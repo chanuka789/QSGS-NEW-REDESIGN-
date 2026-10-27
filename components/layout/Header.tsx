@@ -79,8 +79,8 @@ export function Header() {
       >
         <div
           className={cn(
-            "glass glass-pill glass-lens relative mx-auto flex h-[68px] items-center justify-between gap-4 overflow-hidden pl-6 pr-2.5 transition-[max-width] duration-700 ease-[var(--ease-liquid)] sm:pl-7",
-            scrolled ? "glass-strong max-w-[1120px]" : "max-w-[1320px]",
+            "glass glass-pill relative mx-auto flex h-[68px] items-center justify-between gap-4 overflow-hidden pl-6 pr-2.5 transition-[max-width] duration-700 ease-[var(--ease-liquid)] sm:pl-7",
+            scrolled ? "glass-strong max-w-[1100px]" : "max-w-[1200px]",
           )}
         >
           <Link href="/" aria-label={`${company.name} — home`} className="shrink-0 transition-opacity hover:opacity-80">
@@ -93,7 +93,7 @@ export function Header() {
                 const active = isActive(pathname, item);
                 const hasChildren = !!item.children?.length;
                 const base = cn(
-                  "relative flex h-11 items-center gap-1 rounded-full px-4 text-[0.95rem] transition-colors",
+                  "relative flex h-11 items-center gap-1 rounded-full px-4 t-small transition-colors",
                   active ? "text-ink" : "text-ink-2/80 hover:text-ink",
                 );
                 return (
@@ -154,11 +154,11 @@ export function Header() {
           {openMenu && (
             <motion.div
               key={openMenu}
-              initial={{ opacity: 0, y: 10, filter: "blur(6px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
-              exit={{ opacity: 0, y: 6, filter: "blur(4px)" }}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 6 }}
               transition={{ type: "spring", stiffness: 320, damping: 32 }}
-              className="mx-auto mt-3 hidden max-w-[760px] lg:block"
+              className="mx-auto mt-3 hidden max-w-[720px] lg:block"
               onMouseEnter={() => open(openMenu)}
               onMouseLeave={scheduleClose}
             >
@@ -169,16 +169,16 @@ export function Header() {
                     <Link key={c.href + c.label} href={c.href} className="group flex items-start gap-4 rounded-[18px] p-4 transition-colors hover:bg-white/70">
                       <span className="num pt-0.5">{String(i + 1).padStart(2, "0")}</span>
                       <span className="min-w-0 flex-1">
-                        <span className="flex items-center justify-between gap-2 text-[1.02rem] font-medium text-ink">
+                        <span className="flex items-center justify-between gap-2 t-h4 text-ink">
                           {c.label}
                           <ArrowUpRight className="h-4 w-4 text-brand opacity-0 transition-opacity group-hover:opacity-100" />
                         </span>
-                        <span className="mt-1 block text-[0.88rem] leading-snug text-muted">{c.description}</span>
+                        <span className="t-small mt-1 block text-muted">{c.description}</span>
                       </span>
                     </Link>
                   ))}
                 {openMenu === "Services" && (
-                  <Link href={routes.services} className="link-arrow col-span-2 mt-1 rounded-[18px] px-4 py-3 text-[0.95rem] hover:bg-white/70">
+                  <Link href={routes.services} className="link-arrow col-span-2 mt-1 rounded-[18px] px-4 py-3 t-small hover:bg-white/70">
                     Explore all quantity surveying services <ArrowLong />
                   </Link>
                 )}
@@ -216,16 +216,16 @@ export function Header() {
                     <Link
                       href={item.href}
                       aria-current={isActive(pathname, item) ? "page" : undefined}
-                      className="flex items-baseline gap-5 py-5 text-[2rem] font-medium leading-none tracking-[-0.02em] text-ink"
+                      className="t-h2 flex items-baseline gap-5 py-5 text-ink"
                     >
-                      <span className="num text-[0.85rem]">{String(i + 1).padStart(2, "0")}</span>
+                      <span className="num t-xs">{String(i + 1).padStart(2, "0")}</span>
                       {item.label}
                     </Link>
                     {item.children && (
                       <ul className="-mt-1 grid gap-1 pb-5 pl-10">
                         {item.children.map((c) => (
                           <li key={c.href + c.label}>
-                            <Link href={c.href} className={cn("block py-1.5 text-[1.02rem] text-muted", pathname === c.href && "text-ink")}>
+                            <Link href={c.href} className={cn("block py-1.5 t-body text-muted", pathname === c.href && "text-ink")}>
                               {c.label}
                             </Link>
                           </li>
@@ -240,10 +240,10 @@ export function Header() {
               <Link href={routes.contact} className="btn btn-primary w-full justify-between">
                 Schedule an online meeting <ArrowUpRight className="h-5 w-5" />
               </Link>
-              <div className="grid grid-cols-2 gap-6 text-[0.9rem]">
+              <div className="grid grid-cols-2 gap-6 t-small">
                 {offices.map((o) => (
                   <div key={o.country}>
-                    <p className="eyebrow !text-[0.7rem]">{o.country}</p>
+                    <p className="eyebrow">{o.country}</p>
                     {o.phone && (
                       <a href={o.phoneHref} className="mt-2 block text-ink-2">
                         {o.phone}

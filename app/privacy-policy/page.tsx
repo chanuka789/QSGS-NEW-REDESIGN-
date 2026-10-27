@@ -38,16 +38,16 @@ const sections = [
 export default function PrivacyPage() {
   return (
     <>
-      <PageHero crumbs={[{ name: "Privacy Policy" }]} eyebrow="Legal" title={["Privacy policy."]} lead={`Last updated: ${new Date("2026-10-27").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}`} size="md" />
-      <section className="px-5 pb-28 pt-16 sm:px-8">
-        <div className="mx-auto max-w-[1320px]">
-          <ol className="max-w-3xl border-t border-ink">
+      <PageHero crumbs={[{ name: "Privacy Policy" }]} eyebrow="Legal" title={["Privacy policy."]} lead={`Last updated: ${new Date("2026-10-27").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}`} />
+      <section className="section pt-10 lg:pt-14">
+        <div className="container-x">
+          <ol className="max-w-3xl border-t border-line">
             {sections.map((s, i) => (
-              <li key={s.h} className="grid gap-3 border-b border-line py-8 sm:grid-cols-[64px_1fr]">
+              <li key={s.h} className="grid gap-3 border-b border-line py-7 sm:grid-cols-[48px_1fr]">
                 <span className="num pt-1">{String(i + 1).padStart(2, "0")}</span>
                 <div>
-                  <h2 className="text-[1.5rem] font-medium">{s.h}</h2>
-                  <p className="mt-3 leading-[1.8] text-muted">{s.p}</p>
+                  <h2 className="t-h3">{s.h}</h2>
+                  <p className="t-body mt-2">{s.p}</p>
                 </div>
               </li>
             ))}

@@ -7,26 +7,25 @@ const named = ["Australia", "New Zealand", "UK", "USA", "Canada", "Singapore", "
 
 export function GlobalReach() {
   return (
-    <section className="relative overflow-hidden bg-paper-2/60 px-5 py-16 sm:px-8 lg:py-24" aria-labelledby="reach-title">
-      <div className="mx-auto grid max-w-[1320px] items-center gap-14 lg:grid-cols-2 lg:gap-20">
+    <section className="section bg-paper-2" aria-labelledby="reach-title">
+      <div className="container-x grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
         <div>
-          <SectionHeading id="reach-title" eyebrow="Global reach" title={["Expanding horizons with", "comprehensive quantity", "surveying services."]} size="md" />
+          <SectionHeading id="reach-title" eyebrow="Global reach" title={["Expanding horizons with comprehensive quantity surveying services."]} />
           <Reveal delay={0.1}>
-            <p className="mt-10 flex items-baseline gap-4">
-              <span className="text-[clamp(4.5rem,10vw,8rem)] font-medium leading-none tracking-[-0.03em] text-ink">20+</span>
-              <span className="text-[1.3rem] font-medium tracking-tight text-muted">Countries</span>
+            <p className="mt-8 flex items-baseline gap-3">
+              <span className="t-stat text-brand">20+</span>
+              <span className="t-h4 text-ink">Countries</span>
             </p>
           </Reveal>
           <Reveal delay={0.15}>
-            <p className="mt-8 max-w-xl text-[1.02rem] leading-[1.75] text-muted">
+            <p className="t-body mt-6 max-w-xl">
               We are proud to offer our expert quantity surveying services to clients around the globe. Our commitment to excellence and precision knows no borders, enabling us to support projects in various countries with unmatched expertise and dedication. Whether you’re in Australia, New Zealand, UK, USA, Canada, Singapore, all European countries, UAE or any Middle East countries, our remote services ensure that you receive the highest quality surveying solutions tailored to your specific needs.
             </p>
           </Reveal>
           <Reveal delay={0.2}>
-            <ul className="mt-10 flex flex-wrap gap-x-6 gap-y-3 border-t border-line pt-6 text-[0.95rem] text-ink-2" aria-label="Countries and regions we serve">
+            <ul className="t-small mt-8 flex flex-wrap gap-2" aria-label="Countries and regions we serve">
               {named.map((n) => (
-                <li key={n} className="flex items-center gap-2">
-                  <span className="h-1 w-1 rounded-full bg-brand" aria-hidden />
+                <li key={n} className="rounded-full bg-white px-3 py-1.5 text-ink-2 shadow-[inset_0_0_0_1px_var(--color-line)]">
                   {n}
                 </li>
               ))}
@@ -34,18 +33,18 @@ export function GlobalReach() {
           </Reveal>
         </div>
 
-        <Reveal y={40} className="relative">
-          <div className="relative mx-auto aspect-square w-full max-w-[620px]">
+        <Reveal y={30} className="relative">
+          <div className="relative mx-auto aspect-square w-full max-w-[520px]">
             <LazyScene scene="globe" className="absolute inset-0" />
-            <div className="pointer-events-none absolute inset-x-0 bottom-2 flex flex-wrap justify-center gap-2">
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-wrap justify-center gap-2">
               {offices.map((o) => (
-                <span key={o.country} className="glass glass-pill glass-strong inline-flex items-center gap-2 px-4 py-2 text-[0.82rem] font-medium text-ink">
+                <span key={o.country} className="t-xs inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 font-medium text-ink shadow-[inset_0_0_0_1px_var(--color-line)]">
                   <span className="h-1.5 w-1.5 rounded-full bg-brand" aria-hidden /> {o.country}
                 </span>
               ))}
             </div>
           </div>
-          <p className="mt-5 text-center text-[0.82rem] text-muted">Drag to spin · Offices in UAE, Kuwait, Australia and Sri Lanka</p>
+          <p className="t-xs mt-4 text-center text-muted">Drag to spin · Offices in UAE, Kuwait, Australia and Sri Lanka</p>
         </Reveal>
       </div>
     </section>

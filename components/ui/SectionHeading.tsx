@@ -4,6 +4,10 @@ import { cn } from "@/lib/utils";
 
 type Part = string | { text: string; className?: string };
 
+/**
+ * Standard section header: eyebrow → title (t-h2) → optional lead.
+ * Same spacing and sizes on every page.
+ */
 export function SectionHeading({
   eyebrow,
   title,
@@ -12,8 +16,7 @@ export function SectionHeading({
   className,
   as = "h2",
   id,
-  size = "lg",
-  dark = false,
+  invert = false,
 }: {
   eyebrow?: string;
   title: Part[];
@@ -22,35 +25,24 @@ export function SectionHeading({
   className?: string;
   as?: "h1" | "h2" | "h3";
   id?: string;
-  size?: "md" | "lg" | "xl";
-  dark?: boolean;
+  invert?: boolean;
 }) {
-  const sizes = {
-    md: "text-[clamp(1.85rem,3vw,2.6rem)]",
-    lg: "text-[clamp(2.1rem,3.8vw,3.4rem)]",
-    xl: "text-[clamp(2.5rem,5vw,4.5rem)]",
-  };
   return (
-    <div className={cn(align === "center" && "mx-auto text-center", "max-w-4xl", className)}>
+    <div className={cn("max-w-3xl", align === "center" && "mx-auto text-center", className)}>
       {eyebrow && (
-        <Reveal y={10} blur={false}>
-          <p className={cn("eyebrow", dark && "!text-brand-200")}>{eyebrow}</p>
+        <Reveal y={10}>
+          <p className={cn("eyebrow", invert && "!text-white/70")}>{eyebrow}</p>
         </Reveal>
       )}
-      <SplitText
-        as={as}
-        id={id}
-        parts={title}
-        className={cn("display", eyebrow && "mt-4", sizes[size], dark && "!text-paper")}
-      />
+      <SplitText as={as} id={id} parts={title} className={cn("t-h2", eyebrow && "mt-4", invert && "!text-white")} />
       {lead && (
-        <Reveal delay={0.15} blur={false}>
-          <p className={cn("lead mt-5 max-w-2xl", align === "center" && "mx-auto", dark && "!text-white/65")}>{lead}</p>
+        <Reveal delay={0.1}>
+          <p className={cn("t-lead mt-5 max-w-2xl", align === "center" && "mx-auto", invert && "!text-white/75")}>{lead}</p>
         </Reveal>
       )}
     </div>
   );
 }
 
-/** Kept for API compatibility: renders a phrase in the same voice (no decorative font). */
+/** Kept for API compatibility: renders the phrase in the same voice. */
 export const serif = (text: string): Part => text;

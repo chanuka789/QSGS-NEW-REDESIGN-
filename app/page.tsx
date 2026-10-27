@@ -51,20 +51,20 @@ export default function HomePage() {
       <HomeHero />
       <StandardsMarquee />
 
-      {/* Intro statement */}
-      <section className="px-5 py-16 sm:px-8 lg:py-24" aria-labelledby="intro-title">
-        <div className="mx-auto max-w-[1320px]">
-          <p className="eyebrow">About QSGS</p>
-          <Reveal>
-            <h2 id="intro-title" className="display mt-6 max-w-[26ch] text-[clamp(1.7rem,3.2vw,2.8rem)] !leading-[1.2]">
-              We specialise in providing expert quantity surveying services remotely — to property developers, consultants, contractors and architects around the globe.
-            </h2>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <Link href={routes.about} className="link-arrow mt-10 text-[1.05rem]">
-              More about us <ArrowLong />
-            </Link>
-          </Reveal>
+      {/* About + stats */}
+      <section className="section" aria-labelledby="intro-title">
+        <div className="container-x">
+          <div className="grid gap-8 lg:grid-cols-[1fr_1fr] lg:gap-16">
+            <SectionHeading id="intro-title" eyebrow="About QSGS" title={["Expert quantity surveying, delivered remotely."]} />
+            <Reveal delay={0.1} className="lg:pt-10">
+              <p className="t-lead">
+                We specialise in providing expert quantity surveying services remotely to clients around the globe — property developers, consultant firms, contracting firms and independent architects.
+              </p>
+              <Link href={routes.about} className="link-arrow mt-6">
+                More about us <ArrowLong />
+              </Link>
+            </Reveal>
+          </div>
           <div className="mt-14">
             <Stats />
           </div>
@@ -72,25 +72,27 @@ export default function HomePage() {
       </section>
 
       {/* Who we help */}
-      <section className="px-5 pb-16 sm:px-8 lg:pb-24" aria-labelledby="services-title">
-        <div className="mx-auto max-w-[1320px]">
-          <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
-            <SectionHeading id="services-title" eyebrow="Our remote services" title={["We are offering our", "remote services."]} />
-            <p className="lead lg:pb-2">Tailored quantity surveying support for every side of the project.</p>
-          </div>
-          <div className="mt-14">
+      <section className="section pt-0 lg:pt-0" aria-labelledby="services-title">
+        <div className="container-x">
+          <SectionHeading id="services-title" eyebrow="Our remote services" title={["We are offering our remote services."]} lead="Tailored quantity surveying support for every side of the project." />
+          <div className="mt-10">
             <SegmentIndex />
           </div>
         </div>
       </section>
 
       {/* What we do */}
-      <section className="bg-surface/60 px-5 py-16 sm:px-8 lg:py-24" aria-labelledby="what-title">
-        <div className="mx-auto grid max-w-[1320px] gap-14 lg:grid-cols-[0.75fr_1.25fr] lg:gap-20">
-          <div className="lg:sticky lg:top-32 lg:self-start">
-            <SectionHeading id="what-title" eyebrow="What we do" title={["Precise quantities,", "from take-off to tender."]} size="md" lead="2D and 3D take-off services along with BoQ preparation for Architectural, Structural, M&E, Infrastructural, Landscape, Irrigation, ICT and Security systems & Data centers." />
-            <Reveal delay={0.2}>
-              <Link href={routes.services} className="link-arrow mt-10 text-[1.05rem]">
+      <section className="section bg-brand-50/60" aria-labelledby="what-title">
+        <div className="container-x grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+          <div className="lg:sticky lg:top-28 lg:self-start">
+            <SectionHeading
+              id="what-title"
+              eyebrow="What we do"
+              title={["Precise quantities, from take-off to tender."]}
+              lead="2D and 3D take-off services along with BoQ preparation for Architectural, Structural, M&E, Infrastructural, Landscape, Irrigation, ICT and Security systems & Data centers."
+            />
+            <Reveal delay={0.15}>
+              <Link href={routes.services} className="link-arrow mt-8">
                 Find the right support <ArrowLong />
               </Link>
             </Reveal>
@@ -102,14 +104,12 @@ export default function HomePage() {
       <Approach />
 
       {/* Disciplines + work samples */}
-      <section className="py-16 lg:py-24" aria-labelledby="disciplines-title">
-        <div className="mx-auto max-w-[1320px] px-5 sm:px-8">
-          <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
-            <SectionHeading id="disciplines-title" eyebrow="What we measure" title={["Every discipline,", "one standard of care."]} size="md" />
-            <Disciplines />
-          </div>
+      <section className="section" aria-labelledby="disciplines-title">
+        <div className="container-x grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+          <SectionHeading id="disciplines-title" eyebrow="What we measure" title={["Every discipline, one standard of care."]} lead="Real take-off and BoQ samples from our team." />
+          <Disciplines />
         </div>
-        <div className="mt-24">
+        <div className="mt-14">
           <WorkSamples />
         </div>
       </section>

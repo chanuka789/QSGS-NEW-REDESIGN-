@@ -5,16 +5,16 @@ import type { ReactNode } from "react";
 
 const tags = { div: motion.div, ul: motion.ul, ol: motion.ol, section: motion.section };
 
-type Props = HTMLMotionProps<"div"> & { delay?: number; y?: number; blur?: boolean; children: ReactNode };
+type Props = HTMLMotionProps<"div"> & { delay?: number; y?: number; children: ReactNode };
 
-/** Fades/rises content into view once, with a soft de-blur — the "liquid" settle. */
-export function Reveal({ delay = 0, y = 28, blur = true, children, ...rest }: Props) {
+/** Fades and rises content into view once (transform + opacity only, GPU-friendly). */
+export function Reveal({ delay = 0, y = 20, children, ...rest }: Props) {
   return (
     <motion.div
-      initial={{ opacity: 0, y, filter: blur ? "blur(10px)" : "blur(0px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
+      initial={{ opacity: 0, y }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "0px 0px -12% 0px" }}
-      transition={{ duration: 0.9, delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
       {...rest}
     >
       {children}
@@ -39,8 +39,8 @@ export function Stagger({ children, className, gap = 0.08, as = "div" }: { child
 }
 
 export const staggerItem = {
-  hidden: { opacity: 0, y: 26, filter: "blur(8px)" },
-  show: { opacity: 1, y: 0, filter: "blur(0px)", transitionEnd: { filter: "none" }, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as const } },
+  hidden: { opacity: 0, y: 18 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] as const } },
 };
 
 export function StaggerItem({ children, className, ...rest }: HTMLMotionProps<"div">) {

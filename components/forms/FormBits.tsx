@@ -8,16 +8,16 @@ import { cn } from "@/lib/utils";
 export function Field({ id, label, required, error, hint, className, children }: { id: string; label: string; required?: boolean; error?: string; hint?: string; className?: string; children: ReactNode }) {
   return (
     <div className={cn("flex flex-col", className)}>
-      <label htmlFor={id} className="mb-2 text-[0.88rem] font-medium text-ink">
+      <label htmlFor={id} className="mb-2 t-small font-medium text-ink">
         {label}
         {required && <span className="ml-1 text-brand" aria-hidden>*</span>}
         {required && <span className="sr-only"> (required)</span>}
       </label>
       {children}
-      {hint && !error && <p className="mt-1.5 text-[0.8rem] text-muted">{hint}</p>}
+      {hint && !error && <p className="mt-1.5 t-xs text-muted">{hint}</p>}
       <AnimatePresence>
         {error && (
-          <motion.p id={`${id}-error`} role="alert" initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mt-1.5 text-[0.82rem] text-[#c0392b]">
+          <motion.p id={`${id}-error`} role="alert" initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mt-1.5 t-xs text-[#c0392b]">
             {error}
           </motion.p>
         )}
@@ -56,7 +56,7 @@ export function Success({ title, text, onReset }: { title: string; text: string;
       <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.15, type: "spring", stiffness: 260, damping: 16 }} className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-brand/10 text-brand">
         <CheckCircle2 className="h-10 w-10" strokeWidth={1.5} />
       </motion.span>
-      <h3 className="mt-8 text-[2rem] font-medium">{title}</h3>
+      <h3 className="t-h2 mt-6">{title}</h3>
       <p className="mx-auto mt-3 max-w-md text-muted">{text}</p>
       <button type="button" onClick={onReset} className="link-underline mt-8">
         Send another
@@ -68,7 +68,7 @@ export function Success({ title, text, onReset }: { title: string; text: string;
 export function FormError({ message }: { message?: string }) {
   if (!message) return null;
   return (
-    <p role="alert" className="rounded-[12px] bg-[#c0392b]/8 px-4 py-3 text-[0.9rem] text-[#a3301f]">
+    <p role="alert" className="rounded-[12px] bg-[#c0392b]/8 px-4 py-3 t-small text-[#a3301f]">
       {message}
     </p>
   );

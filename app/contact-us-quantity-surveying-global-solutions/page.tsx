@@ -1,7 +1,6 @@
 import { PageHero } from "@/components/sections/PageHero";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { Reveal, Stagger, StaggerLi } from "@/components/ui/Reveal";
-import { ArrowLong } from "@/components/ui/ArrowLong";
 import { LocalTime } from "@/components/ui/LocalTime";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbJsonLd, buildMetadata, webPageJsonLd } from "@/lib/seo";
@@ -28,43 +27,41 @@ export default function ContactPage() {
         eyebrow="Contact us"
         title={["Schedule a meeting."]}
         lead="Tell us about your project and choose a convenient time. Our quantity surveying team will confirm your online meeting by email."
-        size="md"
       />
 
-      <section className="px-5 pb-24 pt-14 sm:px-8 lg:pb-24 lg:pt-20" aria-label="Contact form and offices">
-        <div className="mx-auto grid max-w-[1320px] gap-14 lg:grid-cols-[1.25fr_0.75fr] lg:gap-20">
-          <Reveal y={30}>
-            <div className="panel p-6 sm:p-10">
+      <section className="section pt-10 lg:pt-14" aria-label="Contact form and offices">
+        <div className="container-x grid gap-10 lg:grid-cols-[1.3fr_0.7fr] lg:gap-14">
+          <Reveal y={24}>
+            <div className="rounded-[20px] bg-white p-6 shadow-[inset_0_0_0_1px_var(--color-line)] sm:p-8">
               <ContactForm />
             </div>
           </Reveal>
 
-          <div>
+          <div className="space-y-4">
             <Reveal>
-              <p className="eyebrow">General enquiries</p>
-              <a href={`mailto:${company.email}`} className="link-arrow mt-5 text-[1.15rem]">
-                {company.email} <ArrowLong />
-              </a>
+              <div className="rounded-[20px] bg-brand p-6 text-white">
+                <p className="eyebrow !text-white/70">General enquiries</p>
+                <a href={`mailto:${company.email}`} className="t-h4 mt-3 block break-all !text-white hover:underline">
+                  {company.email}
+                </a>
+              </div>
             </Reveal>
-            <Stagger as="ul" className="mt-14 border-t border-ink" gap={0.06}>
+            <Stagger as="ul" className="rounded-[20px] bg-paper-2 px-6" gap={0.05}>
               {offices.map((o, i) => (
-                  <StaggerLi key={o.country} className="grid grid-cols-[44px_1fr] gap-3 border-b border-line py-7">
-                    <span className="num pt-1">{String(i + 1).padStart(2, "0")}</span>
-                    <div>
-                      <div className="flex items-baseline justify-between gap-4">
-                        <h2 className="text-[1.5rem] font-medium tracking-[-0.02em]">{o.country}</h2>
-                        <LocalTime tz={o.timezone} />
-                      </div>
-                      {o.phone && (
-                        <a href={o.phoneHref} className="mt-2 block text-[1.02rem] text-ink-2 hover:text-brand">
-                          {o.phone}
-                        </a>
-                      )}
-                      <a href={`mailto:${o.email}`} className="mt-1 block break-all text-[0.98rem] text-muted hover:text-brand">
-                        {o.email}
-                      </a>
-                    </div>
-                  </StaggerLi>
+                <StaggerLi key={o.country} className={i ? "border-t border-line py-5" : "py-5"}>
+                  <div className="flex items-baseline justify-between gap-4">
+                    <h2 className="t-h4">{o.country}</h2>
+                    <LocalTime tz={o.timezone} />
+                  </div>
+                  {o.phone && (
+                    <a href={o.phoneHref} className="t-small mt-1.5 block text-ink-2 hover:text-brand">
+                      {o.phone}
+                    </a>
+                  )}
+                  <a href={`mailto:${o.email}`} className="t-small mt-0.5 block break-all text-muted hover:text-brand">
+                    {o.email}
+                  </a>
+                </StaggerLi>
               ))}
             </Stagger>
           </div>

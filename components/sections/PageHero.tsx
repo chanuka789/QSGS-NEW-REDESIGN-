@@ -3,9 +3,9 @@ import { ChevronRight } from "lucide-react";
 import { SplitText } from "@/components/ui/SplitText";
 import { Reveal } from "@/components/ui/Reveal";
 import { ParallaxImage } from "@/components/ui/Parallax";
-import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 
+/** Inner-page hero: breadcrumb → eyebrow → title (t-display) → lead → optional image. */
 export function PageHero({
   crumbs,
   eyebrow,
@@ -14,7 +14,6 @@ export function PageHero({
   image,
   imageAlt = "",
   children,
-  size = "lg",
 }: {
   crumbs: { name: string; href?: string }[];
   eyebrow?: string;
@@ -26,10 +25,10 @@ export function PageHero({
   size?: "md" | "lg";
 }) {
   return (
-    <section className="px-5 pt-28 sm:px-8 lg:pt-36">
-      <div className="mx-auto max-w-[1320px]">
+    <section className="pb-4 pt-28 lg:pt-36">
+      <div className="container-x">
         <nav aria-label="Breadcrumb">
-          <ol className="flex flex-wrap items-center gap-1.5 text-[0.85rem] text-muted">
+          <ol className="t-xs flex flex-wrap items-center gap-1.5 text-muted">
             <li>
               <Link href="/" className="hover:text-ink">Home</Link>
             </li>
@@ -46,27 +45,21 @@ export function PageHero({
           </ol>
         </nav>
         {eyebrow && (
-          <Reveal y={10} blur={false}>
+          <Reveal y={10}>
             <p className="eyebrow mt-10">{eyebrow}</p>
           </Reveal>
         )}
-        <SplitText
-          as="h1"
-          immediate
-          delay={0.1}
-          parts={title}
-          className={cn("display mt-5 max-w-[20ch]", size === "lg" ? "text-[clamp(2.4rem,5vw,4.6rem)]" : "text-[clamp(2.2rem,4.2vw,3.8rem)]")}
-        />
+        <SplitText as="h1" immediate delay={0.05} parts={title} className="t-display mt-4 max-w-4xl" />
         {lead && (
-          <Reveal delay={0.35} blur={false}>
-            <p className="lead mt-8 max-w-2xl">{lead}</p>
+          <Reveal delay={0.25}>
+            <p className="t-lead mt-6 max-w-2xl">{lead}</p>
           </Reveal>
         )}
         {children}
       </div>
       {image && (
-        <Reveal delay={0.4} y={40} className="mx-auto mt-12 max-w-[1320px] lg:mt-16">
-          <ParallaxImage src={image} alt={imageAlt} priority className="aspect-[16/10] rounded-[6px] sm:aspect-[21/9]" sizes="100vw" strength={10} />
+        <Reveal delay={0.3} y={30} className="container-x mt-12 lg:mt-16">
+          <ParallaxImage src={image} alt={imageAlt} priority className="aspect-[16/10] rounded-[16px] sm:aspect-[21/9]" sizes="(min-width:1200px) 1136px, 100vw" strength={8} />
         </Reveal>
       )}
     </section>

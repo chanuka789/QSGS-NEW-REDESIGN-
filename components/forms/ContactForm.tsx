@@ -114,19 +114,19 @@ export function ContactForm() {
         <textarea id="message" name="message" className="field" placeholder="Tell us about your project, drawings and deadline." />
       </Field>
       <div className="sm:col-span-2">
-        <label className="flex cursor-pointer items-start gap-3 text-[0.9rem] leading-relaxed text-muted">
+        <label className="flex cursor-pointer items-start gap-3 t-small leading-relaxed text-muted">
           <input id="consent" name="consent" type="checkbox" className="mt-1 h-5 w-5 shrink-0 accent-[#046492]" {...err("consent")} />
           <span>
             I agree that Quantity Surveying Global Solutions may use these details to respond to my request, as described in the{" "}
             <Link href={routes.privacy} className="text-ink underline underline-offset-4">privacy policy</Link>.
           </span>
         </label>
-        {errors.consent && <p id="consent-error" role="alert" className="mt-1.5 text-[0.82rem] text-[#c0392b]">{errors.consent}</p>}
+        {errors.consent && <p id="consent-error" role="alert" className="mt-1.5 t-xs text-[#c0392b]">{errors.consent}</p>}
       </div>
       <div className="grid gap-4 sm:col-span-2">
         <FormError message={formError} />
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <p id="form-note" className="text-[0.82rem] text-muted">Fields marked <span className="text-brand">*</span> are required.</p>
+          <p id="form-note" className="t-xs text-muted">Fields marked <span className="text-brand">*</span> are required.</p>
           <SubmitButton loading={loading}>
             Schedule meeting <ArrowUpRight className="h-5 w-5" />
           </SubmitButton>

@@ -4,7 +4,6 @@ import "./globals.css";
 import { Providers } from "@/components/layout/Providers";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { GlassFilters } from "@/components/glass/GlassFilters";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { organizationJsonLd } from "@/lib/seo";
 import { SITE_URL, company } from "@/lib/site";
@@ -51,7 +50,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Skip to content
         </a>
-        <GlassFilters />
         <Providers>
           <Header />
           <main id="main" className="relative">

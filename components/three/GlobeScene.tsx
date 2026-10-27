@@ -143,7 +143,7 @@ export default function GlobeScene({ active = true }: { active?: boolean }) {
     <Canvas
       id="globe-canvas"
       frameloop={active ? "always" : "never"}
-      dpr={[1, 1.75]}
+      dpr={[1, 1.5]}
       camera={{ position: [0, 0, 5.2], fov: 38 }}
       gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
       style={{ touchAction: "pan-y", cursor: "grab" }}

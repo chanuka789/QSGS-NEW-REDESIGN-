@@ -1,6 +1,6 @@
 "use client";
 
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
@@ -226,6 +226,23 @@ function Rig({ view }: { view: BuildingView }) {
   return null;
 }
 
+/**
+ * Render on demand: frames are drawn only while something moves (view change,
+ * auto-rotate, orbit drag). Idle = 0 GPU work, so scrolling stays smooth at 60–120 Hz.
+ */
+function Driver({ view, rotate }: { view: BuildingView; rotate: boolean }) {
+  const invalidate = useThree((s) => s.invalidate);
+  const until = useRef(0);
+  useEffect(() => {
+    until.current = performance.now() + 2600;
+    invalidate();
+  }, [view, invalidate]);
+  useFrame(() => {
+    if (rotate || performance.now() < until.current) invalidate();
+  });
+  return null;
+}
+
 function Model({ view, rotate }: { view: BuildingView; rotate: boolean }) {
   const group = useRef<THREE.Group>(null);
   const reduce = useMemo(() => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches, []);
@@ -246,9 +263,9 @@ export default function BuildingScene({ view = "design", rotate = false, active 
   const desktop = typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches;
   return (
     <Canvas
-      frameloop={active ? "always" : "never"}
+      frameloop={active ? "demand" : "never"}
       shadows
-      dpr={[1, 1.75]}
+      dpr={[1, 1.5]}
       camera={{ position: [11.2, 8.4, 11.2], fov: 25 }}
       gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
       style={{ touchAction: "pan-y" }}
@@ -270,6 +287,7 @@ export default function BuildingScene({ view = "design", rotate = false, active 
       <directionalLight position={[-6, 4, -3]} intensity={0.35} />
       <Model view={view} rotate={rotate} />
       <Rig view={view} />
+      <Driver view={view} rotate={rotate} />
       {desktop && (
         <OrbitControls makeDefault enableZoom={false} enablePan={false} minPolarAngle={0.6} maxPolarAngle={1.25} rotateSpeed={0.6} target={[0, 1.6, 0]} />
       )}

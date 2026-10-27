@@ -4,7 +4,6 @@ import { CtaBand } from "@/components/sections/CtaBand";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ArrowLong } from "@/components/ui/ArrowLong";
 import { Reveal, Stagger, StaggerLi } from "@/components/ui/Reveal";
-import { Marquee } from "@/components/ui/Marquee";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbJsonLd, buildMetadata, webPageJsonLd } from "@/lib/seo";
 import { routes } from "@/lib/site";
@@ -62,36 +61,32 @@ export default function TeamPage() {
         imageAlt="Quantity surveying team collaborating"
       />
 
-      <section aria-label="Regions of experience" className="mt-20 border-y border-line py-6">
-        <Marquee speed={40}>
-          {[...regions, ...regions].map((r, i) => (
-            <span key={i} className="mx-10 inline-flex items-center gap-10 whitespace-nowrap text-[clamp(1.6rem,3vw,2.6rem)] font-medium tracking-[-0.02em] text-ink/75">
-              {r}
-              <span className="h-2 w-2 rounded-full bg-brand/60" aria-hidden />
-            </span>
-          ))}
-        </Marquee>
-      </section>
-
-      <section className="px-5 py-16 sm:px-8 lg:py-24" aria-labelledby="pillars-title">
-        <div className="mx-auto grid max-w-[1320px] gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24">
-          <div className="lg:sticky lg:top-32 lg:self-start">
-            <SectionHeading id="pillars-title" eyebrow="What sets us apart" title={["Six reasons clients", "trust our team."]} size="md" />
-            <Reveal delay={0.2}>
-              <Link href={routes.careers} className="link-arrow mt-10 text-[1.05rem]">
+      <section className="section" aria-labelledby="pillars-title">
+        <div className="container-x grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+          <div className="lg:sticky lg:top-28 lg:self-start">
+            <SectionHeading id="pillars-title" eyebrow="What sets us apart" title={["Why clients trust our team."]} />
+            <Reveal delay={0.1}>
+              <ul className="t-small mt-6 flex flex-wrap gap-2" aria-label="Regions of experience">
+                {regions.map((r) => (
+                  <li key={r} className="rounded-full bg-brand-50 px-3 py-1.5 text-brand">
+                    {r}
+                  </li>
+                ))}
+              </ul>
+              <Link href={routes.careers} className="link-arrow mt-8">
                 Join our team <ArrowLong />
               </Link>
             </Reveal>
           </div>
-          <Stagger as="ol" className="border-t border-ink" gap={0.06}>
+          <Stagger as="ol" className="border-t border-line" gap={0.05}>
             {pillars.map((p, i) => (
-                <StaggerLi key={p.t} className="grid gap-4 border-b border-line py-10 sm:grid-cols-[64px_1fr]">
-                  <span className="num pt-2">{String(i + 1).padStart(2, "0")}</span>
-                  <div>
-                    <h3 className="text-[clamp(1.5rem,2.6vw,2.2rem)] font-medium leading-tight">{p.t}</h3>
-                    <p className="mt-4 text-[1.02rem] leading-[1.8] text-muted">{p.d}</p>
-                  </div>
-                </StaggerLi>
+              <StaggerLi key={p.t} className="grid gap-3 border-b border-line py-8 sm:grid-cols-[48px_1fr]">
+                <span className="num pt-1">{String(i + 1).padStart(2, "0")}</span>
+                <div>
+                  <h3 className="t-h3">{p.t}</h3>
+                  <p className="t-body mt-3">{p.d}</p>
+                </div>
+              </StaggerLi>
             ))}
           </Stagger>
         </div>

@@ -74,46 +74,49 @@ export default function AboutPage() {
         imageAlt="Modern glass towers — Quantity Surveying Global Solutions"
       />
 
-      <section className="px-5 py-16 sm:px-8 lg:py-24" aria-labelledby="redefine-title">
-        <div className="mx-auto max-w-[1320px]">
-          <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-24">
-            <SectionHeading id="redefine-title" eyebrow="Who we are" title={["Redefining precision and efficiency in quantity surveying."]} size="md" />
-            <Reveal delay={0.1}>
-              <p className="lead">
+      <section className="section" aria-labelledby="redefine-title">
+        <div className="container-x">
+          <div className="grid gap-8 lg:grid-cols-2 lg:gap-16">
+            <SectionHeading id="redefine-title" eyebrow="Who we are" title={["Redefining precision and efficiency in quantity surveying."]} />
+            <Reveal delay={0.1} className="lg:pt-10">
+              <p className="t-lead">
                 At Quantity Surveying Global Solutions, we specialize in delivering top-tier remote quantity surveying services across the globe. Our team of experienced professionals combines advanced technology with industry expertise to provide precise cost management, detailed BOQ preparation, and accurate take-offs. We cater to property developers, consultant firms, contracting firms, and independent architects, ensuring every project is managed with excellence and efficiency.
               </p>
-              <Link href={routes.services} className="link-arrow mt-10 text-[1.05rem]">
+              <Link href={routes.services} className="link-arrow mt-6">
                 Our services <ArrowLong />
               </Link>
             </Reveal>
           </div>
-          <div className="mt-20">
-            <Stats />
-          </div>
         </div>
       </section>
 
-      {/* Our story: sticky chapter label + alternating parallax images */}
-      <section className="bg-surface/60 px-5 py-16 sm:px-8 lg:py-24" aria-labelledby="story-title">
-        <div className="mx-auto max-w-[1320px]">
-          <SectionHeading id="story-title" eyebrow="Our story" title={["One project at a time,", "around the world."]} />
-          <div className="mt-20 space-y-24 lg:space-y-36">
+      {/* Stats on brand */}
+      <section className="section bg-brand" aria-label="QSGS in numbers">
+        <div className="container-x">
+          <Stats invert />
+        </div>
+      </section>
+
+      {/* Our story */}
+      <section className="section" aria-labelledby="story-title">
+        <div className="container-x">
+          <SectionHeading id="story-title" eyebrow="Our story" title={["One project at a time, around the world."]} />
+          <div className="mt-12 space-y-16 lg:space-y-24">
             {story.map((c, i) => (
-              <article key={c.k} className="grid items-center gap-10 lg:grid-cols-2 lg:gap-24">
+              <article key={c.k} className="grid items-center gap-8 lg:grid-cols-2 lg:gap-16">
                 <Reveal className={i % 2 ? "lg:order-2" : ""}>
-                  <p className="flex items-center gap-4">
-                    <span className="num">{String(i + 1).padStart(2, "0")}</span>
-                    <span className="eyebrow !text-[0.72rem]">{c.k}</span>
+                  <p className="eyebrow">
+                    {String(i + 1).padStart(2, "0")} · {c.k}
                   </p>
-                  <h3 className="mt-6 text-[clamp(1.8rem,3vw,2.6rem)] font-medium leading-[1.1]">{c.h}</h3>
-                  {c.p.map((t) => (
-                    <p key={t.slice(0, 20)} className="mt-6 text-[1.02rem] leading-[1.8] text-muted">
-                      {t}
+                  <h3 className="t-h3 mt-3">{c.h}</h3>
+                  {c.p.map((tx) => (
+                    <p key={tx.slice(0, 20)} className="t-body mt-4">
+                      {tx}
                     </p>
                   ))}
                 </Reveal>
-                <Reveal y={50} className={i % 2 ? "lg:order-1" : ""}>
-                  <ParallaxImage src={c.img} alt={c.h} className="aspect-[4/3] rounded-[6px]" sizes="(min-width:1024px) 50vw, 100vw" />
+                <Reveal y={30} className={i % 2 ? "lg:order-1" : ""}>
+                  <ParallaxImage src={c.img} alt={c.h} className="aspect-[4/3] rounded-[16px]" sizes="(min-width:1024px) 560px, 100vw" strength={6} />
                 </Reveal>
               </article>
             ))}
@@ -121,27 +124,16 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="px-5 py-16 sm:px-8 lg:py-24" aria-labelledby="clients-title">
-        <div className="mx-auto max-w-[1320px]">
-          <SectionHeading id="clients-title" eyebrow="Who we serve" title={["Property developers, consultants,", "contractors and architects."]} />
-          <div className="mt-14">
+      <section className="section bg-paper-2" aria-labelledby="clients-title">
+        <div className="container-x">
+          <SectionHeading id="clients-title" eyebrow="Who we serve" title={["Property developers, consultants, contractors and architects."]} />
+          <div className="mt-10">
             <SegmentIndex />
           </div>
         </div>
       </section>
 
-      <section aria-labelledby="our-projects">
-        <div className="mx-auto max-w-[1320px] px-5 sm:px-8">
-          <div className="border-t border-line pt-16">
-            <h2 id="our-projects" className="eyebrow">Our projects</h2>
-            <p className="lead mt-6 max-w-3xl">
-              We proudly showcase a diverse range of completed projects in commercial, residential, industrial, and infrastructural sectors. Each project demonstrates our commitment to precision, efficiency, and excellence — delivered on time and within budget, bringing our clients’ visions to life.
-            </p>
-          </div>
-        </div>
-        <ProjectsGallery />
-      </section>
-
+      <ProjectsGallery />
       <CtaBand />
     </>
   );

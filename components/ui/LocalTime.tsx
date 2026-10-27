@@ -13,7 +13,7 @@ export function LocalTime({ tz }: { tz: string }) {
     return () => clearInterval(id);
   }, [tz]);
   return (
-    <span className="text-[0.82rem] tabular-nums text-muted" aria-label={t ? `Local time ${t}` : undefined}>
+    <span className="t-xs tabular-nums text-muted" aria-label={t ? `Local time ${t}` : undefined}>
       {t ? `${t} local` : " "}
     </span>
   );

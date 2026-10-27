@@ -49,11 +49,11 @@ export function Approach() {
 
   const s = steps[i];
   return (
-    <section ref={ref} className="bg-paper-2 px-5 py-20 sm:px-8 lg:py-28" aria-labelledby="approach-title" onPointerEnter={() => setPaused(true)} onPointerLeave={() => setPaused(false)}>
-      <div className="mx-auto max-w-[1320px]">
-        <SectionHeading id="approach-title" eyebrow="Our approach" title={["A clear path", "from drawings to BoQ."]} />
+    <section ref={ref} className="section bg-brand text-white" aria-labelledby="approach-title" onPointerEnter={() => setPaused(true)} onPointerLeave={() => setPaused(false)}>
+      <div className="container-x">
+        <SectionHeading id="approach-title" invert eyebrow="Our approach" title={["A clear path", "from drawings to BoQ."]} />
 
-        <div role="tablist" aria-label="Our approach steps" className="mt-12 grid grid-cols-4 gap-3 sm:gap-6">
+        <div role="tablist" aria-label="Our approach steps" className="mt-10 grid grid-cols-4 gap-3 sm:gap-6">
           {steps.map((st, k) => (
             <button
               key={st.tab}
@@ -64,27 +64,27 @@ export function Approach() {
               onClick={() => setI(k)}
               className="group text-left"
             >
-              <span className={cn("block text-[0.85rem] tabular-nums transition-colors", k === i ? "text-brand" : "text-muted")}>{String(k + 1).padStart(2, "0")}</span>
-              <span className={cn("mt-2 block text-[1.05rem] font-medium transition-colors sm:text-[1.4rem] sm:tracking-[-0.02em]", k === i ? "text-ink" : "text-muted group-hover:text-ink")}>
+              <span className={cn("t-xs block tabular-nums transition-colors", k === i ? "text-white" : "text-white/55")}>{String(k + 1).padStart(2, "0")}</span>
+              <span className={cn("t-h4 mt-1.5 block transition-colors", k === i ? "text-white" : "text-white/55 group-hover:text-white/85")}>
                 {st.tab}
               </span>
-              <span className="relative mt-4 block h-[2px] overflow-hidden rounded-full bg-ink/10">
+              <span className="relative mt-3 block h-[2px] overflow-hidden rounded-full bg-white/20">
                 {k === i && (
                   <motion.span
                     key={`${i}-${paused}-${inView}`}
-                    className="absolute inset-y-0 left-0 rounded-full bg-brand"
+                    className="absolute inset-y-0 left-0 rounded-full bg-white"
                     initial={{ width: paused || !inView ? "100%" : "0%" }}
                     animate={{ width: "100%" }}
                     transition={{ duration: paused || !inView ? 0 : DURATION / 1000, ease: "linear" }}
                   />
                 )}
-                {k < i && <span className="absolute inset-0 bg-brand/30" />}
+                {k < i && <span className="absolute inset-0 bg-white/45" />}
               </span>
             </button>
           ))}
         </div>
 
-        <div id="approach-panel" role="tabpanel" className="mt-12 min-h-[280px] lg:mt-16">
+        <div id="approach-panel" role="tabpanel" className="mt-10 min-h-[260px] lg:mt-12">
           <AnimatePresence mode="wait">
             <motion.div
               key={i}
@@ -92,16 +92,16 @@ export function Approach() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-              className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-24"
+              className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20"
             >
               <div>
-                <h3 className="text-[clamp(1.7rem,3vw,2.6rem)] font-medium leading-[1.12]">{s.title}</h3>
-                <p className="mt-6 max-w-2xl text-[1.05rem] leading-[1.75] text-muted">{s.text}</p>
+                <h3 className="t-h2 !text-white">{s.title}</h3>
+                <p className="t-lead mt-5 max-w-2xl !text-white/80">{s.text}</p>
               </div>
-              <ul className="self-end border-t border-line">
+              <ul className="self-end border-t border-white/20">
                 {s.points.map((p) => (
-                  <li key={p} className="flex items-center gap-4 border-b border-line py-5 text-[1rem] text-ink-2">
-                    <span className="h-px w-5 bg-brand" aria-hidden />
+                  <li key={p} className="flex items-center gap-4 t-body border-b border-white/20 py-4 !text-white/90">
+                    <span className="h-px w-4 bg-white/70" aria-hidden />
                     {p}
                   </li>
                 ))}

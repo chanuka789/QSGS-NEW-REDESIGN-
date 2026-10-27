@@ -43,36 +43,37 @@ export default function OurServicesPage() {
         lead="Take-offs, Bills of Quantities, tender documents, revisions and reviews — delivered remotely by graduate quantity surveyors to clients in 20+ countries."
       />
 
-      <section className="px-5 py-20 sm:px-8 lg:py-28" aria-label="Services by client">
-        <div className="mx-auto max-w-[1320px]">
+      <section className="section pt-12 lg:pt-16" aria-label="Services by client">
+        <div className="container-x">
           <SegmentIndex />
         </div>
       </section>
 
       <StandardsMarquee />
 
-      <section className="px-5 py-16 sm:px-8 lg:py-24" aria-labelledby="scope-title">
-        <div className="mx-auto grid max-w-[1320px] gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
+      <section className="section" aria-labelledby="scope-title">
+        <div className="container-x grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
           <SectionHeading
             id="scope-title"
             eyebrow="Scope"
-            size="md"
-            title={["We offer 2D and 3D take-off services along with BoQ preparation."]}
+            title={["2D and 3D take-offs with BoQ preparation."]}
             lead="For Architectural, Structural, Mechanical, Electrical (M&E) & Plumbing, Infrastructural, Landscape, Irrigation, ICT and Security systems & Data centers."
           />
           <Disciplines />
         </div>
       </section>
 
-      <section className="px-5 pb-16 sm:px-8 lg:pb-24" aria-labelledby="all-title">
-        <div className="mx-auto mb-16 max-w-[1320px] lg:mb-24">
-          <SectionHeading id="all-title" eyebrow="Service catalogue" title={["Every service,", "measured step by step."]} />
+      <section className="section border-t border-line" aria-labelledby="all-title">
+        <div className="container-x mb-12">
+          <SectionHeading id="all-title" eyebrow="Service catalogue" title={["Every service, step by step."]} />
         </div>
         <ServiceTimeline modules={all} />
       </section>
 
       <Approach />
-      <CtaBand />
+      <div className="pt-16 lg:pt-24">
+        <CtaBand />
+      </div>
     </>
   );
 }

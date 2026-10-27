@@ -31,11 +31,11 @@ export function WorkSamples() {
       {[{ row: rowA, x: xA }, { row: rowB, x: xB }].map(({ row, x }, r) => (
         <motion.div key={r} style={reduce ? undefined : { x }} className="flex w-max gap-5 sm:gap-8">
           {[...row, ...row.slice(0, 2)].map((it, i) => (
-            <figure key={i} className="group w-[250px] shrink-0 sm:w-[360px]">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-[6px] bg-white">
-                <Image src={it.src} alt={it.label} fill sizes="360px" className="object-cover transition-transform duration-1000 group-hover:scale-105" />
+            <figure key={i} className="group w-[240px] shrink-0 sm:w-[320px]">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-[12px] bg-white shadow-[inset_0_0_0_1px_var(--color-line)]">
+                <Image src={it.src} alt={it.label} fill sizes="320px" className="object-cover transition-transform duration-1000 group-hover:scale-105" />
               </div>
-              <figcaption className="mt-3 flex items-center gap-3 text-[0.88rem] text-muted">
+              <figcaption className="t-xs mt-3 flex items-center gap-2.5 text-muted">
                 <span className="h-px w-4 bg-brand" aria-hidden />
                 {it.label}
               </figcaption>

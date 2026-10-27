@@ -15,14 +15,14 @@ const links = [
 export function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="border-t border-line px-5 py-10 sm:px-8">
-      <div className="mx-auto max-w-[1320px]">
+    <footer className="border-t border-line py-10">
+      <div className="container-x">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <Link href="/" aria-label={`${company.name} — home`} className="shrink-0">
             <Logo className="h-9 w-auto text-brand" />
           </Link>
           <nav aria-label="Footer">
-            <ul className="flex flex-wrap gap-x-6 gap-y-2 text-[0.92rem] text-ink-2">
+            <ul className="t-small flex flex-wrap gap-x-6 gap-y-2 text-ink-2">
               {links.map((l) => (
                 <li key={l.href}>
                   <Link href={l.href} className="hover:text-brand">
@@ -34,7 +34,7 @@ export function Footer() {
           </nav>
         </div>
 
-        <ul className="mt-8 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-line pt-6 text-[0.85rem] sm:grid-cols-3 lg:grid-cols-5">
+        <ul className="t-xs mt-8 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-line pt-6 sm:grid-cols-3 lg:grid-cols-5">
           <li>
             <p className="font-medium text-ink">Email</p>
             <a href={`mailto:${company.email}`} className="mt-1 block break-all text-muted hover:text-brand">
@@ -57,7 +57,7 @@ export function Footer() {
           ))}
         </ul>
 
-        <div className="mt-6 flex flex-col gap-3 border-t border-line pt-5 text-[0.8rem] text-muted sm:flex-row sm:items-center sm:justify-between">
+        <div className="t-xs mt-6 flex flex-col gap-3 border-t border-line pt-5 text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>© {year} {company.name}. All rights reserved.</p>
           <div className="flex items-center gap-5">
             <Link href={routes.privacy} className="hover:text-brand">

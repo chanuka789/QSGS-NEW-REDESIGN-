@@ -2,183 +2,176 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { AnimatePresence, motion, useInView, useScroll, useSpring, useReducedMotion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { motion, useInView, useScroll, useSpring, type MotionValue } from "motion/react";
+import { createRef, useEffect, useMemo, useRef, useState, type RefObject } from "react";
+import { ArrowUpRight, Check } from "lucide-react";
 import type { ServiceModule } from "@/lib/services";
 import { routes } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 /**
- * "Scale-rule" service timeline: a measuring ruler fills as you scroll,
- * each numbered station lights up when reached, and (on desktop) a sticky
- * panel shows the active service's visual and a live counter.
+ * Chapter navigator for service pages.
+ * Desktop: a sticky index on the left; each chapter number has a thin progress
+ * ring that fills as you read that service, and the active chapter is highlighted.
+ * Mobile: a sticky row of service tabs that follows the scroll.
  */
 export function ServiceTimeline({ modules, discussLabel = "Discuss" }: { modules: ServiceModule[]; discussLabel?: string }) {
-  const listRef = useRef<HTMLDivElement>(null);
+  const refs = useMemo(() => modules.map(() => createRef<HTMLElement>()), [modules]);
   const [active, setActive] = useState(0);
-  const reduce = useReducedMotion();
-  const { scrollYProgress } = useScroll({ target: listRef, offset: ["start 55%", "end 60%"] });
-  const fill = useSpring(scrollYProgress, { stiffness: 140, damping: 30, restDelta: 0.001 });
-  const current = modules[active];
 
   return (
-    <div className="mx-auto grid max-w-[1320px] gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:gap-20">
-      {/* Sticky visual panel (desktop) */}
-      <div className="hidden lg:block">
-        <div className="sticky top-28 flex h-[calc(100vh-9rem)] max-h-[760px] flex-col">
-          <div className="relative flex-1 overflow-hidden rounded-[28px] bg-paper-2">
-            <AnimatePresence mode="popLayout" initial={false}>
-              <motion.div
-                key={current.id}
-                className="absolute inset-0"
-                initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 1.08, clipPath: "inset(100% 0% 0% 0%)" }}
-                animate={{ opacity: 1, scale: 1, clipPath: "inset(0% 0% 0% 0%)" }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <Image src={current.image} alt={current.imageAlt} fill sizes="40vw" className="object-cover" />
-              </motion.div>
-            </AnimatePresence>
-            <div className="absolute inset-x-4 bottom-4">
-              <div className="glass glass-strong flex items-center justify-between !rounded-[18px] px-5 py-4">
-                <div className="min-w-0">
-                  <p className="eyebrow !text-[0.68rem] !tracking-[0.22em] text-muted">Now viewing</p>
-                  <AnimatePresence mode="wait" initial={false}>
-                    <motion.p
-                      key={current.id}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      transition={{ duration: 0.35 }}
-                      className="mt-1 truncate text-[1.02rem] font-medium text-ink"
-                    >
-                      {current.title}
-                    </motion.p>
-                  </AnimatePresence>
-                </div>
-                <p className="ml-4 shrink-0 font-medium tabular-nums text-ink">
-                  <span className="text-brand">{String(active + 1).padStart(2, "0")}</span>
-                  <span className="text-muted"> / {String(modules.length).padStart(2, "0")}</span>
-                </p>
-              </div>
+    <div className="container-x">
+      <MobileTabs modules={modules} active={active} />
+      <div className="grid gap-10 lg:grid-cols-[300px_1fr] lg:gap-16">
+        <aside className="hidden lg:block" aria-label="Services on this page">
+          <div className="sticky top-28">
+            <p className="eyebrow">On this page</p>
+            <ol className="mt-5 space-y-1">
+              {modules.map((m, i) => (
+                <IndexRow key={m.id} m={m} i={i} active={i === active} target={refs[i]} />
+              ))}
+            </ol>
+            <div className="mt-8 rounded-[16px] bg-brand-50 p-5">
+              <p className="t-h4 text-ink">Need a quote?</p>
+              <p className="t-small mt-1 text-muted">Share your drawings and we will reply with scope and timeline.</p>
+              <Link href={routes.contact} className="btn btn-primary btn-sm mt-4">
+                Get a quote <ArrowUpRight className="h-4 w-4" />
+              </Link>
             </div>
           </div>
-          <ol className="mt-5 grid gap-1" aria-label="Services on this page">
-            {modules.map((m, i) => (
-              <li key={m.id}>
-                <a
-                  href={`#${m.id}`}
-                  className={cn(
-                    "flex items-center gap-4 py-1.5 text-[0.92rem] transition-colors",
-                    i === active ? "text-ink" : "text-muted hover:text-ink",
-                  )}
-                >
-                  <span className={cn("h-px transition-all duration-500", i === active ? "w-10 bg-brand" : "w-5 bg-ink/25")} />
-                  {m.short}
-                </a>
-              </li>
-            ))}
-          </ol>
+        </aside>
+
+        <div>
+          {modules.map((m, i) => (
+            <Chapter key={m.id} m={m} i={i} total={modules.length} sectionRef={refs[i]} onActive={setActive} discussLabel={discussLabel} />
+          ))}
         </div>
       </div>
+    </div>
+  );
+}
 
-      {/* Scrolling ruler + stations */}
-      <div ref={listRef} className="relative pl-[64px] sm:pl-[92px]">
-        <div aria-hidden className="absolute bottom-0 left-0 top-0 w-11 sm:w-14">
-          {/* scale-rule ticks: minor every 14px, major every 70px */}
-          <div className="absolute inset-y-0 right-1/2 mr-[3px] w-[8px] bg-[repeating-linear-gradient(to_bottom,rgb(16_36_46/0.2)_0_1px,transparent_1px_14px)]" />
-          <div className="absolute inset-y-0 right-1/2 mr-[3px] w-[16px] bg-[repeating-linear-gradient(to_bottom,rgb(16_36_46/0.32)_0_1px,transparent_1px_70px)]" />
-          <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-ink/15" />
-          <motion.div className="absolute inset-y-0 left-1/2 w-[3px] -translate-x-1/2 origin-top rounded-full bg-brand" style={{ scaleY: fill }} />
-        </div>
+function ProgressRing({ progress, active }: { progress: MotionValue<number>; active: boolean }) {
+  return (
+    <svg viewBox="0 0 40 40" className="absolute inset-0 -rotate-90" aria-hidden>
+      <circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-line" />
+      <motion.circle cx="20" cy="20" r="18" fill="none" strokeWidth="1.5" strokeLinecap="round" className={active ? "stroke-brand" : "stroke-brand/50"} style={{ pathLength: progress }} />
+    </svg>
+  );
+}
 
+function IndexRow({ m, i, active, target }: { m: ServiceModule; i: number; active: boolean; target: RefObject<HTMLElement | null> }) {
+  const { scrollYProgress } = useScroll({ target, offset: ["start 70%", "end 45%"] });
+  const progress = useSpring(scrollYProgress, { stiffness: 160, damping: 30, restDelta: 0.001 });
+  return (
+    <li>
+      <a
+        href={`#${m.id}`}
+        aria-current={active ? "true" : undefined}
+        className={cn("group flex items-center gap-3.5 rounded-[12px] px-2 py-2 transition-colors", active ? "bg-brand-50" : "hover:bg-paper-2")}
+      >
+        <span className={cn("t-xs relative grid h-10 w-10 shrink-0 place-items-center font-medium tabular-nums", active ? "text-brand" : "text-muted")}>
+          <ProgressRing progress={progress} active={active} />
+          {String(i + 1).padStart(2, "0")}
+        </span>
+        <span className={cn("t-small leading-snug transition-colors", active ? "font-medium text-ink" : "text-muted group-hover:text-ink")}>{m.short}</span>
+      </a>
+    </li>
+  );
+}
+
+function MobileTabs({ modules, active }: { modules: ServiceModule[]; active: number }) {
+  const bar = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = bar.current?.querySelector<HTMLElement>(`[data-i="${active}"]`);
+    if (el && bar.current) bar.current.scrollTo({ left: el.offsetLeft - 16, behavior: "smooth" });
+  }, [active]);
+  return (
+    <div className="sticky top-3 z-30 -mx-5 mb-8 px-3 sm:-mx-8 lg:hidden">
+      <div ref={bar} className="glass glass-strong glass-pill flex gap-1 overflow-x-auto p-1.5 [scrollbar-width:none]" data-lenis-prevent-touch>
         {modules.map((m, i) => (
-          <Station key={m.id} m={m} i={i} reached={i <= active} isActive={i === active} onActive={() => setActive(i)} discussLabel={discussLabel} />
+          <a
+            key={m.id}
+            data-i={i}
+            href={`#${m.id}`}
+            className={cn("t-xs shrink-0 rounded-full px-3.5 py-2 transition-colors", i === active ? "bg-brand text-white" : "text-ink-2")}
+          >
+            {String(i + 1).padStart(2, "0")} · {m.short.split(" ").slice(0, 3).join(" ")}
+          </a>
         ))}
       </div>
     </div>
   );
 }
 
-function Station({
+function Chapter({
   m,
   i,
-  reached,
-  isActive,
+  total,
+  sectionRef,
   onActive,
   discussLabel,
 }: {
   m: ServiceModule;
   i: number;
-  reached: boolean;
-  isActive: boolean;
-  onActive: () => void;
+  total: number;
+  sectionRef: RefObject<HTMLElement | null>;
+  onActive: (i: number) => void;
   discussLabel: string;
 }) {
-  const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { margin: "-45% 0px -50% 0px" });
+  const inView = useInView(sectionRef as RefObject<HTMLElement>, { margin: "-40% 0px -55% 0px" });
   useEffect(() => {
-    if (inView) onActive();
-  }, [inView, onActive]);
+    if (inView) onActive(i);
+  }, [inView, i, onActive]);
 
   return (
-    <article ref={ref} id={m.id} className="relative scroll-mt-32 pb-24 last:pb-4 sm:pb-32" aria-labelledby={`${m.id}-title`}>
-      <span
-        aria-hidden
-        className={cn(
-          "absolute -left-[64px] top-0 z-10 grid h-11 w-11 place-items-center rounded-full bg-paper text-[0.9rem] font-medium tabular-nums transition-all duration-500 sm:-left-[92px] sm:h-14 sm:w-14 sm:text-base",
-          reached ? "text-brand shadow-[inset_0_0_0_1.5px_var(--color-brand)]" : "text-muted shadow-[inset_0_0_0_1px_rgb(16_36_46/0.18)]",
-        )}
-      >
-        {String(i + 1).padStart(2, "0")}
-      </span>
-
-      <h3
-        id={`${m.id}-title`}
-        className={cn(
-          "text-[clamp(1.85rem,3.4vw,3rem)] font-medium leading-[1.05] tracking-[-0.02em] transition-colors duration-500",
-          isActive ? "!text-brand" : "",
-        )}
-      >
+    <article
+      ref={sectionRef as RefObject<HTMLElement>}
+      id={m.id}
+      aria-labelledby={`${m.id}-title`}
+      className={cn("scroll-mt-28 border-line", i > 0 && "mt-16 border-t pt-16 lg:mt-20 lg:pt-20")}
+    >
+      <p className="eyebrow">
+        Service {String(i + 1).padStart(2, "0")} <span className="text-muted">/ {String(total).padStart(2, "0")}</span>
+      </p>
+      <h3 id={`${m.id}-title`} className="t-h2 mt-4 max-w-2xl">
         {m.title}
       </h3>
-      <motion.p
-        initial={{ opacity: 0, y: 14 }}
+      <p className="t-lead mt-5 max-w-2xl">{m.intro}</p>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "0px 0px -10% 0px" }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className="lead mt-6 max-w-2xl"
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        className="relative mt-8 aspect-[16/9] overflow-hidden rounded-[16px] bg-paper-2"
       >
-        {m.intro}
-      </motion.p>
+        <Image src={m.image} alt={m.imageAlt} fill sizes="(min-width:1024px) 800px, 100vw" className="object-cover" />
+      </motion.div>
 
-      {/* Mobile visual */}
-      <div className="relative mt-8 aspect-[16/10] overflow-hidden rounded-[22px] bg-paper-2 lg:hidden">
-        <Image src={m.image} alt={m.imageAlt} fill sizes="100vw" className="object-cover" />
-      </div>
-
-      <p className="eyebrow mt-12 !text-[0.72rem]">Key deliverables</p>
-      <ul className="mt-6 grid gap-x-12 sm:grid-cols-2">
+      <h4 className="eyebrow mt-10">What you receive</h4>
+      <ul className="mt-5 grid gap-x-10 gap-y-6 sm:grid-cols-2">
         {m.items.map((it, k) => (
           <motion.li
             key={it.title}
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "0px 0px -8% 0px" }}
-            transition={{ delay: (k % 2) * 0.08, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="border-t border-line py-6"
+            transition={{ delay: (k % 2) * 0.06, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="flex gap-3.5"
           >
-            <p className="flex gap-3 text-[1.05rem] font-medium leading-snug text-ink">
-              <span className="mt-[0.7em] h-px w-4 shrink-0 bg-brand" aria-hidden />
-              {it.title}
-            </p>
-            <p className="mt-2.5 pl-7 text-[0.95rem] leading-relaxed text-muted">{it.text}</p>
+            <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-brand-50 text-brand" aria-hidden>
+              <Check className="h-3.5 w-3.5" strokeWidth={2.2} />
+            </span>
+            <div>
+              <p className="t-h4 text-ink">{it.title}</p>
+              <p className="t-small mt-1.5 text-muted">{it.text}</p>
+            </div>
           </motion.li>
         ))}
       </ul>
 
-      <Link href={routes.contact} className="link-underline mt-8 text-[1rem]">
+      <Link href={routes.contact} className="link-underline t-small mt-10">
         {discussLabel} {m.short.toLowerCase()} <ArrowUpRight className="h-4 w-4 text-brand" />
       </Link>
     </article>

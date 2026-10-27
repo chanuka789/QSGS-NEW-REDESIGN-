@@ -50,13 +50,13 @@ function DropZone({ id, label, required, files, setFiles, error }: { id: string;
         )}
       >
         <UploadCloud className="mx-auto h-7 w-7 text-brand" strokeWidth={1.5} aria-hidden />
-        <p className="mt-3 text-[0.95rem] text-ink">
+        <p className="mt-3 t-small text-ink">
           Drag files here or{" "}
           <button type="button" onClick={() => input.current?.click()} className="font-medium text-brand underline underline-offset-4">
             browse
           </button>
         </p>
-        <p className="mt-1 text-[0.8rem] text-muted">PDF, DOC or DOCX · up to 4 files · 5 MB each</p>
+        <p className="mt-1 t-xs text-muted">PDF, DOC or DOCX · up to 4 files · 5 MB each</p>
         <input
           ref={input}
           id={id}
@@ -73,10 +73,10 @@ function DropZone({ id, label, required, files, setFiles, error }: { id: string;
       {files.length > 0 && (
         <ul className="mt-3 grid gap-2">
           {files.map((f, i) => (
-            <li key={f.name + i} className="flex items-center gap-3 rounded-[12px] bg-white/70 px-4 py-2.5 text-[0.9rem] shadow-[inset_0_0_0_1px_rgb(16_36_46/0.08)]">
+            <li key={f.name + i} className="flex items-center gap-3 rounded-[12px] bg-white/70 px-4 py-2.5 t-small shadow-[inset_0_0_0_1px_rgb(16_36_46/0.08)]">
               <FileText className="h-4 w-4 shrink-0 text-brand" aria-hidden />
               <span className="min-w-0 flex-1 truncate">{f.name}</span>
-              <span className="text-[0.8rem] text-muted">{fmt(f.size)}</span>
+              <span className="t-xs text-muted">{fmt(f.size)}</span>
               <button type="button" aria-label={`Remove ${f.name}`} onClick={() => setFiles(files.filter((_, k) => k !== i))} className="grid h-7 w-7 place-items-center rounded-full hover:bg-ink/5">
                 <X className="h-4 w-4" />
               </button>
@@ -176,7 +176,7 @@ export function CareersForm() {
       </Field>
 
       <fieldset className="sm:col-span-2">
-        <legend className="mb-3 text-[0.88rem] font-medium text-ink">
+        <legend className="mb-3 t-small font-medium text-ink">
           Job type <span className="text-brand" aria-hidden>*</span>
         </legend>
         <div className="flex flex-wrap gap-2" role="radiogroup">
@@ -187,7 +187,7 @@ export function CareersForm() {
             </label>
           ))}
         </div>
-        {errors.jobType && <p role="alert" className="mt-1.5 text-[0.82rem] text-[#c0392b]">{errors.jobType}</p>}
+        {errors.jobType && <p role="alert" className="mt-1.5 t-xs text-[#c0392b]">{errors.jobType}</p>}
       </fieldset>
 
       <DropZone id="resume" label="Upload your resume" required files={resume} setFiles={setResume} error={errors.resume} />
@@ -198,20 +198,20 @@ export function CareersForm() {
       </Field>
 
       <div className="sm:col-span-2">
-        <label className="flex cursor-pointer items-start gap-3 text-[0.9rem] leading-relaxed text-muted">
+        <label className="flex cursor-pointer items-start gap-3 t-small leading-relaxed text-muted">
           <input id="consent" name="consent" type="checkbox" className="mt-1 h-5 w-5 shrink-0 accent-[#046492]" {...err("consent")} />
           <span>
             I agree that my application and documents may be stored and reviewed for recruitment, as described in the{" "}
             <Link href={routes.privacy} className="text-ink underline underline-offset-4">privacy policy</Link>.
           </span>
         </label>
-        {errors.consent && <p id="consent-error" role="alert" className="mt-1.5 text-[0.82rem] text-[#c0392b]">{errors.consent}</p>}
+        {errors.consent && <p id="consent-error" role="alert" className="mt-1.5 t-xs text-[#c0392b]">{errors.consent}</p>}
       </div>
 
       <div className="grid gap-4 sm:col-span-2">
         <FormError message={formError} />
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-[0.82rem] text-muted">
+          <p className="t-xs text-muted">
             Fields marked <span className="text-brand">*</span> are required.
           </p>
           <SubmitButton loading={loading}>
