@@ -34,9 +34,29 @@ function table(rows: Row[]) {
     .join("")}</table>`;
 }
 
+export type FileRef = { name: string; label: string; key: string; size: number; link?: string };
+
+const kb = (n: number) => (n > 1024 * 1024 ? `${(n / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(n / 1024))} KB`);
+
+/** Uploaded-files block: name, size, bucket path and a 7-day private download link. */
+function filesBlock(files: FileRef[]) {
+  if (!files.length) return "";
+  return `<h2 style="margin:28px 0 8px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#69737a">Uploaded files</h2>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #10242e">${files
+    .map(
+      (f) => `<tr><td style="padding:12px 0;border-bottom:1px solid #e6e2d9;font-size:14px;line-height:1.5">
+<strong>${esc(f.label)}:</strong> ${f.link ? `<a href="${esc(f.link)}" style="color:#046492">${esc(f.name)}</a>` : esc(f.name)} <span style="color:#69737a">(${kb(f.size)})</span><br>
+<span style="font-size:12px;color:#69737a">Railway bucket: ${esc(f.key)}</span></td></tr>`,
+    )
+    .join("")}</table>
+<p style="margin:10px 0 0;font-size:12px;color:#69737a">Download links expire after 7 days. Files stay in the Railway bucket (qsgs-media → uploads/).</p>`;
+}
+
+const textFiles = (files: FileRef[]) => (files.length ? `\n\nUploaded files:\n${files.map((f) => `- ${f.label}: ${f.name} (${kb(f.size)}) — ${f.key}${f.link ? `\n  ${f.link}` : ""}`).join("\n")}` : "");
+
 const textRows = (rows: Row[]) => rows.filter(([, v]) => v && v.trim()).map(([k, v]) => `${k}: ${v}`).join("\n");
 
-export function contactNotification(d: Record<string, string>) {
+export function contactNotification(d: Record<string, string>, files: FileRef[] = []) {
   const rows: Row[] = [
     ["Name", d.name],
     ["Email", d.email],
@@ -52,8 +72,8 @@ export function contactNotification(d: Record<string, string>) {
   const title = "New meeting request";
   return {
     subject: `Meeting request — ${d.name}${d.company ? ` (${d.company})` : ""}`,
-    html: layout(title, "A new request was submitted through the website contact form. Reply to this email to answer the sender directly.", table(rows)),
-    text: `${title}\n\n${textRows(rows)}`,
+    html: layout(title, "A new request was submitted through the website contact form. Reply to this email to answer the sender directly.", table(rows) + filesBlock(files)),
+    text: `${title}\n\n${textRows(rows)}${textFiles(files)}`,
   };
 }
 
@@ -67,7 +87,7 @@ export function contactConfirmation(name: string) {
   };
 }
 
-export function careersNotification(d: Record<string, string>, files: string[]) {
+export function careersNotification(d: Record<string, string>, files: FileRef[]) {
   const rows: Row[] = [
     ["Name", `${d.firstName} ${d.lastName}`],
     ["Email", d.email],
@@ -75,13 +95,12 @@ export function careersNotification(d: Record<string, string>, files: string[]) 
     ["Address", [d.address1, d.city, d.state, d.country].filter(Boolean).join(", ")],
     ["Job type", d.jobType],
     ["Additional information", d.info],
-    ["Attachments", files.join("\n")],
   ];
   const title = "New job application — Quantity Surveyor";
   return {
     subject: `Job application — ${d.firstName} ${d.lastName} (${d.jobType})`,
-    html: layout(title, "A new application was submitted through the careers page. The CV and cover letter are attached.", table(rows)),
-    text: `${title}\n\n${textRows(rows)}`,
+    html: layout(title, "A new application was submitted through the careers page. The documents are attached and saved in the Railway bucket.", table(rows) + filesBlock(files)),
+    text: `${title}\n\n${textRows(rows)}${textFiles(files)}`,
   };
 }
 

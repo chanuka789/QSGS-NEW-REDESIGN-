@@ -8,6 +8,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbJsonLd, buildMetadata, jobPostingJsonLd } from "@/lib/seo";
 import { qsJob } from "@/lib/jobs";
 import { company, routes } from "@/lib/site";
+import { img } from "@/lib/media";
 
 const seo = {
   path: routes.careers,
@@ -20,7 +21,7 @@ const seo = {
 
 export const metadata = buildMetadata(seo);
 
-const gallery = ["hotel-tower", "hillside-housing", "wave-residences", "office-tower", "corporate-hq"];
+const gallery = ["hospitality-04", "residential-12", "commercial-07", "residential-06"].map((g) => img(`qsgs-${g}.webp`));
 
 function List({ title, items }: { title: string; items: string[] }) {
   return (
@@ -66,8 +67,8 @@ export default function CareersPage() {
       <section aria-label="Project visuals" className="container-x mt-12">
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
           {gallery.slice(0, 4).map((g, i) => (
-            <Reveal key={g} delay={i * 0.06} className="relative aspect-[3/4] overflow-hidden rounded-[16px] bg-paper-2">
-              <Image src={`/images/projects/${g}.webp`} alt="Project by Quantity Surveying Global Solutions" fill sizes="(min-width:640px) 25vw, 50vw" className="object-cover" />
+            <Reveal key={g.file} delay={i * 0.06} className="relative aspect-[3/4] overflow-hidden rounded-[16px] bg-paper-2">
+              <Image src={g.src} alt={g.alt} fill sizes="(min-width:640px) 25vw, 50vw" className="object-cover" />
             </Reveal>
           ))}
         </div>

@@ -11,6 +11,7 @@ import { ParallaxImage } from "@/components/ui/Parallax";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbJsonLd, buildMetadata, webPageJsonLd } from "@/lib/seo";
 import { routes } from "@/lib/site";
+import { img } from "@/lib/media";
 
 const seo = {
   path: routes.about,
@@ -30,7 +31,7 @@ const story = [
       "In a world where construction projects are becoming increasingly complex, Quantity Surveying Global Solutions was born out of a vision to simplify and enhance the art of quantity surveying. Our journey began with a team of passionate quantity surveyors who believed in the power of precision, efficiency, and innovation.",
       "Our founders, seasoned professionals in the construction industry, recognized the growing demand for reliable and accurate surveying services that could transcend geographical boundaries. With a blend of expertise and cutting-edge tools, we developed a suite of remote services designed to meet the diverse needs of property developers, consultant firms, contracting firms, and independent architects.",
     ],
-    img: "/images/photos/drawings.webp",
+    img: img("qsgs-educational-01.webp").src,
   },
   {
     k: "Ambition",
@@ -39,7 +40,7 @@ const story = [
       "From our humble beginnings, we set out to redefine the standards of quantity surveying, driven by the desire to offer unparalleled remote services to clients worldwide. We envisioned a future where advanced technology and expert knowledge could be seamlessly integrated to provide cost-effective and efficient solutions for any project, anywhere.",
       "At Quantity Surveying Global Solutions, we pride ourselves on our commitment to excellence. Our team works meticulously on every detail of a project. We believe in the power of collaboration, leveraging our collective experience to deliver results that exceed expectations.",
     ],
-    img: "/images/photos/collaboration.webp",
+    img: img("qsgs-commercial-08.webp").src,
   },
   {
     k: "Innovation",
@@ -47,7 +48,7 @@ const story = [
     p: [
       "Innovation is at the heart of our operations. By embracing the latest technology, we offer precise take-offs, detailed BOQ preparation, and comprehensive cost management services, all from a remote setting. This not only saves our clients valuable time and resources but also ensures that projects are managed with the utmost accuracy and professionalism.",
     ],
-    img: "/images/work/takeoff-3d-model.webp",
+    img: img("qsgs-infrastructure-03.webp").src,
   },
   {
     k: "Growth",
@@ -56,7 +57,7 @@ const story = [
       "Our journey has been marked by continuous growth and adaptation. As we expanded our services globally, we remained steadfast in our mission to provide top-notch quantity surveying solutions tailored to the unique requirements of each client. Today, we are proud to serve a diverse portfolio of projects, ranging from commercial, residential, mixed-use, hotels, healthcare, educational, sports, recreational, industrial, irrigation, expressways, and infrastructure developments.",
       "Our story is one of dedication, innovation, and a relentless pursuit of excellence. We are Quantity Surveying Global Solutions, your trusted partner in turning visions into reality, one project at a time. Join us on our journey, and let us help you build the future with confidence and precision.",
     ],
-    img: "/images/projects/waterfront-skyline.webp",
+    img: img("qsgs-mixed-use-01.webp").src,
   },
 ];
 
@@ -70,8 +71,8 @@ export default function AboutPage() {
         eyebrow="About us"
         title={["Precision without borders."]}
         lead="Welcome to Quantity Surveying Global Solutions! We specialize in providing expert quantity surveying services remotely to clients around the globe. Our team of seasoned professionals utilizes the latest technology to deliver accurate cost estimates, detailed BOQ preparation, and efficient project management."
-        image="/images/photos/glass-towers.webp"
-        imageAlt="Modern glass towers — Quantity Surveying Global Solutions"
+        image={img("qsgs-residential-11.webp").src}
+        imageAlt={img("qsgs-residential-11.webp").alt}
       />
 
       <section className="section" aria-labelledby="redefine-title">

@@ -7,6 +7,7 @@ import { Reveal, Stagger, StaggerLi } from "@/components/ui/Reveal";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbJsonLd, buildMetadata, webPageJsonLd } from "@/lib/seo";
 import { routes } from "@/lib/site";
+import { img } from "@/lib/media";
 
 const seo = {
   path: routes.team,
@@ -57,8 +58,8 @@ export default function TeamPage() {
         eyebrow="Highly qualified quantity surveyors"
         title={["Meet our expert team."]}
         lead="Graduate quantity surveyors with hands-on experience across the Gulf region, the United Kingdom, Australia and New Zealand — a leading QS outsource partner for your projects."
-        image="/images/photos/team.webp"
-        imageAlt="Quantity surveying team collaborating"
+        image={img("qsgs-commercial-05.webp").src}
+        imageAlt={img("qsgs-commercial-05.webp").alt}
       />
 
       <section className="section" aria-labelledby="pillars-title">

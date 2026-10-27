@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { CountryOptions, Field, FormError, Honeypot, SubmitButton, Success } from "./FormBits";
+import { DropZone } from "./DropZone";
 import { countries, priorityCountries } from "@/lib/countries";
 import { companyTypes, routes } from "@/lib/site";
 import { modules } from "@/lib/services";
@@ -15,6 +16,7 @@ export function ContactForm() {
   const [formError, setFormError] = useState<string>();
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
+  const [files, setFiles] = useState<File[]>([]);
   const startedAt = useRef(0);
   const dateRef = useRef<HTMLInputElement>(null);
 
@@ -40,16 +42,13 @@ export function ContactForm() {
     }
     setLoading(true);
     try {
-      const res = await fetch("/api/contact/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...data,
-          consent: true,
-          startedAt: startedAt.current,
-          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        }),
-      });
+      const body = new FormData();
+      Object.entries(data).forEach(([k, v]) => body.set(k, v));
+      body.set("consent", "true");
+      body.set("startedAt", String(startedAt.current));
+      body.set("timezone", Intl.DateTimeFormat().resolvedOptions().timeZone);
+      files.forEach((f) => body.append("attachments", f));
+      const res = await fetch("/api/contact/", { method: "POST", body });
       const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string; fields?: Record<string, string> };
       if (!res.ok || !json.ok) {
         setErrors(json.fields ?? {});
@@ -57,6 +56,7 @@ export function ContactForm() {
         return;
       }
       setDone(true);
+      setFiles([]);
     } catch {
       setFormError("Network error. Please check your connection and try again.");
     } finally {
@@ -110,6 +110,9 @@ export function ContactForm() {
       <Field id="time" label="Preferred time" hint="Your local time zone is included automatically." error={errors.time}>
         <input id="time" name="time" type="time" className="field" />
       </Field>
+      <div className="sm:col-span-2">
+        <DropZone id="attachments" label="Attach drawings or documents (optional)" files={files} setFiles={setFiles} error={errors.attachments} />
+      </div>
       <Field id="message" label="Comment or message" className="sm:col-span-2">
         <textarea id="message" name="message" className="field" placeholder="Tell us about your project, drawings and deadline." />
       </Field>

@@ -78,17 +78,25 @@ For `login`, *Authenticated SMTP* must be enabled for the mailbox in the Microso
 
 `railway.json` configures the build (`npm run build`), start (`npm run start`, listens on `$PORT`) and health check (`/api/health/`).
 
-Set these service variables in Railway: `NEXT_PUBLIC_SITE_URL` and the email variables above. Then add the custom domain `qs-global-solutions.com` in **Settings → Networking** and update DNS at your domain registrar.
+Set these service variables in Railway: `NEXT_PUBLIC_SITE_URL`, the email variables above, and the bucket references from `.env.example`. Then add the custom domain `qs-global-solutions.com` in **Settings → Networking** and update DNS at your domain registrar.
 
-## Replacing images
+## Images and file storage (Railway bucket `qsgs-media`)
 
-All images are local in `public/images` — replace a file with one of the **same name** (WebP or JPG renamed to the same path) and redeploy.
+The bucket is private. It has two folders:
 
-| Folder | Used for | Notes |
+| Folder | Contents | Public? |
 | --- | --- | --- |
-| `public/images/projects/` | Service pages, project gallery, client index | Renders from the current website. The project gallery is labelled “Illustrative project studies” — replace with real projects and edit titles in `components/sections/ProjectsGallery.tsx`. |
-| `public/images/work/` | Take-off / BoQ samples, service timeline | Screenshots from the current website. |
-| `public/images/photos/` | About, team, careers, “Why choose us” | **Placeholder stock photos (Unsplash licence)** — replace with your own photos. |
-| `public/brand/` | Logo (SVG), app icons | Vector logo traced from the original artwork. |
+| `images/` | Website images, named `qsgs-<sector>-<nn>.webp` (for example `qsgs-residential-05.webp`) | Served through `/media/<file>`, then resized and cached by Next.js |
+| `uploads/careers/…`, `uploads/contact/…` | CVs, cover letters and drawings sent through the forms (PDF, DOC, DOCX, JPG, PNG, WEBP · 5 MB per file · up to 4 files) | Never public. The notification email includes the files plus 7-day private download links |
+
+All website images are listed in `lib/media.ts` (file, sector, title, alt text). **To replace an image**, upload a new file with the same name. Either use the bucket's **Files** tab in the Railway dashboard (put it in `images/`), or run:
+
+```bash
+curl -X PUT -H "Authorization: Bearer $MEDIA_UPLOAD_TOKEN" \
+  --data-binary @qsgs-residential-05.webp \
+  "https://<your-site>/api/admin/media/?file=qsgs-residential-05.webp"
+```
+
+To add a new image, upload it the same way, then add a line for it in `lib/media.ts`.
 
 Text content lives in `lib/site.ts` (company details, offices, navigation), `lib/services.ts` (all services) and `lib/jobs.ts` (vacancy — update `datePosted` when the role is re-opened).

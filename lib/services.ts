@@ -1,4 +1,5 @@
 import { routes } from "./site";
+import { img } from "./media";
 
 export type ServiceItem = { title: string; text: string };
 export type ServiceModule = {
@@ -29,8 +30,8 @@ export const modules: Record<string, ServiceModule> = {
     title: "Take-off Quantities",
     short: "Take-off quantities",
     icon: "Ruler",
-    image: "/images/work/takeoff-3d-model.webp",
-    imageAlt: "3D model quantity take-off in progress",
+    image: img("qsgs-infrastructure-03.webp").src,
+    imageAlt: img("qsgs-infrastructure-03.webp").alt,
     intro:
       "We provide precise take-off quantities for your construction projects, including 2D drawings and 3D models, ensuring accurate quantification of elements. This supports effective cost estimation and project planning.",
     items: [
@@ -48,8 +49,8 @@ export const modules: Record<string, ServiceModule> = {
     title: "Preparation of Bills of Quantities",
     short: "Preparation of bills of quantities",
     icon: "FileSpreadsheet",
-    image: "/images/work/boq-sheet.webp",
-    imageAlt: "Bill of Quantities spreadsheet prepared by QSGS",
+    image: img("qsgs-commercial-06.webp").src,
+    imageAlt: img("qsgs-commercial-06.webp").alt,
     intro:
       "Our team prepares complete Bills of Quantities (BoQs) with precise quantities, adhering to the drawings, specifications, and the standard method of measurements — based on the client’s requirements and format guidelines.",
     items: [
@@ -69,8 +70,8 @@ export const modules: Record<string, ServiceModule> = {
     title: "Tender Documents Preparation",
     short: "Tender documents preparation",
     icon: "FileStack",
-    image: "/images/work/boq-cover.webp",
-    imageAlt: "Tender document and BoQ cover prepared for a GCC project",
+    image: img("qsgs-commercial-02.webp").src,
+    imageAlt: img("qsgs-commercial-02.webp").alt,
     intro:
       "We provide comprehensive tender document preparation services exclusively for GCC countries. Our offerings include detailed project specifications, terms of contract, schedules, and precise drawings, accompanied by a bill of quantities and clear legal terms. This service is crucial for ensuring accurate project scope definition and facilitating competitive bidding, leading to streamlined project execution across the Gulf region.",
     items: [
@@ -87,8 +88,8 @@ export const modules: Record<string, ServiceModule> = {
     title: "BoQ Revision Services Aligned with Design Changes",
     short: "BoQ revision services aligned with design changes",
     icon: "GitCompareArrows",
-    image: "/images/work/boq-concrete.webp",
-    imageAlt: "Revised Bill of Quantities with highlighted changes",
+    image: img("qsgs-residential-02.webp").src,
+    imageAlt: img("qsgs-residential-02.webp").alt,
     intro:
       "Our BoQ Revision Services meticulously update your Bills of Quantities to reflect the latest design changes, ensuring accuracy and alignment with current project specifications.",
     items: [
@@ -105,8 +106,8 @@ export const modules: Record<string, ServiceModule> = {
     title: "Review of Consultant-Prepared BoQ",
     short: "Review of consultant-prepared BoQ",
     icon: "SearchCheck",
-    image: "/images/work/boq-summary.webp",
-    imageAlt: "BoQ summary under professional review",
+    image: img("qsgs-commercial-05.webp").src,
+    imageAlt: img("qsgs-commercial-05.webp").alt,
     intro:
       "We offer professional reviews of BoQs prepared by consultants, ensuring accuracy, adherence to project specifications, drawings and compliance with industry standards. Our detailed assessments help identify discrepancies and improve overall project reliability and efficiency.",
     items: [
@@ -121,8 +122,8 @@ export const modules: Record<string, ServiceModule> = {
     title: "Comprehensive Quantity Verification for Tender Drawings",
     short: "Comprehensive quantity verification for tender drawings",
     icon: "ScanSearch",
-    image: "/images/work/takeoff-2d-plan.webp",
-    imageAlt: "Tender drawing quantity verification",
+    image: img("qsgs-expressways-01.webp").src,
+    imageAlt: img("qsgs-expressways-01.webp").alt,
     intro:
       "Our team thoroughly checks tender drawings for accurate quantity assessments, ensuring reliable information for cost estimation and project planning, all while adhering to industry standards.",
     items: [
@@ -135,8 +136,8 @@ export const modules: Record<string, ServiceModule> = {
     title: "Preparation of Tender Queries",
     short: "Preparation of tender queries",
     icon: "MessageSquareText",
-    image: "/images/work/takeoff-markup.webp",
-    imageAlt: "Marked-up drawings used to prepare tender queries",
+    image: img("qsgs-hospitality-04.webp").src,
+    imageAlt: img("qsgs-hospitality-04.webp").alt,
     intro:
       "Our team carefully examines tender documents to identify ambiguities, inconsistencies, or missing information. We then prepare detailed queries to submit to consultants, seeking clarification and additional details. This ensures a comprehensive understanding of project requirements and helps prevent misunderstandings during the tendering process before finalizing.",
     items: [
@@ -152,8 +153,8 @@ export const modules: Record<string, ServiceModule> = {
     title: "Assistance in Preparing Variations",
     short: "Assistance in preparing variations",
     icon: "Scale",
-    image: "/images/work/takeoff-3d-tower.webp",
-    imageAlt: "3D tower model used to quantify variations",
+    image: img("qsgs-infrastructure-02.webp").src,
+    imageAlt: img("qsgs-infrastructure-02.webp").alt,
     intro:
       "Our team provides expert support in preparing variations, ensuring that all changes to the project scope are accurately documented and quantified. We work to identify, evaluate, and document modifications, ensuring compliance with contractual requirements. This process helps manage project costs and timelines, while maintaining transparency and clarity.",
     items: [
@@ -187,12 +188,12 @@ export type Segment = {
 };
 
 const developerGallery = [
-  { src: "/images/projects/hotel-tower.webp", alt: "Quantity Surveying Services For Property Developers - hotel tower" },
-  { src: "/images/projects/hillside-housing.webp", alt: "Quantity Surveying Services For Property Developers - hillside housing" },
-  { src: "/images/projects/wave-residences.webp", alt: "Quantity Surveying Services For Property Developers - residences" },
-  { src: "/images/projects/office-tower.webp", alt: "Quantity Surveying Services For Property Developers - office tower" },
-  { src: "/images/projects/corporate-hq.webp", alt: "Quantity Surveying Services For Property Developers - corporate headquarters" },
-];
+      { src: img("qsgs-residential-11.webp").src, alt: img("qsgs-residential-11.webp").alt },
+      { src: img("qsgs-residential-07.webp").src, alt: img("qsgs-residential-07.webp").alt },
+      { src: img("qsgs-residential-12.webp").src, alt: img("qsgs-residential-12.webp").alt },
+      { src: img("qsgs-mixed-use-01.webp").src, alt: img("qsgs-mixed-use-01.webp").alt },
+      { src: img("qsgs-residential-05.webp").src, alt: img("qsgs-residential-05.webp").alt },
+]
 
 export const segments: Segment[] = [
   {
@@ -205,7 +206,7 @@ export const segments: Segment[] = [
     eyebrow: "Remote services for Property Developers / Clients",
     h1: "Our services for Property Developers / Clients",
     lead: "Expert, remote quantity surveying support on the pre-contract side — from take-offs and BoQs to complete tender documents and independent reviews of consultant-prepared BoQs.",
-    heroImage: "/images/projects/hotel-tower.webp",
+    heroImage: img("qsgs-residential-11.webp").src,
     gallery: developerGallery,
     modules: [modules.takeoff, modules.boq, modules.tenderDocs, modules.revision, modules.review],
     seo: {
@@ -225,12 +226,13 @@ export const segments: Segment[] = [
     eyebrow: "Remote Services For Cost Consultant Firms",
     h1: "Our Quantity Surveying Remote Services for Cost Consultant Firms",
     lead: "An extension of your QS team. We take on the measurement-heavy pre-contract work so your consultants can focus on advice — while you save on overheads.",
-    heroImage: "/images/projects/residential-courtyard.webp",
+    heroImage: img("qsgs-commercial-02.webp").src,
     gallery: [
-      { src: "/images/projects/residential-courtyard.webp", alt: "Our Quantity Surveying Remote Services for Consultant Firms - residential" },
-      { src: "/images/projects/residential-corner.webp", alt: "Our Quantity Surveying Remote Services for Consultant Firms - corner block" },
-      { src: "/images/projects/commercial-tower.webp", alt: "Our Quantity Surveying Remote Services for Consultant Firms - commercial tower" },
-      { src: "/images/projects/mixed-use-night.webp", alt: "Our Quantity Surveying Remote Services for Consultant Firms - mixed use" },
+      { src: img("qsgs-commercial-02.webp").src, alt: img("qsgs-commercial-02.webp").alt },
+      { src: img("qsgs-commercial-05.webp").src, alt: img("qsgs-commercial-05.webp").alt },
+      { src: img("qsgs-commercial-06.webp").src, alt: img("qsgs-commercial-06.webp").alt },
+      { src: img("qsgs-commercial-08.webp").src, alt: img("qsgs-commercial-08.webp").alt },
+      { src: img("qsgs-commercial-04.webp").src, alt: img("qsgs-commercial-04.webp").alt },
     ],
     modules: [modules.takeoff, modules.boq, modules.revision],
     seo: {
@@ -250,8 +252,14 @@ export const segments: Segment[] = [
     eyebrow: "Remote services for Contractors",
     h1: "Our Quantity Surveying Remote Services for Contractors",
     lead: "Win tenders with confidence. We verify quantities, raise the right tender queries, prepare subcontract BoQs and support you with variations after award.",
-    heroImage: "/images/projects/high-rise-plaza.webp",
-    gallery: developerGallery,
+    heroImage: img("qsgs-commercial-07.webp").src,
+    gallery: [
+      { src: img("qsgs-infrastructure-02.webp").src, alt: img("qsgs-infrastructure-02.webp").alt },
+      { src: img("qsgs-expressways-01.webp").src, alt: img("qsgs-expressways-01.webp").alt },
+      { src: img("qsgs-commercial-07.webp").src, alt: img("qsgs-commercial-07.webp").alt },
+      { src: img("qsgs-hospitality-04.webp").src, alt: img("qsgs-hospitality-04.webp").alt },
+      { src: img("qsgs-healthcare-01.webp").src, alt: img("qsgs-healthcare-01.webp").alt },
+    ],
     modules: [modules.takeoff, modules.verification, modules.tenderQueries, contractorBoq, modules.variations],
     seo: {
       title: "Our services for Contractors | Quantity Surveying Global Solutions",
@@ -270,13 +278,13 @@ export const segments: Segment[] = [
     eyebrow: "Remote Services For Architects Firms",
     h1: "Our Quantity Surveying Remote Services for Architects Firms",
     lead: "Bring cost certainty to your designs. Accurate take-offs and BoQs that keep pace with every design revision — delivered remotely by graduate quantity surveyors.",
-    heroImage: "/images/projects/cultural-pavilion.webp",
+    heroImage: img("qsgs-residential-06.webp").src,
     gallery: [
-      { src: "/images/projects/cultural-pavilion.webp", alt: "Quantity Surveying Remote Services For Independent Architects - pavilion" },
-      { src: "/images/projects/residential-street.webp", alt: "Quantity Surveying Remote Services For Independent Architects - residential street" },
-      { src: "/images/projects/residential-block.webp", alt: "Quantity Surveying Remote Services For Independent Architects - residential block" },
-      { src: "/images/projects/high-rise-plaza.webp", alt: "Quantity Surveying Remote Services For Independent Architects - high rise" },
-      { src: "/images/projects/civic-building.webp", alt: "Quantity Surveying Remote Services For Independent Architects - civic building" },
+      { src: img("qsgs-residential-06.webp").src, alt: img("qsgs-residential-06.webp").alt },
+      { src: img("qsgs-residential-08.webp").src, alt: img("qsgs-residential-08.webp").alt },
+      { src: img("qsgs-cultural-02.webp").src, alt: img("qsgs-cultural-02.webp").alt },
+      { src: img("qsgs-cultural-01.webp").src, alt: img("qsgs-cultural-01.webp").alt },
+      { src: img("qsgs-educational-01.webp").src, alt: img("qsgs-educational-01.webp").alt },
     ],
     modules: [modules.takeoff, modules.boq, modules.revision, modules.review],
     seo: {

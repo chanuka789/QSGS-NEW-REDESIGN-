@@ -106,7 +106,7 @@ export default function HomePage() {
       {/* Disciplines + work samples */}
       <section className="section" aria-labelledby="disciplines-title">
         <div className="container-x grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
-          <SectionHeading id="disciplines-title" eyebrow="What we measure" title={["Every discipline, one standard of care."]} lead="Real take-off and BoQ samples from our team." />
+          <SectionHeading id="disciplines-title" eyebrow="What we measure" title={["Every discipline, one standard of care."]} lead="Residential, commercial, hospitality, civic and infrastructure projects." />
           <Disciplines />
         </div>
         <div className="mt-14">

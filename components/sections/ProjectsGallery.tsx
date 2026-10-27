@@ -8,24 +8,30 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ArrowLong } from "@/components/ui/ArrowLong";
 import Image from "next/image";
 import { routes } from "@/lib/site";
+import { mediaItems, mediaUrl, sectorLabel, type Sector } from "@/lib/media";
 
-// Illustrative studies with placeholder images — replace with real projects when available.
-const projects = [
-  { title: "Courtyard residential block", cat: "Residential", meta: "Take-off quantities · BoQ preparation", img: "/images/projects/residential-courtyard.webp" },
-  { title: "Glass office tower", cat: "Commercial", meta: "Bills of quantities · Revisions", img: "/images/projects/commercial-tower.webp" },
-  { title: "Hotel tower & podium", cat: "Hospitality", meta: "Tender documents · BoQ", img: "/images/projects/hotel-tower.webp" },
-  { title: "Waterfront district", cat: "Infrastructure", meta: "Infrastructure take-off", img: "/images/projects/waterfront-skyline.webp" },
-  { title: "Hillside housing", cat: "Residential", meta: "BoQ review · Comparison report", img: "/images/projects/hillside-housing.webp" },
-  { title: "Corporate headquarters", cat: "Commercial", meta: "Tender queries · Variations", img: "/images/projects/corporate-hq.webp" },
-  { title: "Mixed-use urban block", cat: "Commercial", meta: "3D model quantification", img: "/images/projects/mixed-use-night.webp" },
-  { title: "Resort residences", cat: "Hospitality", meta: "2D & 3D take-offs", img: "/images/projects/wave-residences.webp" },
-  { title: "Cultural pavilion", cat: "Commercial", meta: "Take-off quantities", img: "/images/projects/cultural-pavilion.webp" },
-];
-const filters = ["All projects", "Residential", "Commercial", "Hospitality", "Infrastructure"] as const;
+type Group = "All projects" | "Residential" | "Commercial" | "Hotels & Resorts" | "Infrastructure" | "Civic & Community";
+const groupOf: Record<Sector, Exclude<Group, "All projects">> = {
+  residential: "Residential",
+  commercial: "Commercial",
+  "mixed-use": "Commercial",
+  hospitality: "Hotels & Resorts",
+  infrastructure: "Infrastructure",
+  expressways: "Infrastructure",
+  landscape: "Infrastructure",
+  cultural: "Civic & Community",
+  educational: "Civic & Community",
+  healthcare: "Civic & Community",
+  recreational: "Civic & Community",
+};
+const filters: Group[] = ["All projects", "Residential", "Commercial", "Hotels & Resorts", "Infrastructure", "Civic & Community"];
+const PAGE = 9;
 
 export function ProjectsGallery() {
-  const [f, setF] = useState<(typeof filters)[number]>("All projects");
-  const list = projects.filter((p) => f === "All projects" || p.cat === f);
+  const [f, setF] = useState<Group>("All projects");
+  const [shown, setShown] = useState(PAGE);
+  const all = mediaItems.filter((m) => f === "All projects" || groupOf[m.sector] === f);
+  const list = all.slice(0, shown);
   return (
     <section className="section" aria-labelledby="projects-title">
       <div className="container-x">
@@ -36,12 +42,12 @@ export function ProjectsGallery() {
             title={["The detail behind the bigger picture."]}
             lead="How precise measurement supports different kinds of projects — from residential blocks to hotels and infrastructure."
           />
-          <p className="t-xs shrink-0 text-muted lg:pb-1">Illustrative project studies</p>
+          <p className="t-xs shrink-0 text-muted lg:pb-1">{mediaItems.length} project visuals</p>
         </div>
 
         <div role="tablist" aria-label="Filter projects" className="mt-10 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none]">
           {filters.map((x) => (
-            <button key={x} role="tab" type="button" aria-selected={f === x} onClick={() => setF(x)} className="tab">
+            <button key={x} role="tab" type="button" aria-selected={f === x} onClick={() => { setF(x); setShown(PAGE); }} className="tab">
               {x}
             </button>
           ))}
@@ -52,7 +58,7 @@ export function ProjectsGallery() {
             {list.map((p) => (
               <motion.li
                 layout="position"
-                key={p.title}
+                key={p.file}
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
@@ -61,8 +67,8 @@ export function ProjectsGallery() {
                 <Link href={routes.contact} className="group block" aria-label={`${p.title} — discuss a similar project`}>
                   <div className="relative aspect-[4/3] overflow-hidden rounded-[16px] bg-paper-2">
                     <Image
-                      src={p.img}
-                      alt={`${p.title} (illustrative)`}
+                      src={mediaUrl(p.file)}
+                      alt={p.alt}
                       fill
                       sizes="(min-width:1024px) 380px, (min-width:640px) 50vw, 100vw"
                       className="object-cover transition-transform duration-700 ease-[var(--ease-liquid)] group-hover:scale-[1.04]"
@@ -72,7 +78,7 @@ export function ProjectsGallery() {
                     <div>
                       <h3 className="t-h4 text-ink transition-colors group-hover:text-brand">{p.title}</h3>
                       <p className="t-small mt-1 text-muted">
-                        {p.cat} · {p.meta}
+                        {sectorLabel[p.sector]}
                       </p>
                     </div>
                     <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full shadow-[inset_0_0_0_1px_var(--color-line)] transition-colors duration-300 group-hover:bg-brand group-hover:text-white group-hover:shadow-none">
@@ -84,6 +90,14 @@ export function ProjectsGallery() {
             ))}
           </AnimatePresence>
         </ul>
+
+        {shown < all.length && (
+          <div className="mt-10 flex justify-center">
+            <button type="button" onClick={() => setShown((n) => n + PAGE)} className="btn btn-outline">
+              Show more projects <span className="t-small text-muted">({all.length - shown})</span>
+            </button>
+          </div>
+        )}
 
         <div className="mt-12 flex flex-col gap-4 border-t border-line pt-8 sm:flex-row sm:items-center sm:justify-between">
           <p className="t-body">Different sectors. The same attention to detail.</p>
