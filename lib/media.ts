@@ -37,6 +37,7 @@ export const mediaItems: MediaItem[] = [
   { file: "qsgs-commercial-02.webp", sector: "commercial", title: "Twin glass office towers", alt: "Twin glass office towers with a landscaped forecourt" },
   { file: "qsgs-infrastructure-01.webp", sector: "infrastructure", title: "Waterfront promenade", alt: "Curving waterfront promenade lined with palms" },
   { file: "qsgs-residential-01.webp", sector: "residential", title: "Residential courtyard", alt: "Residential courtyard with a reflecting pool and olive trees" },
+  { file: "qsgs-mixed-use-02.webp", sector: "mixed-use", title: "Marina residences and waterfront dining", alt: "Marina residences with yachts, palm trees and a waterfront restaurant at golden hour" },
   { file: "qsgs-mixed-use-01.webp", sector: "mixed-use", title: "Marina mixed-use district", alt: "Mixed-use marina district with apartments and waterfront dining" },
   { file: "qsgs-recreational-01.webp", sector: "recreational", title: "Clubhouse pavilion", alt: "Low clubhouse pavilion with a deep canopy and gardens" },
   { file: "qsgs-infrastructure-02.webp", sector: "infrastructure", title: "Canal arch bridge", alt: "Arched pedestrian bridge over a landscaped canal" },
@@ -74,6 +75,13 @@ export const mediaItems: MediaItem[] = [
   { file: "qsgs-hospitality-07.webp", sector: "hospitality", title: "Cliff-top villa", alt: "Cliff-top villa with an infinity pool over the sea" },
   { file: "qsgs-commercial-08.webp", sector: "commercial", title: "Office courtyard", alt: "Office courtyard with olive trees and glazing" },
 ];
+
+/** Home hero: photographic render + its depth map (R depth · G water · B foliage). */
+export const heroMedia = {
+  file: "qsgs-mixed-use-02.webp",
+  depth: "qsgs-mixed-use-02-depth.png",
+  alt: "Marina residences with yachts, palm trees and a waterfront restaurant at golden hour",
+};
 
 const byFile = new Map(mediaItems.map((m) => [m.file, m]));
 

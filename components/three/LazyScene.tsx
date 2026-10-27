@@ -3,9 +3,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import type { BuildingView } from "./BuildingScene";
 
-const BuildingScene = dynamic(() => import("./BuildingScene"), { ssr: false });
 const GlobeScene = dynamic(() => import("./GlobeScene"), { ssr: false });
 
 function hasWebGL() {
@@ -17,9 +15,7 @@ function hasWebGL() {
   }
 }
 
-type Props =
-  | { scene: "building"; view?: BuildingView; rotate?: boolean; className?: string; fallback?: ReactNode }
-  | { scene: "globe"; className?: string; fallback?: ReactNode };
+type Props = { scene: "globe"; className?: string; fallback?: ReactNode };
 
 /**
  * Mounts a Three.js scene only when it approaches the viewport, pauses rendering
@@ -50,11 +46,7 @@ export function LazyScene(props: Props) {
       {(!webgl || !mounted) && fallback}
       {webgl && mounted && (
         <div className="absolute inset-0 animate-[fadeIn_1.2s_var(--ease-liquid)_both]">
-          {props.scene === "building" ? (
-            <BuildingScene view={props.view} rotate={props.rotate} active={active} />
-          ) : (
-            <GlobeScene active={active} />
-          )}
+          <GlobeScene active={active} />
         </div>
       )}
     </div>

@@ -1,15 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
-import { useRef, useState } from "react";
-import { ArrowUpRight, Box, Layers3, Pause, RotateCw } from "lucide-react";
+import { motion } from "motion/react";
+import { ArrowUpRight, MapPin, MousePointer2 } from "lucide-react";
 import { SplitText } from "@/components/ui/SplitText";
 import { ArrowLong } from "@/components/ui/ArrowLong";
-import { LazyScene } from "@/components/three/LazyScene";
-import type { BuildingView } from "@/components/three/BuildingScene";
+import { DepthScene } from "@/components/three/DepthScene";
+import { heroMedia, mediaUrl } from "@/lib/media";
 import { routes } from "@/lib/site";
-import { cn } from "@/lib/utils";
 
 const facts = [
   { k: "20+", v: "Countries served remotely" },
@@ -18,19 +16,13 @@ const facts = [
 ];
 
 export function HomeHero() {
-  const ref = useRef<HTMLElement>(null);
-  const reduce = useReducedMotion();
-  const [view, setView] = useState<BuildingView>("design");
-  const [rotate, setRotate] = useState(false);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const sceneY = useTransform(scrollYProgress, [0, 1], ["0%", "14%"]);
 
   const ease = [0.22, 1, 0.36, 1] as const;
 
   return (
-    <section ref={ref} className="relative pt-28 lg:pt-32">
-      <div className="container-x grid items-center gap-4 lg:grid-cols-[1fr_1.05fr] lg:gap-6">
-        <div className="relative z-10 lg:pb-10">
+    <section className="relative pt-28 lg:pt-32">
+      <div className="container-x grid items-center gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-12">
+        <div className="relative z-10">
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1, duration: 0.8 }} className="eyebrow">
             Quantity Surveying Global Solutions
           </motion.p>
@@ -67,66 +59,38 @@ export function HomeHero() {
           </motion.div>
         </div>
 
-        <motion.div style={reduce ? undefined : { y: sceneY }} className="relative -mx-5 sm:-mx-8 lg:mx-0">
+        <motion.div
+          initial={{ opacity: 0, y: 24, scale: 0.985 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ delay: 0.3, duration: 1.2, ease }}
+          className="relative"
+        >
+          <DepthScene
+            src={mediaUrl(heroMedia.file)}
+            depthSrc={mediaUrl(heroMedia.depth)}
+            alt={heroMedia.alt}
+            focalX={0.52}
+            focalY={0.5}
+            priority
+            className="aspect-[4/5] w-full rounded-[24px] sm:aspect-[5/4] lg:aspect-auto lg:h-[600px]"
+          />
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35, duration: 1.4, ease }}
-            className="relative h-[400px] sm:h-[500px] lg:h-[580px]"
+            transition={{ delay: 1.1, duration: 0.8, ease }}
+            className="pointer-events-none absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 sm:bottom-5 sm:left-5 sm:right-5"
           >
-            <LazyScene
-              scene="building"
-              view={view}
-              rotate={rotate}
-              className="h-full w-full [mask-image:radial-gradient(ellipse_75%_70%_at_50%_50%,#000_60%,transparent_100%)]"
-              fallback={<div className="absolute inset-0 grid place-items-center text-sm text-muted">Loading 3D model…</div>}
-            />
-          </motion.div>
-
-          {/* Liquid glass model controls */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.1, duration: 0.9, ease }}
-            className="absolute inset-x-0 bottom-2 z-10 flex justify-center px-4 sm:bottom-6"
-          >
-            <div role="group" aria-label="3D model view" className="glass glass-pill flex items-center gap-1 p-1.5">
-              {(
-                [
-                  { id: "design", label: "Design view", short: "Design", icon: Box },
-                  { id: "exploded", label: "Exploded view", short: "Exploded", icon: Layers3 },
-                ] as const
-              ).map((b) => (
-                <button
-                  key={b.id}
-                  type="button"
-                  aria-pressed={view === b.id}
-                  onClick={() => setView(b.id)}
-                  className={cn(
-                    "relative flex h-11 items-center gap-2 whitespace-nowrap rounded-full px-3.5 t-small transition-colors sm:px-5",
-                    view === b.id ? "text-brand" : "text-ink-2/70 hover:text-ink",
-                  )}
-                >
-                  {view === b.id && (
-                    <motion.span layoutId="view-pill" className="absolute inset-0 rounded-full bg-brand-50" transition={{ type: "spring", stiffness: 380, damping: 30 }} />
-                  )}
-                  <b.icon className="relative h-4 w-4" strokeWidth={1.6} />
-                  <span className="relative whitespace-nowrap">
-                    <span className="sm:hidden">{b.short}</span>
-                    <span className="hidden sm:inline">{b.label}</span>
-                  </span>
-                </button>
-              ))}
-              <span className="mx-1 h-6 w-px bg-ink/15" aria-hidden />
-              <button
-                type="button"
-                aria-pressed={rotate}
-                onClick={() => setRotate((r) => !r)}
-                className="flex h-11 items-center gap-2 whitespace-nowrap rounded-full px-3.5 t-small text-ink-2/80 transition-colors hover:text-ink sm:px-5"
-              >
-                {rotate ? <Pause className="h-4 w-4" strokeWidth={1.6} /> : <RotateCw className="h-4 w-4" strokeWidth={1.6} />}
-                {rotate ? "Pause" : "Rotate"}
-              </button>
+            <div className="glass glass-pill flex items-center gap-2.5 py-2 pl-2.5 pr-4">
+              <span className="grid h-7 w-7 place-items-center rounded-full bg-brand text-white" aria-hidden>
+                <MapPin className="h-3.5 w-3.5" strokeWidth={2} />
+              </span>
+              <span className="t-xs leading-tight">
+                <span className="block font-medium text-ink">Marina residences</span>
+                <span className="block text-muted">Mixed-use · Waterfront</span>
+              </span>
+            </div>
+            <div className="glass glass-pill t-xs hidden items-center gap-2 px-3.5 py-2 text-ink-2 lg:flex">
+              <MousePointer2 className="h-3.5 w-3.5 text-brand" strokeWidth={1.8} aria-hidden /> Move to explore
             </div>
           </motion.div>
         </motion.div>
