@@ -33,7 +33,7 @@ function LandDots() {
   return (
     <instancedMesh ref={ref} args={[undefined, undefined, count]}>
       <circleGeometry args={[0.0105, 6]} />
-      <meshBasicMaterial color="#10242e" transparent opacity={0.42} side={THREE.DoubleSide} />
+      <meshBasicMaterial color="#111c24" transparent opacity={0.32} side={THREE.DoubleSide} />
     </instancedMesh>
   );
 }
@@ -71,7 +71,7 @@ function Marker({ pos, office }: { pos: THREE.Vector3; office?: boolean }) {
     <group position={pos} quaternion={q}>
       <mesh>
         <circleGeometry args={[office ? 0.034 : 0.022, 20]} />
-        <meshBasicMaterial color={office ? "#046492" : "#5d8fa6"} side={THREE.DoubleSide} />
+        <meshBasicMaterial color={office ? "#046492" : "#7f97a6"} side={THREE.DoubleSide} />
       </mesh>
       <mesh ref={ring} position={[0, 0, 0.001]}>
         <ringGeometry args={[0.03, 0.04, 32]} />
@@ -121,7 +121,7 @@ function Globe() {
       <group ref={group}>
         <mesh>
           <sphereGeometry args={[R, 64, 64]} />
-          <meshPhysicalMaterial color="#f7f5f0" roughness={0.35} transmission={0} clearcoat={1} clearcoatRoughness={0.3} transparent opacity={0.9} />
+          <meshStandardMaterial color="#f3f6f8" roughness={0.9} />
         </mesh>
         <LandDots />
         {marketVecs.map((v, i) => (
@@ -134,18 +134,6 @@ function Globe() {
           <Arc key={i} from={hub} to={v} delay={i * 0.45} />
         ))}
       </group>
-      {/* Atmosphere rim */}
-      <mesh scale={1.06}>
-        <sphereGeometry args={[R, 48, 48]} />
-        <shaderMaterial
-          transparent
-          depthWrite={false}
-          side={THREE.BackSide}
-          uniforms={{ c: { value: new THREE.Color("#b9d4de") } }}
-          vertexShader={`varying vec3 vN; void main(){ vN = normalize(normalMatrix * normal); gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`}
-          fragmentShader={`uniform vec3 c; varying vec3 vN; void main(){ float i = pow(0.62 - dot(vN, vec3(0.0,0.0,1.0)), 3.0); gl_FragColor = vec4(c, clamp(i*2.2,0.0,1.0)); }`}
-        />
-      </mesh>
     </group>
   );
 }

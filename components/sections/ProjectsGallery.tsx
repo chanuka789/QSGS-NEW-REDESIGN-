@@ -27,7 +27,7 @@ export function ProjectsGallery() {
   const [f, setF] = useState<(typeof filters)[number]>("All projects");
   const list = projects.filter((p) => f === "All projects" || p.cat === f);
   return (
-    <section className="px-5 py-24 sm:px-8 lg:py-36" aria-labelledby="projects-title">
+    <section className="px-5 py-16 sm:px-8 lg:py-24" aria-labelledby="projects-title">
       <div className="mx-auto max-w-[1320px]">
         <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
           <SectionHeading id="projects-title" eyebrow="Projects" title={["The detail behind", "the bigger picture."]} />
@@ -66,7 +66,7 @@ export function ProjectsGallery() {
                         {p.cat} · {p.meta}
                       </p>
                     </div>
-                    <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full shadow-[inset_0_0_0_1px_rgb(16_36_46/0.22)] transition-all duration-500 group-hover:rotate-45 group-hover:bg-ink group-hover:text-paper group-hover:shadow-none">
+                    <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full shadow-[inset_0_0_0_1px_rgb(16_36_46/0.22)] transition-all duration-500 group-hover:rotate-45 group-hover:bg-brand group-hover:text-white group-hover:shadow-none">
                       <ArrowUpRight className="h-5 w-5" strokeWidth={1.5} />
                     </span>
                   </div>

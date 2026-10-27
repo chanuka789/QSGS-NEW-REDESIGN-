@@ -56,7 +56,7 @@ export function SegmentPage({ segment: s }: { segment: Segment }) {
       </section>
 
       {/* Disciplines statement */}
-      <section className="px-5 py-24 sm:px-8 lg:py-36" aria-labelledby="scope-title">
+      <section className="px-5 py-16 sm:px-8 lg:py-24" aria-labelledby="scope-title">
         <div className="mx-auto grid max-w-[1320px] gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
           <SectionHeading
             id="scope-title"
@@ -70,7 +70,7 @@ export function SegmentPage({ segment: s }: { segment: Segment }) {
       </section>
 
       {/* Scale-rule timeline */}
-      <section className="px-5 pb-24 sm:px-8 lg:pb-36" aria-labelledby="services-list-title">
+      <section className="px-5 pb-16 sm:px-8 lg:pb-24" aria-labelledby="services-list-title">
         <div className="mx-auto mb-16 max-w-[1320px] lg:mb-24">
           <SectionHeading id="services-list-title" eyebrow="Our services" title={["What we deliver", `for ${s.label.toLowerCase().replace(" / clients", " & clients")}.`]} />
         </div>
@@ -85,8 +85,8 @@ export function SegmentPage({ segment: s }: { segment: Segment }) {
             {others.map((o) => (
               <li key={o.key} className="border-b border-line">
                 <Link href={o.href} className="group flex items-center justify-between gap-6 py-7">
-                  <span className="text-[clamp(1.4rem,2.6vw,2.2rem)] font-medium tracking-[-0.03em] text-ink transition-transform duration-500 group-hover:translate-x-2">{o.label}</span>
-                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full shadow-[inset_0_0_0_1px_rgb(16_36_46/0.2)] transition-all duration-500 group-hover:rotate-45 group-hover:bg-ink group-hover:text-paper">
+                  <span className="text-[clamp(1.4rem,2.6vw,2.2rem)] font-medium tracking-[-0.02em] text-ink transition-transform duration-500 group-hover:translate-x-2">{o.label}</span>
+                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full shadow-[inset_0_0_0_1px_rgb(16_36_46/0.2)] transition-all duration-500 group-hover:rotate-45 group-hover:bg-brand group-hover:text-white">
                     <ArrowUpRight className="h-5 w-5" strokeWidth={1.5} />
                   </span>
                 </Link>

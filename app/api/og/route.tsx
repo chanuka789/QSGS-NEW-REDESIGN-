@@ -21,12 +21,10 @@ export function GET(req: Request) {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: 64,
-          background: "linear-gradient(135deg,#f4f2ed 0%,#ebe8e1 55%,#e2ebee 100%)",
+          background: "#ffffff",
           fontFamily: "sans-serif",
         }}
       >
-        <div style={{ position: "absolute", right: -120, top: -120, width: 520, height: 520, borderRadius: 9999, background: "radial-gradient(circle,#d7e9ef 0%,rgba(215,233,239,0) 70%)", display: "flex" }} />
-        <div style={{ position: "absolute", left: 300, bottom: -220, width: 520, height: 520, borderRadius: 9999, background: "radial-gradient(circle,#efe3cf 0%,rgba(239,227,207,0) 70%)", display: "flex" }} />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={logo} width={420} height={104} alt="" />
         <div
@@ -35,9 +33,8 @@ export function GET(req: Request) {
             flexDirection: "column",
             padding: "40px 44px",
             borderRadius: 36,
-            background: "rgba(251,250,247,0.7)",
-            border: "1.5px solid rgba(255,255,255,0.9)",
-            boxShadow: "0 30px 60px -30px rgba(4,100,146,0.35)",
+            background: "#f5f7f9",
+            border: "1.5px solid #e3e8ec",
           }}
         >
           <div style={{ fontSize: 22, letterSpacing: 4, color: "#046492", fontWeight: 700, textTransform: "uppercase" }}>Remote Quantity Surveying</div>

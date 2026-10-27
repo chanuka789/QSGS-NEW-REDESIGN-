@@ -67,7 +67,7 @@ export default function CareersPage() {
         </Marquee>
       </section>
 
-      <section className="px-5 py-24 sm:px-8 lg:py-36" aria-labelledby="job-title">
+      <section className="px-5 py-16 sm:px-8 lg:py-24" aria-labelledby="job-title">
         <div className="mx-auto max-w-[1320px]">
           <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-24">
             <div>
@@ -99,7 +99,7 @@ export default function CareersPage() {
         </div>
       </section>
 
-      <section id="apply" className="scroll-mt-28 bg-surface/60 px-5 py-24 sm:px-8 lg:py-36" aria-labelledby="apply-title">
+      <section id="apply" className="scroll-mt-28 bg-surface/60 px-5 py-16 sm:px-8 lg:py-24" aria-labelledby="apply-title">
         <div className="mx-auto grid max-w-[1320px] gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24">
           <div className="lg:sticky lg:top-32 lg:self-start">
             <SectionHeading id="apply-title" eyebrow="Join us today" title={["Apply now."]} lead="Be a part of a forward-thinking company that values excellence, innovation, and collaboration. Apply now and help us shape the future of quantity surveying!" />
@@ -113,7 +113,7 @@ export default function CareersPage() {
             </Reveal>
           </div>
           <Reveal y={30}>
-            <div className="glass glass-strong p-6 sm:p-10">
+            <div className="panel p-6 sm:p-10">
               <CareersForm />
             </div>
           </Reveal>

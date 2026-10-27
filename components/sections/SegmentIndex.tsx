@@ -42,13 +42,13 @@ export function SegmentIndex() {
           >
             <Link href={s.href} className="group grid grid-cols-[auto_1fr_auto] items-start gap-x-5 py-8 sm:gap-x-10 sm:py-10 lg:grid-cols-[80px_1.1fr_1fr_auto] lg:items-center">
               <span className="num pt-2 lg:pt-0">{String(i + 1).padStart(2, "0")}</span>
-              <span className="text-[clamp(1.6rem,3.4vw,2.9rem)] font-medium leading-[1.05] tracking-[-0.035em] text-ink transition-transform duration-700 ease-[var(--ease-liquid)] group-hover:translate-x-2">
+              <span className="text-[clamp(1.6rem,3.4vw,2.9rem)] font-medium leading-[1.05] tracking-[-0.02em] text-ink transition-transform duration-700 ease-[var(--ease-liquid)] group-hover:translate-x-2">
                 {s.cardTitle}
               </span>
               <span className="col-start-2 row-start-2 mt-3 max-w-md text-[1rem] leading-relaxed text-muted lg:col-start-3 lg:row-start-1 lg:mt-0">
                 {s.cardText}
               </span>
-              <span className="col-start-3 row-start-1 grid h-12 w-12 place-items-center rounded-full shadow-[inset_0_0_0_1px_rgb(16_36_46/0.2)] transition-all duration-500 group-hover:rotate-45 group-hover:bg-ink group-hover:text-paper group-hover:shadow-none lg:col-start-4 lg:h-14 lg:w-14">
+              <span className="col-start-3 row-start-1 grid h-12 w-12 place-items-center rounded-full shadow-[inset_0_0_0_1px_rgb(16_36_46/0.2)] transition-all duration-500 group-hover:rotate-45 group-hover:bg-brand group-hover:text-white group-hover:shadow-none lg:col-start-4 lg:h-14 lg:w-14">
                 <ArrowUpRight className="h-5 w-5" strokeWidth={1.5} />
               </span>
             </Link>

@@ -13,7 +13,7 @@ export function Stats({ dark = false }: { dark?: boolean }) {
     <Stagger className="grid grid-cols-2 lg:grid-cols-4" gap={0.08}>
       {stats.map((s, i) => (
         <StaggerItem key={s.label} className={`border-t py-8 pr-6 ${dark ? "border-white/15" : "border-line"} ${i > 0 ? "lg:border-l lg:pl-8" : ""} ${i % 2 === 1 ? "border-l pl-6 lg:pl-8" : ""}`}>
-          <p className={`text-[clamp(3rem,6vw,5rem)] font-medium leading-none tracking-[-0.05em] ${dark ? "text-paper" : "text-ink"}`}>
+          <p className={`text-[clamp(3rem,6vw,5rem)] font-medium leading-none tracking-[-0.03em] ${dark ? "text-paper" : "text-ink"}`}>
             <Counter to={s.n} suffix={s.s} />
           </p>
           <p className={`mt-4 text-[1rem] font-medium ${dark ? "text-paper" : "text-ink"}`}>{s.label}</p>

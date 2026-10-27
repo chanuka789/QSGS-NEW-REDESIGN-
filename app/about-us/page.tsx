@@ -74,7 +74,7 @@ export default function AboutPage() {
         imageAlt="Modern glass towers — Quantity Surveying Global Solutions"
       />
 
-      <section className="px-5 py-24 sm:px-8 lg:py-36" aria-labelledby="redefine-title">
+      <section className="px-5 py-16 sm:px-8 lg:py-24" aria-labelledby="redefine-title">
         <div className="mx-auto max-w-[1320px]">
           <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-24">
             <SectionHeading id="redefine-title" eyebrow="Who we are" title={["Redefining precision and efficiency in quantity surveying."]} size="md" />
@@ -94,7 +94,7 @@ export default function AboutPage() {
       </section>
 
       {/* Our story: sticky chapter label + alternating parallax images */}
-      <section className="bg-surface/60 px-5 py-24 sm:px-8 lg:py-36" aria-labelledby="story-title">
+      <section className="bg-surface/60 px-5 py-16 sm:px-8 lg:py-24" aria-labelledby="story-title">
         <div className="mx-auto max-w-[1320px]">
           <SectionHeading id="story-title" eyebrow="Our story" title={["One project at a time,", "around the world."]} />
           <div className="mt-20 space-y-24 lg:space-y-36">
@@ -121,7 +121,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="px-5 py-24 sm:px-8 lg:py-36" aria-labelledby="clients-title">
+      <section className="px-5 py-16 sm:px-8 lg:py-24" aria-labelledby="clients-title">
         <div className="mx-auto max-w-[1320px]">
           <SectionHeading id="clients-title" eyebrow="Who we serve" title={["Property developers, consultants,", "contractors and architects."]} />
           <div className="mt-14">

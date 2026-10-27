@@ -28,7 +28,7 @@ export function HomeHero() {
   const ease = [0.22, 1, 0.36, 1] as const;
 
   return (
-    <section ref={ref} className="relative px-5 pt-32 sm:px-8 lg:pt-40">
+    <section ref={ref} className="relative px-5 pt-28 sm:px-8 lg:pt-32">
       <div className="mx-auto grid max-w-[1320px] items-center gap-4 lg:grid-cols-[1fr_1.05fr] lg:gap-6">
         <div className="relative z-10 lg:pb-16">
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1, duration: 0.8 }} className="eyebrow">
@@ -40,7 +40,7 @@ export function HomeHero() {
             immediate
             delay={0.15}
             parts={["Remote quantity surveying,", "measured with precision."]}
-            className="display mt-7 text-[clamp(2.75rem,5.4vw,5.1rem)]"
+            className="display mt-6 text-[clamp(2.5rem,4.6vw,4.3rem)]"
           />
 
           <motion.p
@@ -72,7 +72,7 @@ export function HomeHero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.35, duration: 1.4, ease }}
-            className="relative h-[440px] sm:h-[560px] lg:h-[700px]"
+            className="relative h-[420px] sm:h-[520px] lg:h-[620px]"
           >
             <LazyScene
               scene="building"
@@ -104,11 +104,11 @@ export function HomeHero() {
                   onClick={() => setView(b.id)}
                   className={cn(
                     "relative flex h-11 items-center gap-2 whitespace-nowrap rounded-full px-3.5 text-[0.88rem] transition-colors sm:px-5 sm:text-[0.93rem]",
-                    view === b.id ? "text-ink" : "text-ink-2/70 hover:text-ink",
+                    view === b.id ? "text-brand" : "text-ink-2/70 hover:text-ink",
                   )}
                 >
                   {view === b.id && (
-                    <motion.span layoutId="view-pill" className="absolute inset-0 rounded-full bg-[#e3ead9]/90 shadow-[inset_0_1px_0_#fff,0_4px_12px_-6px_rgba(16,36,46,0.3)]" transition={{ type: "spring", stiffness: 380, damping: 30 }} />
+                    <motion.span layoutId="view-pill" className="absolute inset-0 rounded-full bg-brand-50" transition={{ type: "spring", stiffness: 380, damping: 30 }} />
                   )}
                   <b.icon className="relative h-4 w-4" strokeWidth={1.6} />
                   <span className="relative whitespace-nowrap">

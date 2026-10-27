@@ -52,11 +52,11 @@ export default function HomePage() {
       <StandardsMarquee />
 
       {/* Intro statement */}
-      <section className="px-5 py-24 sm:px-8 lg:py-36" aria-labelledby="intro-title">
+      <section className="px-5 py-16 sm:px-8 lg:py-24" aria-labelledby="intro-title">
         <div className="mx-auto max-w-[1320px]">
           <p className="eyebrow">About QSGS</p>
           <Reveal>
-            <h2 id="intro-title" className="display mt-8 max-w-[22ch] text-[clamp(2rem,4.2vw,3.9rem)] !leading-[1.12]">
+            <h2 id="intro-title" className="display mt-6 max-w-[26ch] text-[clamp(1.7rem,3.2vw,2.8rem)] !leading-[1.2]">
               We specialise in providing expert quantity surveying services remotely — to property developers, consultants, contractors and architects around the globe.
             </h2>
           </Reveal>
@@ -65,14 +65,14 @@ export default function HomePage() {
               More about us <ArrowLong />
             </Link>
           </Reveal>
-          <div className="mt-20">
+          <div className="mt-14">
             <Stats />
           </div>
         </div>
       </section>
 
       {/* Who we help */}
-      <section className="px-5 pb-24 sm:px-8 lg:pb-36" aria-labelledby="services-title">
+      <section className="px-5 pb-16 sm:px-8 lg:pb-24" aria-labelledby="services-title">
         <div className="mx-auto max-w-[1320px]">
           <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
             <SectionHeading id="services-title" eyebrow="Our remote services" title={["We are offering our", "remote services."]} />
@@ -85,7 +85,7 @@ export default function HomePage() {
       </section>
 
       {/* What we do */}
-      <section className="bg-surface/60 px-5 py-24 sm:px-8 lg:py-36" aria-labelledby="what-title">
+      <section className="bg-surface/60 px-5 py-16 sm:px-8 lg:py-24" aria-labelledby="what-title">
         <div className="mx-auto grid max-w-[1320px] gap-14 lg:grid-cols-[0.75fr_1.25fr] lg:gap-20">
           <div className="lg:sticky lg:top-32 lg:self-start">
             <SectionHeading id="what-title" eyebrow="What we do" title={["Precise quantities,", "from take-off to tender."]} size="md" lead="2D and 3D take-off services along with BoQ preparation for Architectural, Structural, M&E, Infrastructural, Landscape, Irrigation, ICT and Security systems & Data centers." />
@@ -102,7 +102,7 @@ export default function HomePage() {
       <Approach />
 
       {/* Disciplines + work samples */}
-      <section className="py-24 lg:py-36" aria-labelledby="disciplines-title">
+      <section className="py-16 lg:py-24" aria-labelledby="disciplines-title">
         <div className="mx-auto max-w-[1320px] px-5 sm:px-8">
           <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
             <SectionHeading id="disciplines-title" eyebrow="What we measure" title={["Every discipline,", "one standard of care."]} size="md" />

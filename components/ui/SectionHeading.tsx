@@ -26,9 +26,9 @@ export function SectionHeading({
   dark?: boolean;
 }) {
   const sizes = {
-    md: "text-[clamp(2rem,3.6vw,3rem)]",
-    lg: "text-[clamp(2.4rem,4.8vw,4.25rem)]",
-    xl: "text-[clamp(2.8rem,6.4vw,6rem)]",
+    md: "text-[clamp(1.85rem,3vw,2.6rem)]",
+    lg: "text-[clamp(2.1rem,3.8vw,3.4rem)]",
+    xl: "text-[clamp(2.5rem,5vw,4.5rem)]",
   };
   return (
     <div className={cn(align === "center" && "mx-auto text-center", "max-w-4xl", className)}>
@@ -41,11 +41,11 @@ export function SectionHeading({
         as={as}
         id={id}
         parts={title}
-        className={cn("display", eyebrow && "mt-6", sizes[size], dark && "!text-paper")}
+        className={cn("display", eyebrow && "mt-4", sizes[size], dark && "!text-paper")}
       />
       {lead && (
         <Reveal delay={0.15} blur={false}>
-          <p className={cn("lead mt-7 max-w-2xl", align === "center" && "mx-auto", dark && "!text-white/65")}>{lead}</p>
+          <p className={cn("lead mt-5 max-w-2xl", align === "center" && "mx-auto", dark && "!text-white/65")}>{lead}</p>
         </Reveal>
       )}
     </div>

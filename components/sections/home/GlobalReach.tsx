@@ -7,13 +7,13 @@ const named = ["Australia", "New Zealand", "UK", "USA", "Canada", "Singapore", "
 
 export function GlobalReach() {
   return (
-    <section className="relative overflow-hidden bg-paper-2/60 px-5 py-24 sm:px-8 lg:py-36" aria-labelledby="reach-title">
+    <section className="relative overflow-hidden bg-paper-2/60 px-5 py-16 sm:px-8 lg:py-24" aria-labelledby="reach-title">
       <div className="mx-auto grid max-w-[1320px] items-center gap-14 lg:grid-cols-2 lg:gap-20">
         <div>
           <SectionHeading id="reach-title" eyebrow="Global reach" title={["Expanding horizons with", "comprehensive quantity", "surveying services."]} size="md" />
           <Reveal delay={0.1}>
             <p className="mt-10 flex items-baseline gap-4">
-              <span className="text-[clamp(4.5rem,10vw,8rem)] font-medium leading-none tracking-[-0.06em] text-ink">20+</span>
+              <span className="text-[clamp(4.5rem,10vw,8rem)] font-medium leading-none tracking-[-0.03em] text-ink">20+</span>
               <span className="text-[1.3rem] font-medium tracking-tight text-muted">Countries</span>
             </p>
           </Reveal>

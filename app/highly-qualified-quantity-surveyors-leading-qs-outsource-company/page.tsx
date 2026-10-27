@@ -65,7 +65,7 @@ export default function TeamPage() {
       <section aria-label="Regions of experience" className="mt-20 border-y border-line py-6">
         <Marquee speed={40}>
           {[...regions, ...regions].map((r, i) => (
-            <span key={i} className="mx-10 inline-flex items-center gap-10 whitespace-nowrap text-[clamp(1.6rem,3vw,2.6rem)] font-medium tracking-[-0.03em] text-ink/75">
+            <span key={i} className="mx-10 inline-flex items-center gap-10 whitespace-nowrap text-[clamp(1.6rem,3vw,2.6rem)] font-medium tracking-[-0.02em] text-ink/75">
               {r}
               <span className="h-2 w-2 rounded-full bg-brand/60" aria-hidden />
             </span>
@@ -73,7 +73,7 @@ export default function TeamPage() {
         </Marquee>
       </section>
 
-      <section className="px-5 py-24 sm:px-8 lg:py-36" aria-labelledby="pillars-title">
+      <section className="px-5 py-16 sm:px-8 lg:py-24" aria-labelledby="pillars-title">
         <div className="mx-auto grid max-w-[1320px] gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24">
           <div className="lg:sticky lg:top-32 lg:self-start">
             <SectionHeading id="pillars-title" eyebrow="What sets us apart" title={["Six reasons clients", "trust our team."]} size="md" />

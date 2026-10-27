@@ -216,7 +216,7 @@ export function Header() {
                     <Link
                       href={item.href}
                       aria-current={isActive(pathname, item) ? "page" : undefined}
-                      className="flex items-baseline gap-5 py-5 text-[2rem] font-medium leading-none tracking-[-0.03em] text-ink"
+                      className="flex items-baseline gap-5 py-5 text-[2rem] font-medium leading-none tracking-[-0.02em] text-ink"
                     >
                       <span className="num text-[0.85rem]">{String(i + 1).padStart(2, "0")}</span>
                       {item.label}

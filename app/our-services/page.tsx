@@ -51,7 +51,7 @@ export default function OurServicesPage() {
 
       <StandardsMarquee />
 
-      <section className="px-5 py-24 sm:px-8 lg:py-36" aria-labelledby="scope-title">
+      <section className="px-5 py-16 sm:px-8 lg:py-24" aria-labelledby="scope-title">
         <div className="mx-auto grid max-w-[1320px] gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
           <SectionHeading
             id="scope-title"
@@ -64,7 +64,7 @@ export default function OurServicesPage() {
         </div>
       </section>
 
-      <section className="px-5 pb-24 sm:px-8 lg:pb-36" aria-labelledby="all-title">
+      <section className="px-5 pb-16 sm:px-8 lg:pb-24" aria-labelledby="all-title">
         <div className="mx-auto mb-16 max-w-[1320px] lg:mb-24">
           <SectionHeading id="all-title" eyebrow="Service catalogue" title={["Every service,", "measured step by step."]} />
         </div>

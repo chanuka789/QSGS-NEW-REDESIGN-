@@ -10,15 +10,15 @@ export type BuildingView = "design" | "exploded";
 
 const FLOOR_H = 0.32;
 const COLORS = {
-  slab: "#f2ede3",
-  glass: "#9fbfc2",
-  fin: "#d6c29f",
-  site: "#f1ede5",
-  grid: "#d9d2c4",
-  trunk: "#a88c66",
-  crown: "#a9b98c",
-  crown2: "#94aa78",
-  roof: "#fbfaf7",
+  slab: "#f4f6f8",
+  glass: "#a7bccb",
+  fin: "#dde3e8",
+  site: "#f7f8f9",
+  grid: "#e4e8ec",
+  trunk: "#b7bcc0",
+  crown: "#c6cfc3",
+  crown2: "#b5c0b2",
+  roof: "#ffffff",
   brand: "#046492",
 };
 
@@ -198,10 +198,10 @@ function Site() {
         <lineBasicMaterial color={COLORS.brand} />
       </lineSegments>
       {/* Wide drawing grid fading into the page */}
-      <gridHelper args={[16, 64, "#e2dccf", "#e8e3d8"]} position={[0, 0, 0]} />
+      <gridHelper args={[16, 64, "#e9edf0", "#eef1f3"]} position={[0, 0, 0]} />
       <mesh rotation-x={-Math.PI / 2} position={[0, -0.002, 0]} receiveShadow>
         <planeGeometry args={[16, 16]} />
-        <shadowMaterial opacity={0.12} />
+        <shadowMaterial opacity={0.08} />
       </mesh>
     </group>
   );
@@ -254,7 +254,7 @@ export default function BuildingScene({ view = "design", rotate = false, active 
       style={{ touchAction: "pan-y" }}
       aria-hidden
     >
-      <hemisphereLight args={["#ffffff", "#e9e2d4", 1.15]} />
+      <hemisphereLight args={["#ffffff", "#e8ecef", 1.2]} />
       <directionalLight
         position={[5, 9, 4]}
         intensity={1.6}
@@ -267,7 +267,7 @@ export default function BuildingScene({ view = "design", rotate = false, active 
         shadow-bias={-0.0004}
         shadow-radius={4}
       />
-      <directionalLight position={[-6, 4, -3]} intensity={0.35} color="#dbe9ee" />
+      <directionalLight position={[-6, 4, -3]} intensity={0.35} />
       <Model view={view} rotate={rotate} />
       <Rig view={view} />
       {desktop && (

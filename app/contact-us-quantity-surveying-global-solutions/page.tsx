@@ -31,10 +31,10 @@ export default function ContactPage() {
         size="md"
       />
 
-      <section className="px-5 pb-24 pt-14 sm:px-8 lg:pb-36 lg:pt-20" aria-label="Contact form and offices">
+      <section className="px-5 pb-24 pt-14 sm:px-8 lg:pb-24 lg:pt-20" aria-label="Contact form and offices">
         <div className="mx-auto grid max-w-[1320px] gap-14 lg:grid-cols-[1.25fr_0.75fr] lg:gap-20">
           <Reveal y={30}>
-            <div className="glass glass-strong p-6 sm:p-10">
+            <div className="panel p-6 sm:p-10">
               <ContactForm />
             </div>
           </Reveal>

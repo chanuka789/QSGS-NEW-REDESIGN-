@@ -1,10 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import "@fontsource-variable/dm-sans/opsz.css";
+import "@fontsource-variable/dm-sans";
 import "./globals.css";
 import { Providers } from "@/components/layout/Providers";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { Ambient } from "@/components/layout/Ambient";
 import { GlassFilters } from "@/components/glass/GlassFilters";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { organizationJsonLd } from "@/lib/seo";
@@ -35,7 +34,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f4f2ed",
+  themeColor: "#ffffff",
   colorScheme: "only light",
   width: "device-width",
   initialScale: 1,
@@ -53,7 +52,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
         <GlassFilters />
-        <Ambient />
         <Providers>
           <Header />
           <main id="main" className="relative">

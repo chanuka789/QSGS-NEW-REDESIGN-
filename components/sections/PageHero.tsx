@@ -26,7 +26,7 @@ export function PageHero({
   size?: "md" | "lg";
 }) {
   return (
-    <section className="px-5 pt-32 sm:px-8 lg:pt-44">
+    <section className="px-5 pt-28 sm:px-8 lg:pt-36">
       <div className="mx-auto max-w-[1320px]">
         <nav aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-1.5 text-[0.85rem] text-muted">
@@ -47,7 +47,7 @@ export function PageHero({
         </nav>
         {eyebrow && (
           <Reveal y={10} blur={false}>
-            <p className="eyebrow mt-12">{eyebrow}</p>
+            <p className="eyebrow mt-10">{eyebrow}</p>
           </Reveal>
         )}
         <SplitText
@@ -55,7 +55,7 @@ export function PageHero({
           immediate
           delay={0.1}
           parts={title}
-          className={cn("display mt-7 max-w-[18ch]", size === "lg" ? "text-[clamp(2.7rem,6.4vw,6rem)]" : "text-[clamp(2.4rem,5vw,4.6rem)]")}
+          className={cn("display mt-5 max-w-[20ch]", size === "lg" ? "text-[clamp(2.4rem,5vw,4.6rem)]" : "text-[clamp(2.2rem,4.2vw,3.8rem)]")}
         />
         {lead && (
           <Reveal delay={0.35} blur={false}>
@@ -65,7 +65,7 @@ export function PageHero({
         {children}
       </div>
       {image && (
-        <Reveal delay={0.4} y={40} className="mx-auto mt-16 max-w-[1400px] lg:mt-24">
+        <Reveal delay={0.4} y={40} className="mx-auto mt-12 max-w-[1320px] lg:mt-16">
           <ParallaxImage src={image} alt={imageAlt} priority className="aspect-[16/10] rounded-[6px] sm:aspect-[21/9]" sizes="100vw" strength={10} />
         </Reveal>
       )}

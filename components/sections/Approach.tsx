@@ -49,11 +49,11 @@ export function Approach() {
 
   const s = steps[i];
   return (
-    <section ref={ref} className="bg-deep px-5 py-24 text-paper sm:px-8 lg:py-36" aria-labelledby="approach-title" onPointerEnter={() => setPaused(true)} onPointerLeave={() => setPaused(false)}>
+    <section ref={ref} className="bg-paper-2 px-5 py-20 sm:px-8 lg:py-28" aria-labelledby="approach-title" onPointerEnter={() => setPaused(true)} onPointerLeave={() => setPaused(false)}>
       <div className="mx-auto max-w-[1320px]">
-        <SectionHeading id="approach-title" dark eyebrow="Our approach" title={["A clear path", "from drawings to BoQ."]} />
+        <SectionHeading id="approach-title" eyebrow="Our approach" title={["A clear path", "from drawings to BoQ."]} />
 
-        <div role="tablist" aria-label="Our approach steps" className="mt-16 grid grid-cols-4 gap-3 sm:gap-6">
+        <div role="tablist" aria-label="Our approach steps" className="mt-12 grid grid-cols-4 gap-3 sm:gap-6">
           {steps.map((st, k) => (
             <button
               key={st.tab}
@@ -64,27 +64,27 @@ export function Approach() {
               onClick={() => setI(k)}
               className="group text-left"
             >
-              <span className={cn("block text-[0.85rem] tabular-nums transition-colors", k === i ? "text-brand-200" : "text-white/45")}>{String(k + 1).padStart(2, "0")}</span>
-              <span className={cn("mt-2 block text-[1.05rem] font-medium transition-colors sm:text-[1.6rem] sm:tracking-[-0.02em]", k === i ? "text-paper" : "text-white/45 group-hover:text-white/75")}>
+              <span className={cn("block text-[0.85rem] tabular-nums transition-colors", k === i ? "text-brand" : "text-muted")}>{String(k + 1).padStart(2, "0")}</span>
+              <span className={cn("mt-2 block text-[1.05rem] font-medium transition-colors sm:text-[1.4rem] sm:tracking-[-0.02em]", k === i ? "text-ink" : "text-muted group-hover:text-ink")}>
                 {st.tab}
               </span>
-              <span className="relative mt-4 block h-[2px] overflow-hidden rounded-full bg-white/15">
+              <span className="relative mt-4 block h-[2px] overflow-hidden rounded-full bg-ink/10">
                 {k === i && (
                   <motion.span
                     key={`${i}-${paused}-${inView}`}
-                    className="absolute inset-y-0 left-0 rounded-full bg-brand-200"
+                    className="absolute inset-y-0 left-0 rounded-full bg-brand"
                     initial={{ width: paused || !inView ? "100%" : "0%" }}
                     animate={{ width: "100%" }}
                     transition={{ duration: paused || !inView ? 0 : DURATION / 1000, ease: "linear" }}
                   />
                 )}
-                {k < i && <span className="absolute inset-0 bg-white/35" />}
+                {k < i && <span className="absolute inset-0 bg-brand/30" />}
               </span>
             </button>
           ))}
         </div>
 
-        <div id="approach-panel" role="tabpanel" className="mt-14 min-h-[300px] lg:mt-20">
+        <div id="approach-panel" role="tabpanel" className="mt-12 min-h-[280px] lg:mt-16">
           <AnimatePresence mode="wait">
             <motion.div
               key={i}
@@ -95,13 +95,13 @@ export function Approach() {
               className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-24"
             >
               <div>
-                <h3 className="text-[clamp(1.9rem,3.6vw,3.2rem)] font-medium leading-[1.08] !text-paper">{s.title}</h3>
-                <p className="mt-6 max-w-2xl text-[1.1rem] leading-[1.75] text-white/70">{s.text}</p>
+                <h3 className="text-[clamp(1.7rem,3vw,2.6rem)] font-medium leading-[1.12]">{s.title}</h3>
+                <p className="mt-6 max-w-2xl text-[1.05rem] leading-[1.75] text-muted">{s.text}</p>
               </div>
-              <ul className="self-end border-t border-white/15">
+              <ul className="self-end border-t border-line">
                 {s.points.map((p) => (
-                  <li key={p} className="flex items-center gap-4 border-b border-white/15 py-5 text-[1.02rem] text-white/85">
-                    <span className="h-px w-5 bg-brand-200" aria-hidden />
+                  <li key={p} className="flex items-center gap-4 border-b border-line py-5 text-[1rem] text-ink-2">
+                    <span className="h-px w-5 bg-brand" aria-hidden />
                     {p}
                   </li>
                 ))}

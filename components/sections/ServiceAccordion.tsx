@@ -26,7 +26,7 @@ export function ServiceAccordion({ items }: { items: { module: ServiceModule; hr
                 className="group grid w-full grid-cols-[48px_1fr_auto] items-center gap-4 py-7 text-left sm:grid-cols-[80px_1fr_auto] sm:py-9"
               >
                 <span className="num">{String(i + 1).padStart(2, "0")}</span>
-                <span className="text-[clamp(1.5rem,3vw,2.5rem)] font-medium leading-[1.1] tracking-[-0.03em] text-ink transition-transform duration-500 group-hover:translate-x-1.5">
+                <span className="text-[clamp(1.5rem,3vw,2.5rem)] font-medium leading-[1.1] tracking-[-0.02em] text-ink transition-transform duration-500 group-hover:translate-x-1.5">
                   {m.title}
                 </span>
                 <span className="relative h-6 w-6 text-brand" aria-hidden>

@@ -128,7 +128,7 @@ function Station({
         aria-hidden
         className={cn(
           "absolute -left-[64px] top-0 z-10 grid h-11 w-11 place-items-center rounded-full bg-paper text-[0.9rem] font-medium tabular-nums transition-all duration-500 sm:-left-[92px] sm:h-14 sm:w-14 sm:text-base",
-          reached ? "text-brand shadow-[inset_0_0_0_1.5px_var(--color-brand),0_0_0_6px_rgb(4_100_146/0.08)]" : "text-muted shadow-[inset_0_0_0_1px_rgb(16_36_46/0.18)]",
+          reached ? "text-brand shadow-[inset_0_0_0_1.5px_var(--color-brand)]" : "text-muted shadow-[inset_0_0_0_1px_rgb(16_36_46/0.18)]",
         )}
       >
         {String(i + 1).padStart(2, "0")}
@@ -137,7 +137,7 @@ function Station({
       <h3
         id={`${m.id}-title`}
         className={cn(
-          "text-[clamp(1.85rem,3.4vw,3rem)] font-medium leading-[1.05] tracking-[-0.035em] transition-colors duration-500",
+          "text-[clamp(1.85rem,3.4vw,3rem)] font-medium leading-[1.05] tracking-[-0.02em] transition-colors duration-500",
           isActive ? "!text-brand" : "",
         )}
       >

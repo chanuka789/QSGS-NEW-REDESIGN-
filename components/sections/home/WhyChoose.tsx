@@ -8,7 +8,7 @@ import { routes } from "@/lib/site";
 
 export function WhyChoose() {
   return (
-    <section className="px-5 py-24 sm:px-8 lg:py-36" aria-labelledby="why-title">
+    <section className="px-5 py-16 sm:px-8 lg:py-24" aria-labelledby="why-title">
       <div className="mx-auto max-w-[1320px]">
         <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-24">
           <div>
