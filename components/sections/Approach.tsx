@@ -1,0 +1,115 @@
+"use client";
+
+import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { useInView } from "motion/react";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { cn } from "@/lib/utils";
+
+const steps = [
+  {
+    tab: "Brief",
+    title: "First, we understand the project.",
+    text: "We review your drawings, models and specifications, then agree the scope, the standard method of measurement, the output format and the deadline — usually in a short online meeting.",
+    points: ["Drawings, BIM models & specifications", "NRM, SMM 7, CESMM 4, POMI or your standard", "Scope, format and programme agreed"],
+  },
+  {
+    tab: "Measure",
+    title: "Then, we measure every element.",
+    text: "Our graduate quantity surveyors take off quantities from 2D drawings and 3D models using Revit, Bluebeam, AutoCAD and PlanSwift — division by division, with clear take-off sheets.",
+    points: ["2D & 3D take-offs", "Architectural, structural, M&E and infrastructure", "Marked-up drawings when needed"],
+  },
+  {
+    tab: "Advise",
+    title: "We check, compare and clarify.",
+    text: "Quantities are checked against drawings and specifications. Discrepancies are flagged early, tender queries are prepared, and design changes are tracked in comparison reports.",
+    points: ["Rigorous quality checks", "Tender queries & discrepancy reports", "BoQ revision and comparison reports"],
+  },
+  {
+    tab: "Deliver",
+    title: "Finally, you receive clear documents.",
+    text: "You receive complete, well-organised Bills of Quantities and supporting documents in Excel and PDF — in your own template if you prefer — ready for tender, pricing or cost planning.",
+    points: ["BoQs in Excel & PDF", "Take-off sheets & documentation", "Remote delivery, worldwide"],
+  },
+];
+
+const DURATION = 7000;
+
+export function Approach() {
+  const [i, setI] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const ref = useRef<HTMLElement>(null);
+  const inView = useInView(ref, { margin: "-20% 0px -20% 0px" });
+
+  useEffect(() => {
+    if (paused || !inView) return;
+    const t = setTimeout(() => setI((v) => (v + 1) % steps.length), DURATION);
+    return () => clearTimeout(t);
+  }, [i, paused, inView]);
+
+  const s = steps[i];
+  return (
+    <section ref={ref} className="bg-deep px-5 py-24 text-paper sm:px-8 lg:py-36" aria-labelledby="approach-title" onPointerEnter={() => setPaused(true)} onPointerLeave={() => setPaused(false)}>
+      <div className="mx-auto max-w-[1320px]">
+        <SectionHeading id="approach-title" dark eyebrow="Our approach" title={["A clear path", "from drawings to BoQ."]} />
+
+        <div role="tablist" aria-label="Our approach steps" className="mt-16 grid grid-cols-4 gap-3 sm:gap-6">
+          {steps.map((st, k) => (
+            <button
+              key={st.tab}
+              role="tab"
+              type="button"
+              aria-selected={k === i}
+              aria-controls="approach-panel"
+              onClick={() => setI(k)}
+              className="group text-left"
+            >
+              <span className={cn("block text-[0.85rem] tabular-nums transition-colors", k === i ? "text-brand-200" : "text-white/45")}>{String(k + 1).padStart(2, "0")}</span>
+              <span className={cn("mt-2 block text-[1.05rem] font-medium transition-colors sm:text-[1.6rem] sm:tracking-[-0.02em]", k === i ? "text-paper" : "text-white/45 group-hover:text-white/75")}>
+                {st.tab}
+              </span>
+              <span className="relative mt-4 block h-[2px] overflow-hidden rounded-full bg-white/15">
+                {k === i && (
+                  <motion.span
+                    key={`${i}-${paused}-${inView}`}
+                    className="absolute inset-y-0 left-0 rounded-full bg-brand-200"
+                    initial={{ width: paused || !inView ? "100%" : "0%" }}
+                    animate={{ width: "100%" }}
+                    transition={{ duration: paused || !inView ? 0 : DURATION / 1000, ease: "linear" }}
+                  />
+                )}
+                {k < i && <span className="absolute inset-0 bg-white/35" />}
+              </span>
+            </button>
+          ))}
+        </div>
+
+        <div id="approach-panel" role="tabpanel" className="mt-14 min-h-[300px] lg:mt-20">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+              className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-24"
+            >
+              <div>
+                <h3 className="text-[clamp(1.9rem,3.6vw,3.2rem)] font-medium leading-[1.08] !text-paper">{s.title}</h3>
+                <p className="mt-6 max-w-2xl text-[1.1rem] leading-[1.75] text-white/70">{s.text}</p>
+              </div>
+              <ul className="self-end border-t border-white/15">
+                {s.points.map((p) => (
+                  <li key={p} className="flex items-center gap-4 border-b border-white/15 py-5 text-[1.02rem] text-white/85">
+                    <span className="h-px w-5 bg-brand-200" aria-hidden />
+                    {p}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
+    </section>
+  );
+}
