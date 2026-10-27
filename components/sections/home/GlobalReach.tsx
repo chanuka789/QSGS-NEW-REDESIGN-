@@ -1,9 +1,7 @@
 import { LazyScene } from "@/components/three/LazyScene";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { offices } from "@/lib/site";
-
-const named = ["Australia", "New Zealand", "UK", "USA", "Canada", "Singapore", "All European countries", "UAE", "Middle East countries"];
+import { workingCountries } from "@/lib/site";
 
 export function GlobalReach() {
   return (
@@ -23,10 +21,19 @@ export function GlobalReach() {
             </p>
           </Reveal>
           <Reveal delay={0.2}>
-            <ul className="t-small mt-8 flex flex-wrap gap-2" aria-label="Countries and regions we serve">
-              {named.map((n) => (
-                <li key={n} className="rounded-full bg-white px-3 py-1.5 text-ink-2 shadow-[inset_0_0_0_1px_var(--color-line)]">
-                  {n}
+            <p className="eyebrow mt-8">Countries we work in</p>
+            <ul className="t-small mt-3 flex flex-wrap gap-2">
+              {workingCountries.map((c) => (
+                <li
+                  key={c.code}
+                  className={
+                    c.hub
+                      ? "inline-flex items-center gap-1.5 rounded-full bg-brand px-3 py-1.5 font-medium text-white"
+                      : "inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-ink-2 shadow-[inset_0_0_0_1px_var(--color-line)]"
+                  }
+                >
+                  <span className={c.hub ? "h-1.5 w-1.5 rounded-full bg-white" : "h-1.5 w-1.5 rounded-full bg-brand"} aria-hidden />
+                  {c.name}
                 </li>
               ))}
             </ul>
@@ -34,17 +41,10 @@ export function GlobalReach() {
         </div>
 
         <Reveal y={30} className="relative">
-          <div className="relative mx-auto aspect-square w-full max-w-[520px]">
+          <div className="relative mx-auto aspect-square w-full max-w-[560px]">
             <LazyScene scene="globe" className="absolute inset-0" />
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-wrap justify-center gap-2">
-              {offices.map((o) => (
-                <span key={o.country} className="t-xs inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 font-medium text-ink shadow-[inset_0_0_0_1px_var(--color-line)]">
-                  <span className="h-1.5 w-1.5 rounded-full bg-brand" aria-hidden /> {o.country}
-                </span>
-              ))}
-            </div>
           </div>
-          <p className="t-xs mt-4 text-center text-muted">Drag to spin · Offices in UAE, Kuwait, Australia and Sri Lanka</p>
+          <p className="t-xs mt-4 text-center text-muted">Drag to rotate · Every line connects to our team in Sri Lanka</p>
         </Reveal>
       </div>
     </section>

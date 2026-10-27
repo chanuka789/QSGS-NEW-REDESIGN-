@@ -119,3 +119,20 @@ export const companyTypes = [
   "Engineering Firm",
   "Other",
 ] as const;
+
+/**
+ * Countries we work in (highlighted on the globe). Sri Lanka is the hub every
+ * arc connects to. `anchor` is the label/arc point; `label` is the leader-line
+ * offset in px so the close Gulf labels never overlap.
+ */
+export type WorkingCountry = { code: string; name: string; lat: number; lng: number; label: [number, number]; hub?: boolean };
+export const workingCountries: WorkingCountry[] = [
+  { code: "LK", name: "Sri Lanka", lat: 7.85, lng: 80.7, label: [54, 22], hub: true },
+  { code: "AE", name: "UAE", lat: 24.2, lng: 54.4, label: [40, -46] },
+  { code: "QA", name: "Qatar", lat: 25.3, lng: 51.2, label: [-4, 60] },
+  { code: "KW", name: "Kuwait", lat: 29.3, lng: 47.6, label: [-40, -44] },
+  { code: "OM", name: "Oman", lat: 21.0, lng: 57.0, label: [52, 40] },
+  { code: "SA", name: "Saudi Arabia", lat: 24.0, lng: 45.0, label: [-58, 30] },
+  { code: "GB", name: "United Kingdom", lat: 53.5, lng: -1.5, label: [0, -40] },
+  { code: "AU", name: "Australia", lat: -22.5, lng: 122.5, label: [-36, 40] },
+];
