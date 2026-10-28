@@ -26,7 +26,7 @@ const FRAG = `
 precision highp float;
 varying vec2 vUv;
 uniform sampler2D uColor;
-uniform sampler2D uDepth;   // R depth · G water · B foliage
+uniform sampler2D uDepth;   // R depth · G water · B foliage · A moored boats
 uniform sampler2D uMask;    // R sky · G windows · B terrace lights · A ground
 uniform vec2 uCover;        // visible portion of the image (cover fit)
 uniform vec2 uFocal;        // image point kept centred
@@ -153,6 +153,21 @@ vec2 seaWaves(vec2 p, float t, float rough) {
   return s * (0.75 + 0.5 * noise(x * 0.35 + vec2(t * 0.08, -t * 0.05)));
 }
 
+// Moored yachts riding the swell. Each hull moves as one rigid body: it rises and falls
+// (heave), rocks bow-to-stern about its waterline (pitch) and drifts a touch on its lines.
+// The small boat in front is lighter, so it moves faster and further than the big yacht.
+// Returns how far the image at p has moved (texture units, y down).
+vec2 boatMotion(vec2 p, float t, float swell) {
+  float small = smoothstep(0.09, 0.072, p.x) * smoothstep(0.62, 0.634, p.y);
+  vec2 c = mix(vec2(0.18, 0.652), vec2(0.04, 0.674), small);
+  float heave = mix(sin(t * 0.95) * 0.0034 + sin(t * 0.61 + 1.3) * 0.0014,
+                    sin(t * 1.25 + 2.0) * 0.0042 + sin(t * 0.73) * 0.0016, small);
+  float pitch = mix(sin(t * 0.95 - 1.1) * 0.011, sin(t * 1.25 + 0.9) * 0.02, small);
+  float surge = mix(sin(t * 0.43) * 0.0012, sin(t * 0.52 + 0.7) * 0.0016, small);
+  vec2 r = p - c;
+  return (vec2(-pitch * r.y + surge, pitch * r.x + heave)) * swell;
+}
+
 // The scene's weather + time-of-day grade (shared by the image and its wet reflections).
 vec3 grade(vec3 c, float rain, float night) {
   float l = dot(c, vec3(0.2126, 0.7152, 0.0722));
@@ -173,8 +188,8 @@ void main() {
   }
   p = clamp(p, 0.001, 0.999);
 
-  vec3 m = texture2D(uDepth, p).rgb;
-  float depth = m.r, water = m.g, leaf = m.b;
+  vec4 m = texture2D(uDepth, p);
+  float depth = m.r, water = m.g, leaf = m.b, boat = m.a;
   float t = uTime * uMotion;
   float rain = uRain, night = uNight;
 
@@ -183,10 +198,17 @@ void main() {
   // reflection, stretching it vertically as on real water. Near the quay edge the
   // offset shrinks so stone never gets pulled into the water.
   float wind = 1.0 + rain * 1.6;
-  vec2 slope = seaWaves(p, t, 1.0 + rain) * water * (1.0 + rain * 0.45);
+  vec2 slope = seaWaves(p, t, 1.4 + rain * 0.6) * water * (1.3 + rain * 0.25);
   vec2 wp = p + slope * vec2(0.035, 0.07);
   wp = mix(p, wp, 0.25 + 0.75 * step(0.5, texture2D(uDepth, wp).g));
   p = wp;
+  // The yachts bob on that swell (harder in rain); the small boat's reflection moves with
+  // it, mirrored. Mooring posts and the dock are fixed and stay still.
+  float swell = 1.0 + rain * 0.5;
+  vec2 mirrorP = vec2(p.x, 2.0 * 0.674 - p.y);
+  float boatRefl = texture2D(uDepth, mirrorP).a * water * step(0.674, p.y);
+  p -= boat * boatMotion(p, t, swell);
+  p -= boatRefl * boatMotion(mirrorP, t, swell) * vec2(1.0, -1.0);
   // Rain on the marina: ring ripples (perspective-flattened, bigger when closer) bend the
   // reflections, and fine surface roughness breaks them up like a real rain-hit surface.
   float nearWater = smoothstep(0.15, 0.5, depth);
@@ -527,7 +549,7 @@ export function DepthScene({
     Promise.all([loadImage(colorUrl), loadImage(depthSrc), loadImage(maskSrc)])
       .then(([color, depth, mask]) => {
         if (disposed) return;
-        textures.push(texture(gl, 0, color), texture(gl, 1, depth), texture(gl, 2, mask, gl.RGBA));
+        textures.push(texture(gl, 0, color), texture(gl, 1, depth, gl.RGBA), texture(gl, 2, mask, gl.RGBA));
         gl.uniform1i(uniforms.uColor, 0);
         gl.uniform1i(uniforms.uDepth, 1);
         gl.uniform1i(uniforms.uMask, 2);

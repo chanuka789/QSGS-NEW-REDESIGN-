@@ -79,7 +79,8 @@ export const mediaItems: MediaItem[] = [
 /** Home hero: photographic render + its depth map (R depth · G water · B foliage). */
 export const heroMedia = {
   file: "qsgs-mixed-use-02.webp",
-  depth: "qsgs-mixed-use-02-depth.png",
+  /** R depth · G water · B foliage · A moored boats (they bob on the swell). */
+  depth: "qsgs-mixed-use-02-depth-v2.png",
   /** R sky · G windows · B warm lights · A wet ground — used to relight the scene. */
   mask: "qsgs-mixed-use-02-mask.png",
   alt: "Marina residences with yachts, palm trees and a waterfront restaurant at golden hour",
