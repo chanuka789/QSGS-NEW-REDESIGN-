@@ -80,6 +80,8 @@ export const mediaItems: MediaItem[] = [
 export const heroMedia = {
   file: "qsgs-mixed-use-02.webp",
   depth: "qsgs-mixed-use-02-depth.png",
+  /** R sky · G windows · B warm lights · A wet ground — used to relight the scene. */
+  mask: "qsgs-mixed-use-02-mask.png",
   alt: "Marina residences with yachts, palm trees and a waterfront restaurant at golden hour",
 };
 

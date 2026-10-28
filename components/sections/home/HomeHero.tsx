@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import { motion } from "motion/react";
-import { ArrowUpRight, MapPin, MousePointer2 } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { SplitText } from "@/components/ui/SplitText";
 import { ArrowLong } from "@/components/ui/ArrowLong";
-import { DepthScene } from "@/components/three/DepthScene";
-import { heroMedia, mediaUrl } from "@/lib/media";
+import { HeroScenes } from "./HeroScenes";
 import { routes } from "@/lib/site";
 
 const facts = [
@@ -65,34 +64,7 @@ export function HomeHero() {
           transition={{ delay: 0.3, duration: 1.2, ease }}
           className="relative"
         >
-          <DepthScene
-            src={mediaUrl(heroMedia.file)}
-            depthSrc={mediaUrl(heroMedia.depth)}
-            alt={heroMedia.alt}
-            focalX={0.52}
-            focalY={0.5}
-            priority
-            className="aspect-[4/5] w-full rounded-[24px] sm:aspect-[5/4] lg:aspect-auto lg:h-[600px]"
-          />
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.1, duration: 0.8, ease }}
-            className="pointer-events-none absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 sm:bottom-5 sm:left-5 sm:right-5"
-          >
-            <div className="glass glass-pill flex items-center gap-2.5 py-2 pl-2.5 pr-4">
-              <span className="grid h-7 w-7 place-items-center rounded-full bg-brand text-white" aria-hidden>
-                <MapPin className="h-3.5 w-3.5" strokeWidth={2} />
-              </span>
-              <span className="t-xs leading-tight">
-                <span className="block font-medium text-ink">Marina residences</span>
-                <span className="block text-muted">Mixed-use · Waterfront</span>
-              </span>
-            </div>
-            <div className="glass glass-pill t-xs hidden items-center gap-2 px-3.5 py-2 text-ink-2 lg:flex">
-              <MousePointer2 className="h-3.5 w-3.5 text-brand" strokeWidth={1.8} aria-hidden /> Move to explore
-            </div>
-          </motion.div>
+          <HeroScenes />
         </motion.div>
       </div>
 
