@@ -169,6 +169,28 @@ void main() {
   gl_FragColor = vec4(clamp(col, 0.0, 1.0), 1.0);
 }`;
 
+/** Scene keyframes, played in order and looped: each step changes only weather or only time. */
+const KEYS = [
+  { night: 0, rain: 0 }, // morning
+  { night: 0, rain: 1 }, // morning rain
+  { night: 1, rain: 1 }, // night rain
+  { night: 1, rain: 0 }, // night
+];
+const smoother = (x: number) => x * x * x * (x * (x * 6 - 15) + 10);
+
+/** Scene state at time t (s) for a loop of `cycle` seconds: hold, then a long eased blend to the next key. */
+function timeline(t: number, cycle: number) {
+  const seg = cycle / KEYS.length;
+  const blend = Math.min(seg * 0.48, 3.6);
+  const pos = ((t % cycle) + cycle) % cycle;
+  const i = Math.floor(pos / seg);
+  const local = pos - i * seg;
+  const a = KEYS[i];
+  const b = KEYS[(i + 1) % KEYS.length];
+  const k = smoother(Math.max(0, (local - (seg - blend)) / blend));
+  return { night: a.night + (b.night - a.night) * k, rain: a.rain + (b.rain - a.rain) * k };
+}
+
 function compile(gl: WebGLRenderingContext, type: number, src: string) {
   const s = gl.createShader(type)!;
   gl.shaderSource(s, src);
@@ -206,6 +228,7 @@ export function DepthScene({
   maskSrc,
   night = 0,
   rain = 0,
+  cycle,
   alt,
   focalX = 0.5,
   focalY = 0.5,
@@ -221,6 +244,8 @@ export function DepthScene({
   /** Scene targets; the shader eases towards them. */
   night?: number;
   rain?: number;
+  /** When set, scenes play automatically on a seamless loop of this many seconds. */
+  cycle?: number;
   alt: string;
   focalX?: number;
   focalY?: number;
@@ -307,12 +332,19 @@ export function DepthScene({
       gl.uniform2f(uniforms.uOffset, -pointer.x * strength, pointer.y * strength * 0.6 - scroll * 0.03);
       gl.uniform1f(uniforms.uZoom, 1.06 + scroll * 0.05);
       gl.uniform1f(uniforms.uTime, t);
-      // Ease scene lighting towards its target (~2.5 s cross-fade); jump instantly with reduced motion.
-      const dt = scene.last ? Math.min(0.1, (now - scene.last) / 1000) : 0;
-      scene.last = now;
-      const k = reduce ? 1 : 1 - Math.exp(-dt * 1.6);
-      scene.night += (target.current.night - scene.night) * k;
-      scene.rain += (target.current.rain - scene.rain) * k;
+      if (cycle && !reduce) {
+        // Continuous timeline: every frame is computed from the clock, so it plays like a video loop.
+        const s = timeline(t, cycle);
+        scene.night = s.night;
+        scene.rain = s.rain;
+      } else {
+        // Ease towards the target scene (~2.5 s); jump instantly with reduced motion.
+        const dt = scene.last ? Math.min(0.1, (now - scene.last) / 1000) : 0;
+        scene.last = now;
+        const k = reduce ? 1 : 1 - Math.exp(-dt * 1.6);
+        scene.night += (target.current.night - scene.night) * k;
+        scene.rain += (target.current.rain - scene.rain) * k;
+      }
       gl.uniform1f(uniforms.uNight, scene.night);
       gl.uniform1f(uniforms.uRain, scene.rain);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
@@ -382,7 +414,7 @@ export function DepthScene({
       gl.deleteBuffer(buf);
       gl.deleteProgram(prog);
     };
-  }, [colorUrl, depthSrc, maskSrc, focalX, focalY, focus, strength]);
+  }, [colorUrl, depthSrc, maskSrc, focalX, focalY, focus, strength, cycle]);
 
   return (
     <div ref={wrap} className={cn("relative overflow-hidden bg-paper-2", className)}>
