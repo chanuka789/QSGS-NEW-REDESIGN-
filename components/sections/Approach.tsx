@@ -64,8 +64,8 @@ export function Approach() {
               onClick={() => setI(k)}
               className="group text-left"
             >
-              <span className={cn("t-xs block tabular-nums transition-colors", k === i ? "text-white" : "text-white/55")}>{String(k + 1).padStart(2, "0")}</span>
-              <span className={cn("t-h4 mt-1.5 block transition-colors", k === i ? "text-white" : "text-white/55 group-hover:text-white/85")}>
+              <span className={cn("t-xs block tabular-nums transition-colors", k === i ? "text-white" : "text-white/80")}>{String(k + 1).padStart(2, "0")}</span>
+              <span className={cn("t-h4 mt-1.5 block transition-colors", k === i ? "text-white" : "text-white/80 group-hover:text-white")}>
                 {st.tab}
               </span>
               <span className="relative mt-3 block h-[2px] overflow-hidden rounded-full bg-white/20">

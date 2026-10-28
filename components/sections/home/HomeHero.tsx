@@ -34,14 +34,11 @@ export function HomeHero() {
             className="t-display mt-4"
           />
 
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.9, ease }}
-            className="t-lead mt-6 max-w-[32rem]"
-          >
+          {/* CSS (not JS) fade: the paragraph is the page's largest text, so it must show
+              without waiting for hydration (Largest Contentful Paint). */}
+          <p className="t-lead mt-6 max-w-[32rem] animate-[fadeUp_0.9s_cubic-bezier(0.22,1,0.36,1)_0.35s_both]">
             Industry-leading remote quantity surveying for diverse project needs. Accurate take-offs, BOQ preparation and cost management — from anywhere in the world, without the need for on-site presence.
-          </motion.p>
+          </p>
 
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -58,21 +55,16 @@ export function HomeHero() {
           </motion.div>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 24, scale: 0.985 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ delay: 0.3, duration: 1.2, ease }}
-          className="relative"
-        >
+        <div className="relative animate-[fadeUp_1.2s_cubic-bezier(0.22,1,0.36,1)_0.3s_both]">
           <HeroScenes />
-        </motion.div>
+        </div>
       </div>
 
       <div className="container-x mt-8 lg:mt-4">
         <div className="rule" />
-        <dl className="grid gap-6 py-8 sm:grid-cols-3 sm:gap-8">
+        <ul className="grid gap-6 py-8 sm:grid-cols-3 sm:gap-8">
           {facts.map((f, i) => (
-            <motion.div
+            <motion.li
               key={f.k}
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -81,12 +73,12 @@ export function HomeHero() {
             >
               <span className="num">{String(i + 1).padStart(2, "0")}</span>
               <div>
-                <dt className="t-h4 text-ink">{f.k}</dt>
-                <dd className="t-small mt-1 text-muted">{f.v}</dd>
+                <p className="t-h4 text-ink">{f.k}</p>
+                <p className="t-small mt-1 text-muted">{f.v}</p>
               </div>
-            </motion.div>
+            </motion.li>
           ))}
-        </dl>
+        </ul>
       </div>
     </section>
   );

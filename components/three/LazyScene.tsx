@@ -3,13 +3,17 @@
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { isSoftwareGL } from "./gpu";
 
 const GlobeScene = dynamic(() => import("./GlobeScene"), { ssr: false });
 
 function hasWebGL() {
   try {
     const c = document.createElement("canvas");
-    return !!(c.getContext("webgl2") || c.getContext("webgl"));
+    // Software-only WebGL would stutter: treat it as no WebGL and show the still fallback.
+    const opts = { failIfMajorPerformanceCaveat: true };
+    const gl = (c.getContext("webgl2", opts) || c.getContext("webgl", opts)) as WebGLRenderingContext | WebGL2RenderingContext | null;
+    return !!gl && !isSoftwareGL(gl);
   } catch {
     return false;
   }

@@ -9,6 +9,8 @@ type Part = string | { text: string; className?: string };
 /**
  * Word-by-word masked reveal for headlines. Pass plain strings, or objects
  * to style a phrase (e.g. the serif accent words).
+ * `immediate` (page titles, above the fold) plays as a CSS animation so the title
+ * paints straight from the server HTML, without waiting for JavaScript.
  */
 export function SplitText({
   parts,
@@ -32,14 +34,35 @@ export function SplitText({
     text.split(/\s+/).filter(Boolean).forEach((w) => words.push({ w, cls }));
   });
   const label = words.map((w) => w.w).join(" ");
-  const anim = immediate ? { animate: "show" } : { whileInView: "show", viewport: { once: true, margin: "0px 0px -10% 0px" } };
+  if (immediate) {
+    return (
+      <Tag id={id} className={className} aria-label={label}>
+        <span aria-hidden className="inline">
+          {words.map((w, i) => (
+            <Fragment key={i}>
+              <span className="inline-block overflow-hidden pb-[0.12em] -mb-[0.12em] align-bottom">
+                <span
+                  className={cn("inline-block animate-[wordUp_0.9s_cubic-bezier(0.22,1,0.36,1)_both]", w.cls)}
+                  style={{ animationDelay: `${delay + i * 0.045}s` }}
+                >
+                  {w.w}
+                </span>
+              </span>
+              {i < words.length - 1 && " "}
+            </Fragment>
+          ))}
+        </span>
+      </Tag>
+    );
+  }
   return (
     <Tag id={id} className={className} aria-label={label}>
       <motion.span
         aria-hidden
         className="inline"
         initial="hidden"
-        {...anim}
+        whileInView="show"
+        viewport={{ once: true, margin: "0px 0px -10% 0px" }}
         variants={{ hidden: {}, show: { transition: { staggerChildren: 0.045, delayChildren: delay } } }}
       >
         {words.map((w, i) => (

@@ -44,7 +44,7 @@ export function SegmentPage({ segment: s }: { segment: Segment }) {
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
           {s.gallery.slice(0, 4).map((g, i) => (
             <Reveal key={g.src} delay={i * 0.06} className="relative aspect-[3/4] overflow-hidden rounded-[16px] bg-paper-2">
-              <Image src={g.src} alt={g.alt} fill sizes="(min-width:640px) 25vw, 50vw" className="object-cover" priority={i < 2} />
+              <Image src={g.src} alt={g.alt} fill sizes="(min-width:640px) 25vw, 50vw" className="object-cover" loading={i < 2 ? "eager" : "lazy"} />
             </Reveal>
           ))}
         </div>

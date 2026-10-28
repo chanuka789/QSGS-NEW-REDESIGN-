@@ -44,7 +44,7 @@ export function ParallaxImage({
   return (
     <div ref={ref} className={cn("relative overflow-hidden", className)}>
       <motion.div className="absolute inset-[-8%]" style={reduce ? undefined : { y, scale }}>
-        <Image src={src} alt={alt} fill sizes={sizes} priority={priority} className={cn("object-cover", imgClassName)} />
+        <Image src={src} alt={alt} fill sizes={sizes} loading={priority ? "eager" : "lazy"} fetchPriority={priority ? "high" : "auto"} className={cn("object-cover", imgClassName)} />
       </motion.div>
     </div>
   );

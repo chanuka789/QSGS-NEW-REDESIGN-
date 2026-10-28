@@ -3,6 +3,7 @@
 import Image, { getImageProps } from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { isSoftwareGL } from "./gpu";
 
 /**
  * Photographic 3D hero: the real render plus a depth map (Depth Anything V2)
@@ -438,8 +439,9 @@ export function DepthScene({
     const cv = canvas.current;
     if (!el || !cv) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const gl = cv.getContext("webgl", { antialias: false, alpha: false, premultipliedAlpha: false, powerPreference: "high-performance" });
-    if (!gl || gl.isContextLost()) return;
+    const gl = cv.getContext("webgl", { antialias: false, alpha: false, premultipliedAlpha: false, powerPreference: "high-performance", failIfMajorPerformanceCaveat: true });
+    // No GPU (software rendering): keep the still photo rather than a slow animation.
+    if (!gl || gl.isContextLost() || isSoftwareGL(gl)) return;
 
     let raf = 0;
     let disposed = false;
@@ -586,7 +588,7 @@ export function DepthScene({
   return (
     <div ref={wrap} className={cn("relative overflow-hidden bg-paper-2", className)}>
       {/* Static image: instant first paint (LCP), no-WebGL fallback and SEO. */}
-      <Image src={src} alt={alt} fill priority={priority} sizes="(min-width:1024px) 640px, 100vw" quality={85} className="scale-[1.06] object-cover" style={{ objectPosition: `${focalX * 100}% ${focalY * 100}%` }} />
+      <Image src={src} alt={alt} fill loading={priority ? "eager" : "lazy"} fetchPriority={priority ? "high" : "auto"} sizes="(min-width:1024px) 640px, 100vw" quality={85} className="scale-[1.06] object-cover" style={{ objectPosition: `${focalX * 100}% ${focalY * 100}%` }} />
       <canvas ref={canvas} aria-hidden className={cn("absolute inset-0 h-full w-full transition-opacity duration-700", ready ? "opacity-100" : "opacity-0")} />
     </div>
   );

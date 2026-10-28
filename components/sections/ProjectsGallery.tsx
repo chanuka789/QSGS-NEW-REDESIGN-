@@ -64,7 +64,7 @@ export function ProjectsGallery() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
               >
-                <Link href={routes.contact} className="group block" aria-label={`${p.title} — discuss a similar project`}>
+                <Link href={routes.contact} className="group block">
                   <div className="relative aspect-[4/3] overflow-hidden rounded-[16px] bg-paper-2">
                     <Image
                       src={mediaUrl(p.file)}
@@ -79,6 +79,7 @@ export function ProjectsGallery() {
                       <h3 className="t-h4 text-ink transition-colors group-hover:text-brand">{p.title}</h3>
                       <p className="t-small mt-1 text-muted">
                         {sectorLabel[p.sector]}
+                        <span className="sr-only"> — discuss a similar project</span>
                       </p>
                     </div>
                     <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full shadow-[inset_0_0_0_1px_var(--color-line)] transition-colors duration-300 group-hover:bg-brand group-hover:text-white group-hover:shadow-none">
