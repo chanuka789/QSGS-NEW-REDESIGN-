@@ -41,6 +41,8 @@ const nextConfig: NextConfig = {
   async redirects() {
     // Friendly short links and common legacy WordPress paths.
     return [
+      // One canonical host: www → bare domain (keeps the path).
+      { source: "/:path*", has: [{ type: "host", value: "www.qs-global-solutions.com" }], destination: "https://qs-global-solutions.com/:path*", permanent: true },
       { source: "/home", destination: "/", permanent: true },
       { source: "/about", destination: "/about-us/", permanent: true },
       { source: "/services", destination: "/our-services/", permanent: true },
