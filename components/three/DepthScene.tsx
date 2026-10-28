@@ -126,6 +126,33 @@ vec3 rings(vec2 p, vec2 freq, float squash, float t, float seed) {
   return vec3(wave, dir * wave / freq);
 }
 
+// One wave train on the water plane: returns its slope (d/dX, d/dZ). Deep-water
+// dispersion (w = sqrt(g k)) makes long waves travel faster than short ones, like the sea.
+// Waves too fine to resolve at this distance fade out instead of shimmering.
+vec2 wave(vec2 x, vec2 dir, float len, float steep, float t, float pxLen) {
+  float k = 6.2832 / len;
+  float w = sqrt(3.3 * k);
+  float lod = smoothstep(1.5, 4.0, len / pxLen);
+  return dir * (steep * cos(dot(dir, x) * k - w * t) * lod);
+}
+
+// Wind waves on the marina, in perspective: the image is mapped onto a flat water plane
+// (X across, Z away from the camera, in camera heights) so waves shrink and crowd
+// together towards the far quay. Returns the surface slope.
+vec2 seaWaves(vec2 p, float t, float rough) {
+  float z = 1.0 / max(p.y - 0.57, 0.03);
+  vec2 x = vec2((p.x - 0.5) * z, z);
+  float pxLen = z * z / 1254.0 * 2.5;                  // plane length of ~2.5 px along Z
+  vec2 s = wave(x, normalize(vec2(0.3, -1.0)), 1.7, 0.09, t, pxLen)
+         + wave(x, normalize(vec2(-0.55, -1.0)), 1.05, 0.08, t, pxLen)
+         + wave(x, normalize(vec2(0.9, -0.5)), 0.62, 0.07, t, pxLen)
+         + wave(x, normalize(vec2(-0.95, -0.3)), 0.4, 0.06, t, pxLen)
+         + wave(x, normalize(vec2(0.2, 1.0)), 0.27, 0.05, t, pxLen) * rough
+         + wave(x, normalize(vec2(0.7, -1.0)), 0.17, 0.05, t, pxLen) * rough;
+  // Slow gusts drifting over the water make some patches choppier than others.
+  return s * (0.75 + 0.5 * noise(x * 0.35 + vec2(t * 0.08, -t * 0.05)));
+}
+
 // The scene's weather + time-of-day grade (shared by the image and its wet reflections).
 vec3 grade(vec3 c, float rain, float night) {
   float l = dot(c, vec3(0.2126, 0.7152, 0.0722));
@@ -151,9 +178,15 @@ void main() {
   float t = uTime * uMotion;
   float rain = uRain, night = uNight;
 
-  // Water: travelling ripples (stronger in wind and rain), foliage: wind sway.
+  // Water: rolling wind waves in every scene (choppier in rain), foliage: wind sway.
+  // A tilted facet reflects a different part of the scene, so the waves move the
+  // reflection, stretching it vertically as on real water. Near the quay edge the
+  // offset shrinks so stone never gets pulled into the water.
   float wind = 1.0 + rain * 1.6;
-  p += water * vec2(sin(p.y * 260.0 + t * 1.7) * 0.0007 + sin(p.x * 70.0 - t * 0.9) * 0.0004, cos(p.x * 180.0 + t * 1.3) * 0.0005) * (1.0 + rain);
+  vec2 slope = seaWaves(p, t, 1.0 + rain) * water * (1.0 + rain * 0.45);
+  vec2 wp = p + slope * vec2(0.035, 0.07);
+  wp = mix(p, wp, 0.25 + 0.75 * step(0.5, texture2D(uDepth, wp).g));
+  p = wp;
   // Rain on the marina: ring ripples (perspective-flattened, bigger when closer) bend the
   // reflections, and fine surface roughness breaks them up like a real rain-hit surface.
   float nearWater = smoothstep(0.15, 0.5, depth);
@@ -170,9 +203,11 @@ void main() {
   float lum = dot(src, vec3(0.2126, 0.7152, 0.0722));
   vec3 col = src;
 
-  // Sun glints on calm water (clear day only).
-  float glint = water * smoothstep(0.75, 1.0, sin(p.x * 340.0 + t * 2.2) * sin(p.y * 520.0 - t * 1.6));
-  col += glint * 0.035 * (1.0 - rain) * (1.0 - night);
+  // Wave faces tilted towards the camera mirror the bright sky, the backs of the waves
+  // the darker quay: crest/trough shading, plus sharp sun glints on clear days.
+  col *= 1.0 + slope.y * 1.3;
+  float glint = smoothstep(0.1, 0.16, slope.y + slope.x * 0.4) * water;
+  col += glint * 0.12 * (1.0 - rain) * (1.0 - night);
 
   // ---------- Rain grade: overcast light, softer contrast, cooler tone ----------
   col = mix(col, grade(src, 1.0, 0.0), rain);
@@ -218,7 +253,7 @@ void main() {
 
   // Marina at night: warm light streaks where the water already reflected the building.
   float refl = smoothstep(0.5, 0.85, lum) * water;
-  float shimmer = 0.6 + 0.4 * sin(p.y * 600.0 + t * 3.0 + sin(p.x * 80.0));
+  float shimmer = clamp(0.6 + slope.y * 5.0, 0.15, 1.5);   // light streaks broken by the waves
   col += refl * shimmer * vec3(1.0, 0.62, 0.3) * 0.32 * night;
 
   // ---------- Rain details ----------
