@@ -1,7 +1,11 @@
 import { LazyScene } from "@/components/three/LazyScene";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { workingCountries } from "@/lib/site";
+import Link from "next/link";
+import { routes, workingCountries } from "@/lib/site";
+
+/** Country chips link to the matching country page where one exists. */
+const countryPage: Record<string, string> = { AE: routes.uae, QA: routes.qatar, KW: routes.kuwait, SA: routes.saudi, AU: routes.australia };
 
 export function GlobalReach() {
   return (
@@ -33,7 +37,13 @@ export function GlobalReach() {
                   }
                 >
                   <span className={c.hub ? "h-1.5 w-1.5 rounded-full bg-white" : "h-1.5 w-1.5 rounded-full bg-brand"} aria-hidden />
-                  {c.name}
+                  {countryPage[c.code] ? (
+                    <Link href={countryPage[c.code]} className="hover:text-brand">
+                      {c.name}
+                    </Link>
+                  ) : (
+                    c.name
+                  )}
                 </li>
               ))}
             </ul>

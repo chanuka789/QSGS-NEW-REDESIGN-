@@ -25,6 +25,34 @@ All original URLs are kept (with trailing slash), so existing Google rankings ca
 | Our team | `/highly-qualified-quantity-surveyors-leading-qs-outsource-company/` |
 | Contact | `/contact-us-quantity-surveying-global-solutions/` |
 | Privacy policy (new) | `/privacy-policy/` |
+| Service, country and guide pages (new or rebuilt) | see SEO below |
+
+## SEO
+
+Each page targets one main search topic, so pages never compete with each other:
+
+| Page | Main keywords |
+| --- | --- |
+| Home | quantity surveying company, quantity surveying services |
+| Our services | construction consultancy services, quantity surveying services |
+| `/boq-preparation-services/` | BOQ preparation, bills of quantities |
+| `/quantity-take-off-services/` | quantity take-off services, 2D/3D take-off |
+| `/cost-plan-preparation-services/` | cost plan preparation, cost estimating |
+| `/our-services-uae/` | quantity surveying companies in UAE, Dubai, Abu Dhabi |
+| Qatar / Saudi Arabia / Kuwait / Australia pages | quantity surveying services in <country> |
+| `/trusted-boq-certification-services-recognized-by-sri-lankan-banks/` | BOQ certification for bank loans (Sri Lanka) |
+| Client pages (developers, consultants, contractors, architects) | QS services for each client type |
+| UAE guide (old blog URL) | remote quantity surveying services UAE |
+
+Content for the service and country pages lives in `lib/landing.ts`; the guide in `lib/article.ts`. All URLs from the old WordPress site still work (pages kept or 301-redirected).
+
+**After connecting the real domain:**
+
+1. Google Search Console → add the domain property → set `GOOGLE_SITE_VERIFICATION` in Railway (or verify by DNS) → submit `https://qs-global-solutions.com/sitemap.xml` → use URL Inspection → *Request indexing* for the most important pages.
+2. Bing Webmaster Tools → import from Search Console (or set `BING_SITE_VERIFICATION`) → submit the sitemap. Then run `node scripts/indexnow.mjs` to notify Bing and other IndexNow engines.
+3. Create or update a Google Business Profile, plus LinkedIn and other directory listings, linking to the website.
+
+The Railway preview address sends `X-Robots-Tag: noindex`, so only the real domain is indexed.
 
 ## Run locally
 

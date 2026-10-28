@@ -12,9 +12,9 @@ import { img } from "@/lib/media";
 
 const seo = {
   path: routes.careers,
-  title: "Remote Quantity Surveyor Jobs | Join Our Global Team at Quantity Surveying Global Solutions",
+  title: "Remote Quantity Surveyor Jobs | Careers at QSGS",
   description:
-    "Apply now for remote Quantity Surveyor positions at Quantity Surveying Global Solutions. Work on diverse projects worldwide, enjoy flexible hours, and grow your career with our innovative team. Explore exciting job opportunities and contribute to cutting-edge projects in commercial, residential, and mixed-use sectors.",
+    "Apply for remote quantity surveyor jobs at Quantity Surveying Global Solutions. Work on commercial, residential and mixed-use projects worldwide with flexible hours.",
   ogTitle: "Careers | Quantity Surveying Global Solutions",
   ogLabel: "Careers — Remote Quantity Surveyor jobs",
 };
@@ -54,7 +54,7 @@ export default function CareersPage() {
       <PageHero
         crumbs={[{ name: "Careers" }]}
         eyebrow="Careers"
-        title={["Shape the future of quantity surveying."]}
+        title={["Remote quantity surveyor jobs."]}
         lead="Quantity Surveying Global Solutions (QSGS) is a leading provider of comprehensive quantity surveying services, specializing in various project types, including commercial, residential, mixed-use, and more. We are passionate about innovation, excellence, and sustainability, and we invite you to be part of our journey."
       >
         <Reveal delay={0.3}>

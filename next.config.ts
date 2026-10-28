@@ -26,6 +26,12 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },
+      // The Railway preview address must never compete with the real domain in search.
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "(?<sub>.+)\\.up\\.railway\\.app" }],
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
       {
         source: "/brand/:path*",
         headers: [{ key: "Cache-Control", value: "public, max-age=2592000, stale-while-revalidate=86400" }],
@@ -43,6 +49,17 @@ const nextConfig: NextConfig = {
       { source: "/our-team", destination: "/highly-qualified-quantity-surveyors-leading-qs-outsource-company/", permanent: true },
       { source: "/team", destination: "/highly-qualified-quantity-surveyors-leading-qs-outsource-company/", permanent: true },
       { source: "/feed", destination: "/", permanent: true },
+      { source: "/comments/feed", destination: "/", permanent: true },
+      // Old WordPress archive and plugin pages that Google indexed.
+      { source: "/category/:path*", destination: "/", permanent: true },
+      { source: "/author/:path*", destination: "/about-us/", permanent: true },
+      { source: "/elementskit-content/:path*", destination: "/", permanent: true },
+      // Old Yoast sitemaps (may still be registered in Search Console).
+      { source: "/sitemap_index.xml", destination: "/sitemap.xml", permanent: true },
+      { source: "/:name(post|page|category|author|elementskit_content|elementskit_template)-sitemap.xml", destination: "/sitemap.xml", permanent: true },
+      // Short links for the service and country pages.
+      { source: "/boq", destination: "/boq-preparation-services/", permanent: true },
+      { source: "/uae", destination: "/our-services-uae/", permanent: true },
       { source: "/wp-admin", destination: "/", permanent: false },
       { source: "/wp-login.php", destination: "/", permanent: false },
     ];

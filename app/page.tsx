@@ -21,9 +21,9 @@ import Link from "next/link";
 
 const seo = {
   path: "/",
-  title: "Quantity Surveying Global Solutions | Expert Taking-Off & BOQ Services",
+  title: "Quantity Surveying Company | BOQ & Take-Off Services | QSGS",
   description:
-    "Your trusted partner for comprehensive quantity surveying services, including precise cost estimation, 2D and 3D take-off services, and detailed BOQ preparation. Specializing in architectural, structural, M&E, plumbing, and infrastructural projects. Enhance your project’s accuracy and efficiency with our global expertise.",
+    "Quantity surveying company for the UAE, Qatar, Saudi Arabia, Kuwait and Australia: BOQ preparation, quantity take-offs, cost plans and tender documents.",
   ogTitle: "Quantity Surveying Global Solutions",
   ogDescription:
     "QS Global Solutions offers remote quantity surveying services with accurate take-offs, BOQ preparation, and cost management — saving you time and resources without the need for on-site presence.",

@@ -54,6 +54,18 @@ export const routes = {
   team: "/highly-qualified-quantity-surveyors-leading-qs-outsource-company/",
   contact: "/contact-us-quantity-surveying-global-solutions/",
   privacy: "/privacy-policy/",
+  // Core service pages
+  boq: "/boq-preparation-services/",
+  takeoff: "/quantity-take-off-services/",
+  costPlan: "/cost-plan-preparation-services/",
+  // Country pages (URLs kept from the old website)
+  uae: "/our-services-uae/",
+  qatar: "/quantity-surveying-services-in-qatar-quantity-surveying-global-solutions/",
+  kuwait: "/quantity-surveying-services-in-kuwait-quantity-surveying-global-solutions/",
+  saudi: "/leading-quantity-surveying-services-in-saudi-arabia-quantity-surveying-global-solutions/",
+  australia: "/expert-quantity-surveying-services-in-australia-quantity-surveying-global-solutions/",
+  bank: "/trusted-boq-certification-services-recognized-by-sri-lankan-banks/",
+  article: "/expert-remote-quantity-surveying-services-in-uae-qs-global-solutions/",
 } as const;
 
 export type NavItem = { label: string; href: string; description?: string; children?: NavItem[] };
@@ -76,6 +88,22 @@ export const mainNav: NavItem[] = [
       { label: "Property Developers / Clients", href: routes.developers, description: "Expert pre-contract QS support." },
       { label: "Contractors", href: routes.contractors, description: "Streamlined tendering and variations." },
       { label: "Architects Firms", href: routes.architects, description: "Accurate QS for visionary projects." },
+      { label: "BOQ Preparation", href: routes.boq, description: "Bills of Quantities to NRM, POMI or SMM7." },
+      { label: "Quantity Take-Off", href: routes.takeoff, description: "2D and 3D take-offs with full mark-ups." },
+      { label: "Cost Plans & Estimates", href: routes.costPlan, description: "Budgets that follow the design." },
+      { label: "BOQ Certification (Sri Lanka)", href: routes.bank, description: "Certified BoQs for bank loans." },
+    ],
+  },
+  {
+    label: "Locations",
+    href: routes.uae,
+    children: [
+      { label: "UAE — Dubai & Abu Dhabi", href: routes.uae, description: "Quantity surveying across the Emirates." },
+      { label: "Qatar", href: routes.qatar, description: "BoQs and tender documents in Doha." },
+      { label: "Saudi Arabia", href: routes.saudi, description: "Capacity for the Saudi pipeline." },
+      { label: "Kuwait", href: routes.kuwait, description: "Tender support with a Kuwait contact." },
+      { label: "Australia", href: routes.australia, description: "Take-offs for builders and consultants." },
+      { label: "Guide: remote QS in the UAE", href: routes.article, description: "How remote quantity surveying works." },
     ],
   },
   { label: "Careers", href: routes.careers },

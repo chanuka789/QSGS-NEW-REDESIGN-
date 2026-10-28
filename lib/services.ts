@@ -210,10 +210,10 @@ export const segments: Segment[] = [
     gallery: developerGallery,
     modules: [modules.takeoff, modules.boq, modules.tenderDocs, modules.revision, modules.review],
     seo: {
-      title: "Quantity Surveying Services For Property Developers / Clients | QSGS",
+      title: "Quantity Surveying for Property Developers & Clients | QSGS",
       ogTitle: "Remote services for Property Developers / Clients | Quantity Surveying Global Solutions",
       description:
-        "Comprehensive Quantity Surveying Services for Property Developers and Clients: Specializing in 2D and 3D take-off services, BOQ preparation for Architectural, Structural, M&E, Plumbing, Infrastructural, Landscape, Irrigation, ICT, and Security Systems & Data Centers. Ensure precision and efficiency in your projects with our expert services.",
+        "Pre-contract quantity surveying for property developers: take-offs, BOQ preparation, GCC tender documents, BOQ revisions and reviews of consultant BOQs.",
     },
   },
   {
@@ -236,10 +236,10 @@ export const segments: Segment[] = [
     ],
     modules: [modules.takeoff, modules.boq, modules.revision],
     seo: {
-      title: "Our Quantity Surveying Remote Services for Consultant Firms | QSGS",
+      title: "QS Outsourcing for Cost Consultancy Firms | QSGS",
       ogTitle: "Remote Services For Cost Consultant Firms | Quantity Surveying Global Solutions",
       description:
-        "QS Global Solutions | Your trusted partner for comprehensive quantity surveying remote services worldwide. Specializing in take-off services and BOQ preparation for diverse projects.",
+        "Outsource take-offs, BOQs and BOQ revisions to qualified quantity surveyors and cut your consultancy firm’s pre-contract workload. Measured to NRM, POMI or SMM7.",
     },
   },
   {
@@ -262,10 +262,10 @@ export const segments: Segment[] = [
     ],
     modules: [modules.takeoff, modules.verification, modules.tenderQueries, contractorBoq, modules.variations],
     seo: {
-      title: "Our services for Contractors | Quantity Surveying Global Solutions",
+      title: "Quantity Surveying Services for Contractors | QSGS",
       ogTitle: "Remote services for Contractors | Quantity Surveying Global Solutions",
       description:
-        "We offer specialized services for contractors, including quantity surveying, BoQ preparation, and take-off measurements. Our team assists with tender queries, variation management, and compliance, providing efficient solutions for streamlined project planning and execution.",
+        "Win more tenders: quantity take-offs, tender drawing checks, tender queries, subcontract BOQs and variation support for contracting firms.",
     },
   },
   {
@@ -288,10 +288,10 @@ export const segments: Segment[] = [
     ],
     modules: [modules.takeoff, modules.boq, modules.revision, modules.review],
     seo: {
-      title: "Quantity Surveying Remote Services For Independent Architects | QSGS",
+      title: "Quantity Surveying for Architects | Take-Off & BOQ | QSGS",
       ogTitle: "Remote Services For Architects Firms | Quantity Surveying Global Solutions",
       description:
-        "Remote Quantity Surveying Services for Independent Architects: Expert 2D and 3D take-off services, BOQ preparation, and comprehensive cost management for architectural projects. Enhance your project’s accuracy and efficiency with our specialized remote services.",
+        "Cost certainty for architects: 2D/3D take-offs, BOQ preparation, BOQ revisions that follow every design change, and reviews of consultant-prepared BOQs.",
     },
   },
 ];

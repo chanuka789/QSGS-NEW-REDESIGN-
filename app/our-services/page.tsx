@@ -6,6 +6,7 @@ import { StandardsMarquee } from "@/components/sections/StandardsMarquee";
 import { Approach } from "@/components/sections/Approach";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { LinkRows } from "@/components/ui/LinkRows";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbJsonLd, buildMetadata, serviceJsonLd } from "@/lib/seo";
 import { modules } from "@/lib/services";
@@ -13,9 +14,9 @@ import { routes } from "@/lib/site";
 
 const seo = {
   path: routes.services,
-  title: "Our Services | Quantity Surveying Global Solutions",
+  title: "Quantity Surveying & Construction Consultancy | QSGS",
   description:
-    "Discover the comprehensive services offered by Quantity Surveying Global Solutions. From precise cost estimation and 2D/3D take-off services to detailed BOQ preparation, we specialize in architectural, structural, M&E, plumbing, and infrastructural projects. Ensure your project’s success with our expert quantity surveying services.",
+    "Quantity surveying and construction cost consultancy services: 2D/3D take-offs, BOQ preparation, cost plans, tender documents and BOQ reviews, delivered remotely.",
   ogTitle: "Our services | Quantity Surveying Global Solutions",
 };
 
@@ -39,13 +40,26 @@ export default function OurServicesPage() {
       <PageHero
         crumbs={[{ name: "Our Services" }]}
         eyebrow="Our services"
-        title={["We are offering our remote services."]}
+        title={["Quantity surveying and construction consultancy services."]}
         lead="Take-offs, Bills of Quantities, tender documents, revisions and reviews — delivered remotely by graduate quantity surveyors to clients in 20+ countries."
       />
 
       <section className="section pt-12 lg:pt-16" aria-label="Services by client">
         <div className="container-x">
           <SegmentIndex />
+        </div>
+      </section>
+
+      <section className="section border-t border-line" aria-labelledby="core-title">
+        <div className="container-x grid gap-12 lg:grid-cols-2 lg:gap-16">
+          <div>
+            <SectionHeading id="core-title" eyebrow="Core services" title={["BOQ preparation, take-offs and cost plans."]} />
+            <LinkRows hrefs={[routes.boq, routes.takeoff, routes.costPlan, routes.bank]} className="mt-8 border-t border-line" />
+          </div>
+          <div>
+            <SectionHeading id="where-title" eyebrow="Where we work" title={["Quantity surveying across the GCC and beyond."]} />
+            <LinkRows hrefs={[routes.uae, routes.qatar, routes.saudi, routes.kuwait, routes.australia]} className="mt-8 border-t border-line" />
+          </div>
         </div>
       </section>
 

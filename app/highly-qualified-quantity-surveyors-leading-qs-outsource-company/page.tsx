@@ -11,9 +11,9 @@ import { img } from "@/lib/media";
 
 const seo = {
   path: routes.team,
-  title: "Highly Qualified Quantity Surveyors | Leading QS Outsource Company",
+  title: "Qualified Quantity Surveyors | QS Outsourcing Team | QSGS",
   description:
-    "Discover top-tier quantity surveying services from a leading QS outsource company. Our team of highly qualified quantity surveyors brings extensive expertise in cost management, budgeting, and contract administration, ensuring your projects are delivered on time and within budget. Trust us for precision, accuracy, and exceptional results in every project.",
+    "Meet our graduate quantity surveyors with Gulf, UK, Australian and New Zealand project experience — the qualified QS outsourcing team behind every take-off and BOQ.",
   ogTitle: "Meet Our Expert Team | Quantity Surveying Global Solutions",
 };
 
@@ -56,7 +56,7 @@ export default function TeamPage() {
       <PageHero
         crumbs={[{ name: "About us", href: routes.about }, { name: "Our Team" }]}
         eyebrow="Highly qualified quantity surveyors"
-        title={["Meet our expert team."]}
+        title={["Meet our qualified quantity surveyors."]}
         lead="Graduate quantity surveyors with hands-on experience across the Gulf region, the United Kingdom, Australia and New Zealand — a leading QS outsource partner for your projects."
         image={img("qsgs-commercial-05.webp").src}
         imageAlt={img("qsgs-commercial-05.webp").alt}

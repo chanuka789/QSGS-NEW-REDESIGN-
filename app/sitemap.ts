@@ -1,20 +1,30 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL, routes } from "@/lib/site";
+import { landings } from "@/lib/landing";
+import { article } from "@/lib/article";
 
+/** Date the redesigned core pages were last changed. Update it when their content changes. */
+const CORE_UPDATED = "2026-10-28";
+
+/**
+ * Every indexable page with an honest lastmod (Google uses lastmod when it is accurate,
+ * and ignores priority/changefreq). Landing pages also list their main image.
+ */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date();
-  const entries: { path: string; priority: number; changeFrequency: "weekly" | "monthly" | "yearly" }[] = [
-    { path: routes.home, priority: 1, changeFrequency: "weekly" },
-    { path: routes.services, priority: 0.9, changeFrequency: "monthly" },
-    { path: routes.consultants, priority: 0.9, changeFrequency: "monthly" },
-    { path: routes.developers, priority: 0.9, changeFrequency: "monthly" },
-    { path: routes.contractors, priority: 0.9, changeFrequency: "monthly" },
-    { path: routes.architects, priority: 0.9, changeFrequency: "monthly" },
-    { path: routes.about, priority: 0.8, changeFrequency: "monthly" },
-    { path: routes.team, priority: 0.7, changeFrequency: "monthly" },
-    { path: routes.careers, priority: 0.7, changeFrequency: "weekly" },
-    { path: routes.contact, priority: 0.8, changeFrequency: "yearly" },
-    { path: routes.privacy, priority: 0.2, changeFrequency: "yearly" },
-  ];
-  return entries.map((e) => ({ url: `${SITE_URL}${e.path}`, lastModified, changeFrequency: e.changeFrequency, priority: e.priority }));
+  const core = [
+    routes.home,
+    routes.services,
+    routes.developers,
+    routes.consultants,
+    routes.contractors,
+    routes.architects,
+    routes.about,
+    routes.team,
+    routes.careers,
+    routes.contact,
+    routes.privacy,
+  ].map((path) => ({ url: `${SITE_URL}${path}`, lastModified: CORE_UPDATED }));
+  const pages = landings.map((l) => ({ url: `${SITE_URL}${l.path}`, lastModified: l.updated, images: [`${SITE_URL}${l.image.src}`] }));
+  const guide = { url: `${SITE_URL}${article.path}`, lastModified: article.updated, images: [`${SITE_URL}${article.image.src}`] };
+  return [...core, ...pages, guide];
 }

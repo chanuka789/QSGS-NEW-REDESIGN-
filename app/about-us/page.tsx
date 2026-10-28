@@ -15,9 +15,9 @@ import { img } from "@/lib/media";
 
 const seo = {
   path: routes.about,
-  title: "About Us | Quantity Surveying Global Solutions",
+  title: "About Us | Remote Quantity Surveying Consultants | QSGS",
   description:
-    "Quantity Surveying Global Solutions offers expert cost estimation, 2D and 3D take-off services, and detailed BOQ preparation. Specializing in architectural, structural, M&E, plumbing, and infrastructural projects, we ensure accuracy and efficiency for global clients.",
+    "QSGS is a remote quantity surveying consultancy with graduate surveyors serving 20+ countries, with contacts in the UAE, Kuwait, Australia and Sri Lanka.",
   ogTitle: "About us | Quantity Surveying Global Solutions",
 };
 
@@ -69,7 +69,7 @@ export default function AboutPage() {
       <PageHero
         crumbs={[{ name: "About us" }]}
         eyebrow="About us"
-        title={["Precision without borders."]}
+        title={["Quantity surveying consultants, without borders."]}
         lead="Welcome to Quantity Surveying Global Solutions! We specialize in providing expert quantity surveying services remotely to clients around the globe. Our team of seasoned professionals utilizes the latest technology to deliver accurate cost estimates, detailed BOQ preparation, and efficient project management."
         image={img("qsgs-residential-11.webp").src}
         imageAlt={img("qsgs-residential-11.webp").alt}

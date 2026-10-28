@@ -29,7 +29,13 @@ export const metadata: Metadata = {
     ],
     apple: "/apple-touch-icon.png",
   },
-  other: { "color-scheme": "only light" },
+  other: {
+    "color-scheme": "only light",
+    // Bing Webmaster Tools ownership check (set BING_SITE_VERIFICATION in Railway).
+    ...(process.env.BING_SITE_VERIFICATION ? { "msvalidate.01": process.env.BING_SITE_VERIFICATION } : {}),
+  },
+  // Google Search Console ownership check (set GOOGLE_SITE_VERIFICATION in Railway).
+  ...(process.env.GOOGLE_SITE_VERIFICATION ? { verification: { google: process.env.GOOGLE_SITE_VERIFICATION } } : {}),
 };
 
 export const viewport: Viewport = {

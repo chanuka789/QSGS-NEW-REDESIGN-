@@ -3,6 +3,21 @@ import { Logo } from "@/components/brand/Logo";
 import { company, offices, routes } from "@/lib/site";
 import { BackToTop } from "./BackToTop";
 
+/** Compact keyword links: core services and the countries we serve. */
+const serviceLinks = [
+  { label: "BOQ preparation", href: routes.boq },
+  { label: "Quantity take-off", href: routes.takeoff },
+  { label: "Cost plans", href: routes.costPlan },
+  { label: "BOQ certification (Sri Lanka)", href: routes.bank },
+];
+const locationLinks = [
+  { label: "UAE", href: routes.uae },
+  { label: "Qatar", href: routes.qatar },
+  { label: "Saudi Arabia", href: routes.saudi },
+  { label: "Kuwait", href: routes.kuwait },
+  { label: "Australia", href: routes.australia },
+];
+
 const links = [
   { label: "About us", href: routes.about },
   { label: "Our Team", href: routes.team },
@@ -34,7 +49,28 @@ export function Footer() {
           </nav>
         </div>
 
-        <ul className="t-xs mt-8 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-line pt-6 sm:grid-cols-3 lg:grid-cols-5">
+        <div className="t-xs mt-8 grid gap-3 border-t border-line pt-6 text-muted sm:grid-cols-2">
+          <nav aria-label="Services">
+            <span className="font-medium text-ink">Services: </span>
+            {serviceLinks.map((l, i) => (
+              <span key={l.href}>
+                {i > 0 && " · "}
+                <Link href={l.href} className="hover:text-brand">{l.label}</Link>
+              </span>
+            ))}
+          </nav>
+          <nav aria-label="Locations">
+            <span className="font-medium text-ink">Quantity surveying in: </span>
+            {locationLinks.map((l, i) => (
+              <span key={l.href}>
+                {i > 0 && " · "}
+                <Link href={l.href} className="hover:text-brand">{l.label}</Link>
+              </span>
+            ))}
+          </nav>
+        </div>
+
+        <ul className="t-xs mt-6 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-line pt-6 sm:grid-cols-3 lg:grid-cols-5">
           <li>
             <p className="font-medium text-ink">Email</p>
             <a href={`mailto:${company.email}`} className="mt-1 block break-all text-muted hover:text-brand">

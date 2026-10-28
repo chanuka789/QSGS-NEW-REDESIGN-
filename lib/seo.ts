@@ -59,13 +59,20 @@ export function organizationJsonLd() {
         image: `${SITE_URL}/brand/logo-512.png`,
         email: company.email,
         description: company.description,
-        areaServed: markets.map((m) => ({ "@type": "Place", name: m.name })),
+        areaServed: [
+          ...["United Arab Emirates", "Qatar", "Saudi Arabia", "Kuwait", "Oman", "United Kingdom", "Australia", "Sri Lanka", "New Zealand", "Singapore", "Canada", "United States"].map((name) => ({ "@type": "Country", name })),
+          ...["Dubai", "Abu Dhabi", "Doha", "Riyadh"].map((name) => ({ "@type": "City", name })),
+        ],
         knowsAbout: [
           "Quantity surveying",
           "Quantity take-off",
           "Bill of Quantities (BoQ) preparation",
+          "BOQ certification",
           "Tender documents",
           "Cost estimation",
+          "Cost planning",
+          "Construction cost consultancy",
+          "POMI",
           "NRM 1",
           "NRM 2",
           "SMM7",
@@ -155,5 +162,41 @@ export function jobPostingJsonLd(opts: { title: string; description: string; dat
     hiringOrganization: { "@type": "Organization", name: company.name, sameAs: `${SITE_URL}/`, logo: `${SITE_URL}/brand/logo-512.png` },
     directApply: true,
     url: `${SITE_URL}${routes.careers}`,
+  };
+}
+
+const COUNTRIES = new Set(["United Arab Emirates", "Qatar", "Saudi Arabia", "Kuwait", "Oman", "Australia", "United Kingdom", "Sri Lanka"]);
+
+/** Service offered in specific countries/cities (service and location landing pages). */
+export function landingServiceJsonLd(opts: { path: string; name: string; description: string; areaServed: string[]; image: string }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${SITE_URL}${opts.path}#service`,
+    name: opts.name,
+    description: opts.description,
+    serviceType: "Quantity Surveying",
+    category: "Construction cost consultancy",
+    provider: { "@id": ORG_ID },
+    areaServed: opts.areaServed.map((n) => ({ "@type": COUNTRIES.has(n) ? "Country" : "City", name: n })),
+    image: `${SITE_URL}${opts.image}`,
+    url: `${SITE_URL}${opts.path}`,
+  };
+}
+
+export function articleJsonLd(opts: { path: string; headline: string; description: string; image: string; published: string; updated: string }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "@id": `${SITE_URL}${opts.path}#article`,
+    mainEntityOfPage: `${SITE_URL}${opts.path}`,
+    headline: opts.headline,
+    description: opts.description,
+    image: [`${SITE_URL}${opts.image}`],
+    datePublished: opts.published,
+    dateModified: opts.updated,
+    author: { "@type": "Organization", "@id": ORG_ID, name: company.name, url: `${SITE_URL}/` },
+    publisher: { "@id": ORG_ID },
+    inLanguage: "en-US",
   };
 }

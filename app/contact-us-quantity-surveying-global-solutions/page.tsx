@@ -8,9 +8,9 @@ import { company, offices, routes } from "@/lib/site";
 
 const seo = {
   path: routes.contact,
-  title: "Contact Us | Quantity Surveying Global Solutions",
+  title: "Contact Us | Get a Quantity Surveying Quote | QSGS",
   description:
-    "Get in touch with Quantity Surveying Global Solutions for expert quantity surveying services. Reach out for precise cost estimation, 2D/3D take-off services, and BOQ preparation. Our team is ready to assist with your architectural, structural, M&E, plumbing, and infrastructural project needs. Contact us today to ensure your project’s success.",
+    "Contact Quantity Surveying Global Solutions for a quote on take-offs, BOQ preparation or cost plans. Contacts in the UAE, Kuwait, Australia and Sri Lanka.",
   ogTitle: "Contact | Quantity Surveying Global Solutions",
   ogLabel: "Schedule an online meeting",
 };
@@ -25,7 +25,7 @@ export default function ContactPage() {
       <PageHero
         crumbs={[{ name: "Contact" }]}
         eyebrow="Contact us"
-        title={["Schedule a meeting."]}
+        title={["Contact our quantity surveyors."]}
         lead="Tell us about your project and choose a convenient time. Our quantity surveying team will confirm your online meeting by email."
       />
 

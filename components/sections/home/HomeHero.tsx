@@ -30,7 +30,7 @@ export function HomeHero() {
             as="h1"
             immediate
             delay={0.15}
-            parts={["Remote quantity surveying,", "measured with precision."]}
+            parts={["Quantity surveying services,", "measured with precision."]}
             className="t-display mt-4"
           />
 
