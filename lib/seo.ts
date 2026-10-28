@@ -11,6 +11,8 @@ type PageSeo = {
   type?: "website" | "article";
   /** Short label printed on the generated social-share image. */
   ogLabel?: string;
+  /** Posts: dates and main image for Open Graph article tags. */
+  article?: { published: string; modified: string; section: string; image?: string };
 };
 
 export function buildMetadata(p: PageSeo): Metadata {
@@ -32,6 +34,9 @@ export function buildMetadata(p: PageSeo): Metadata {
       title: p.ogTitle ?? p.title,
       description: p.ogDescription ?? p.description,
       images: [{ url: og, width: 1200, height: 630, alt: p.ogTitle ?? p.title }],
+      ...(p.article
+        ? { publishedTime: p.article.published, modifiedTime: p.article.modified, section: p.article.section, authors: [company.name] }
+        : {}),
     },
     twitter: {
       card: "summary_large_image",
@@ -184,10 +189,12 @@ export function landingServiceJsonLd(opts: { path: string; name: string; descrip
   };
 }
 
-export function articleJsonLd(opts: { path: string; headline: string; description: string; image: string; published: string; updated: string }) {
+export function articleJsonLd(opts: { path: string; headline: string; description: string; image: string; published: string; updated: string; section?: string; words?: number }) {
   return {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
+    ...(opts.section ? { articleSection: opts.section } : {}),
+    ...(opts.words ? { wordCount: opts.words } : {}),
     "@id": `${SITE_URL}${opts.path}#article`,
     mainEntityOfPage: `${SITE_URL}${opts.path}`,
     headline: opts.headline,

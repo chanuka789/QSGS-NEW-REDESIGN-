@@ -3,8 +3,9 @@ import { landingRoutes } from "./landing";
 import { routes } from "./site";
 
 /**
- * The guide that was published on the old website at this URL (31 May 2025), rewritten
- * for the new site. It covers the topic in depth and links to the matching service pages.
+ * Insights posts. Each post is served at the root, at /<slug>/ (old WordPress URLs are kept),
+ * rendered by app/[post]/page.tsx with the shared responsive post template, and listed on
+ * /insights/, in the sitemap and in structured data. To add a post, add an entry to `posts`.
  */
 export type ArticleBlock =
   | { type: "p"; text: string }
@@ -14,8 +15,32 @@ export type ArticleBlock =
   | { type: "table"; head: string[]; rows: string[][] }
   | { type: "links"; items: { label: string; href: string }[] };
 
-export const article = {
+export type Post = {
+  slug: string;
+  path: string;
+  category: string;
+  /** Full headline (structured data). */
+  title: string;
+  h1: string;
+  lead: string;
+  /** One or two sentences for the Insights list. */
+  excerpt: string;
+  seo: { title: string; description: string };
+  published: string;
+  updated: string;
+  image: { src: string; alt: string };
+  blocks: ArticleBlock[];
+  /** Service / location pages to suggest after the post. */
+  related: string[];
+};
+
+/** Published on the old website on 31 May 2025, rewritten for the new site. */
+const uaeGuide: Post = {
+  slug: landingRoutes.article.replace(/\//g, ""),
   path: landingRoutes.article,
+  category: "Guide",
+  excerpt: "What remote quantity surveying is, what you can outsource, and how UAE developers, consultants, contractors and architects use it to control cost.",
+  related: [landingRoutes.uae, landingRoutes.boq, landingRoutes.takeoff, routes.consultants],
   title: "Remote quantity surveying services in the UAE: how they work and why they save cost",
   h1: "Expert remote quantity surveying services in the UAE",
   lead: "How remote quantity surveying works, what you can outsource, and how UAE developers, consultants, contractors and architects use it to control cost.",
@@ -26,7 +51,7 @@ export const article = {
   },
   published: "2025-05-31",
   updated: "2026-10-28",
-  image: img("qsgs-mixed-use-01.webp"),
+  image: { src: img("qsgs-mixed-use-01.webp").src, alt: img("qsgs-mixed-use-01.webp").alt },
   blocks: [
     { type: "h2", id: "what-is-remote-qs", text: "What is remote quantity surveying?" },
     {
@@ -112,5 +137,17 @@ export const article = {
       type: "p",
       text: "Send us your drawings, specifications and the format you need. We confirm the scope, deliverables and delivery date, then measure, check and deliver. To discuss a project, book an online meeting or email info@qs-global-solutions.com.",
     },
-  ] as ArticleBlock[],
+  ],
 };
+
+export const posts: Post[] = [uaeGuide].sort((a, b) => b.published.localeCompare(a.published));
+export const postBySlug = (slug: string) => posts.find((p) => p.slug === slug);
+
+/** Reading time at ~220 words per minute. */
+export function readingMinutes(p: Post) {
+  const words = p.blocks
+    .map((b) => (b.type === "p" || b.type === "h2" || b.type === "h3" ? b.text : b.type === "list" ? b.items.map((i) => `${i.title ?? ""} ${i.text}`).join(" ") : b.type === "table" ? b.rows.flat().join(" ") : ""))
+    .join(" ")
+    .split(/\s+/).length;
+  return Math.max(1, Math.round(words / 220));
+}

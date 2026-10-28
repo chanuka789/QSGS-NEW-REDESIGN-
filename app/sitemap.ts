@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL, routes } from "@/lib/site";
 import { landings } from "@/lib/landing";
-import { article } from "@/lib/article";
+import { posts } from "@/lib/posts";
 
 /** Date the redesigned core pages were last changed. Update it when their content changes. */
 const CORE_UPDATED = "2026-10-28";
@@ -25,6 +25,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     routes.privacy,
   ].map((path) => ({ url: `${SITE_URL}${path}`, lastModified: CORE_UPDATED }));
   const pages = landings.map((l) => ({ url: `${SITE_URL}${l.path}`, lastModified: l.updated, images: [`${SITE_URL}${l.image.src}`] }));
-  const guide = { url: `${SITE_URL}${article.path}`, lastModified: article.updated, images: [`${SITE_URL}${article.image.src}`] };
-  return [...core, ...pages, guide];
+  const insights = { url: `${SITE_URL}${routes.insights}`, lastModified: posts[0]?.updated ?? CORE_UPDATED };
+  const articles = posts.map((p) => ({ url: `${SITE_URL}${p.path}`, lastModified: p.updated, images: [`${SITE_URL}${p.image.src}`] }));
+  return [...core, ...pages, insights, ...articles];
 }

@@ -22,6 +22,7 @@ const links = [
   { label: "About us", href: routes.about },
   { label: "Our Team", href: routes.team },
   { label: "Services", href: routes.services },
+  { label: "Insights", href: routes.insights },
   { label: "Careers", href: routes.careers },
   { label: "Contact", href: routes.contact },
 ];

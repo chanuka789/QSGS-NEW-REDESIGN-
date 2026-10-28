@@ -218,6 +218,7 @@ export function Dashboard({ initialItems, openId, email, status }: { initialItem
           ))}
         </nav>
         <div className="border-t border-line p-3">
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- CSV file download from a route handler, not a page */}
           <a href="/api/admin/export/" className="t-small flex items-center gap-3 rounded-[10px] px-3 py-2.5 text-ink-2 hover:bg-paper-2">
             <Download className="h-4 w-4" /> Export CSV
           </a>
@@ -239,6 +240,7 @@ export function Dashboard({ initialItems, openId, email, status }: { initialItem
         <div className="flex items-center justify-between px-4 py-3">
           <Logo className="h-7 w-auto text-brand" />
           <div className="flex items-center gap-1">
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- CSV file download from a route handler, not a page */}
             <a href="/api/admin/export/" aria-label="Export CSV" className="grid h-10 w-10 place-items-center rounded-full text-ink-2 hover:bg-paper-2">
               <Download className="h-5 w-5" />
             </a>

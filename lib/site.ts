@@ -66,6 +66,7 @@ export const routes = {
   australia: "/expert-quantity-surveying-services-in-australia-quantity-surveying-global-solutions/",
   bank: "/trusted-boq-certification-services-recognized-by-sri-lankan-banks/",
   article: "/expert-remote-quantity-surveying-services-in-uae-qs-global-solutions/",
+  insights: "/insights/",
 } as const;
 
 /** Contact form opened on "Request a quotation". */
@@ -81,6 +82,7 @@ export const mainNav: NavItem[] = [
     children: [
       { label: "About us", href: routes.about, description: "Our story, mission and the way we work." },
       { label: "Our Team", href: routes.team, description: "Highly qualified quantity surveyors." },
+      { label: "Insights", href: routes.insights, description: "Guides on quantity surveying and BOQs." },
     ],
   },
   {
