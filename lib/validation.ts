@@ -41,7 +41,7 @@ export const contactSchema = z
   consent: z.literal(true, { error: "Please agree so we can reply to your request." }),
   // Spam protection: human-verification solution, hidden honeypot field and form-render timestamp.
   captcha: z.string().max(2000).optional().default(""),
-  website: z.string().max(0).optional().default(""),
+  website: z.string().max(500).optional().default(""),
   startedAt: z.coerce.number().optional(),
   })
   .superRefine((d, ctx) => {
@@ -64,7 +64,7 @@ export const careersSchema = z.object({
   info: text(5000).optional().default(""),
   consent: z.literal(true, { error: "Please agree so we can process your application." }),
   captcha: z.string().max(2000).optional().default(""),
-  website: z.string().max(0).optional().default(""),
+  website: z.string().max(500).optional().default(""),
   startedAt: z.coerce.number().optional(),
 });
 export type CareersInput = z.infer<typeof careersSchema>;
