@@ -11,7 +11,7 @@ import { quoteHref, routes } from "@/lib/site";
 const facts = [
   { k: "20+", v: "Countries served remotely" },
   { k: "2D & 3D", v: "Take-offs from drawings & models" },
-  { k: "NRM · SMM7 · CESMM4", v: "Standard methods of measurement" },
+  { k: "POMI · NRM · SMM7 · CESMM4", v: "Standard methods of measurement" },
 ];
 
 export function HomeHero() {
