@@ -46,28 +46,94 @@ float noise(vec2 p) {
 }
 float fbm(vec2 p) { float v = 0.0, a = 0.5; for (int i = 0; i < 5; i++) { v += a * noise(p); p *= 2.03; a *= 0.5; } return v; }
 
-// Falling rain streaks in screen space. One layer = one depth band.
-float rainLayer(vec2 uv, float cols, float speed, float len, float width, float seed, float t) {
-  uv.x += uv.y * 0.16;                       // wind slant
-  vec2 q = vec2(uv.x * cols, uv.y * cols * 0.12 + t * speed + seed);
-  vec2 id = floor(q); vec2 f = fract(q);
+const float PI = 3.14159265;
+float inv(float a, float b, float x) { return 1.0 - smoothstep(a, b, x); }
+
+// One layer of falling rain, in screen space (uv.x in screen-height units, uv.y down).
+// Drops are thin, motion-blurred streaks: brightest at the head, fading along the tail,
+// with per-drop speed, length and brightness. Width is in device pixels so thin far
+// drops dim instead of aliasing.
+float rainLayer(vec2 uv, float cols, float cellH, float speed, float len, float wPx, float density, float seed, float t) {
+  uv.x -= uv.y * 0.11;                               // wind slant
+  float colId = floor(uv.x * cols);
+  float hc = hash(vec2(colId, seed));
+  float y = (uv.y - t * speed * (0.85 + 0.3 * hc)) / cellH - hc * 7.0;
+  float rowId = floor(y);
+  float f = fract(y);
+  vec2 id = vec2(colId, rowId);
   float h = hash(id + seed);
-  if (h < 0.35) return 0.0;                  // not every cell carries a drop
-  float x = abs(f.x - (0.15 + 0.7 * hash(id.yx + seed)));
-  float y = fract(f.y + h * 3.0);
-  return smoothstep(width, 0.0, x) * smoothstep(0.0, 0.05, y) * smoothstep(len, len * 0.3, y);
+  if (h > density) return 0.0;
+  float x0 = (colId + 0.15 + 0.7 * hash(id.yx + seed * 1.3)) / cols;
+  float dxPx = abs(uv.x - x0) * uRes.y;
+  float w = max(wPx, 0.9);
+  float across = inv(0.0, w, dxPx) * min(1.0, wPx / 0.9);
+  float head = 0.3 + 0.55 * hash(id * 1.7 + seed);
+  float l = len * (0.7 + 0.6 * hash(id + 3.3)) / cellH;
+  float along = smoothstep(head - l, head, f) * inv(head, head + 0.01, f);
+  return across * along * (0.55 + 0.45 * hash(id + 2.0));
 }
 
-// Expanding rings where drops hit water / wet stone.
-float ripples(vec2 p, float t) {
-  vec2 g = p * vec2(70.0, 120.0);            // foreshortened grid
-  vec2 id = floor(g); vec2 f = fract(g) - 0.5;
-  float h = hash(id);
-  float ph = fract(t * 0.9 + h);
-  float r = length(f * vec2(1.0, 1.6));
-  return (1.0 - ph) * smoothstep(0.05, 0.0, abs(r - ph * 0.45)) * step(0.45, h);
+// Drop impacts on stone: a quick splash crown with two bouncing droplets, then a thin
+// ring of water that spreads and fades. 'squash' flattens circles into perspective ellipses.
+// Each impact lands at a new random spot (and some cells stay dry for a beat), so the
+// hits never line up into a visible grid.
+// Drop impacts on stone: a quick splash crown with two droplets thrown up and falling
+// back; in standing water (.y = puddle) the impact also leaves a thin spreading ring.
+float splashes(vec2 p, vec2 freq, float squash, float t, float seed, float puddle) {
+  vec2 g = p * freq;
+  vec2 id = floor(g);
+  vec2 f = fract(g) - 0.5;
+  float h = hash(id + seed);
+  float tt = t / (0.45 + 0.6 * h) + h * 5.0;
+  vec2 rid = id + floor(tt) * vec2(17.13, 31.7) + seed;
+  if (hash(rid) > 0.55) return 0.0;
+  float ph = fract(tt);
+  vec2 v = f - (vec2(hash(rid + 1.3), hash(rid + 2.7)) - 0.5) * 0.4;
+  float d = length(v * vec2(1.0, squash));
+  float out_ = 0.0;
+  float life = ph / 0.16;                            // crown lasts ~0.1–0.2 s
+  if (life < 1.0) {
+    float r = life * 0.17;
+    float fade = 1.0 - life;
+    out_ = inv(0.0, 0.05, abs(d - r)) * step(v.y, 0.02) * fade;  // upper rim of the crown
+    float lift = sin(life * PI) * 0.22;
+    out_ += inv(0.0, 0.03, length(v - vec2(r * 0.9, -lift))) * fade;
+    out_ += inv(0.0, 0.026, length(v - vec2(-r * 0.8, -lift * 0.75))) * fade;
+    out_ += inv(0.0, 0.045, d) * inv(0.0, 0.3, life);           // the instant of impact
+  }
+  out_ += inv(0.0, 0.035, abs(d - (0.04 + ph * 0.24))) * (1.0 - ph) * (0.3 + 0.7 * puddle) * 0.75;
+  return out_;
 }
 
+// Rain rings on the marina: a few concentric ripples that spread and settle. Returns the
+// signed wave height in .x (crest > 0, trough < 0) and a refraction offset in .yz that
+// bends the reflections along the ring, as on a real rain-hit water surface.
+vec3 rings(vec2 p, vec2 freq, float squash, float t, float seed) {
+  vec2 g = p * freq;
+  vec2 id = floor(g);
+  vec2 f = fract(g) - 0.5;
+  float h = hash(id + seed);
+  float tt = t * (0.7 + 0.6 * h) + h * 9.0;
+  vec2 rid = id + floor(tt) * vec2(11.7, 23.3) + seed;
+  if (hash(rid) > 0.7) return vec3(0.0);
+  float ph = fract(tt);
+  vec2 v = (f - (vec2(hash(rid + 4.1), hash(rid + 8.3)) - 0.5) * 0.36) * vec2(1.0, squash);
+  float d = length(v);
+  float r = 0.02 + ph * 0.3;
+  float env = inv(0.0, 0.1, abs(d - r + 0.03)) * inv(0.0, r + 0.02, r - d + 0.06);
+  float wave = sin((d - r) * 52.0) * env * (1.0 - ph) * 1.5;
+  vec2 dir = d > 0.0001 ? v / d : vec2(0.0);
+  return vec3(wave, dir * wave / freq);
+}
+
+// The scene's weather + time-of-day grade (shared by the image and its wet reflections).
+vec3 grade(vec3 c, float rain, float night) {
+  float l = dot(c, vec3(0.2126, 0.7152, 0.0722));
+  vec3 o = mix(vec3(l), c, 0.5) * vec3(0.84, 0.88, 0.95);
+  o = mix(o, vec3(0.6, 0.64, 0.69), 0.16);
+  c = mix(c, o, rain);
+  return mix(c, pow(c, vec3(1.35)) * vec3(0.17, 0.2, 0.33), night);
+}
 void main() {
   vec2 base = uFocal + (vUv - 0.5) * uCover / uZoom;
   base.y = 1.0 - base.y;
@@ -88,6 +154,14 @@ void main() {
   // Water: travelling ripples (stronger in wind and rain), foliage: wind sway.
   float wind = 1.0 + rain * 1.6;
   p += water * vec2(sin(p.y * 260.0 + t * 1.7) * 0.0007 + sin(p.x * 70.0 - t * 0.9) * 0.0004, cos(p.x * 180.0 + t * 1.3) * 0.0005) * (1.0 + rain);
+  // Rain on the marina: ring ripples (perspective-flattened, bigger when closer) bend the
+  // reflections, and fine surface roughness breaks them up like a real rain-hit surface.
+  float nearWater = smoothstep(0.15, 0.5, depth);
+  vec3 rA = rings(p, vec2(40.0, 100.0), 1.25, t, 1.0);
+  vec3 rB = rings(p + 0.37, vec2(20.0, 46.0), 1.15, t * 1.1, 7.0);
+  vec3 ringSum = rA * (1.0 - nearWater * 0.6) + rB * (0.35 + nearWater * 0.65);
+  vec2 rough = vec2(noise(p * vec2(420.0, 900.0) + t * 4.0), noise(p * vec2(380.0, 860.0) - t * 3.7)) - 0.5;
+  p += water * rain * (ringSum.yz * 2.2 + rough * 0.003);
   p += leaf * wind * vec2(sin(t * 0.85 + p.y * 14.0) * 0.0014 + sin(t * 1.9 + p.x * 40.0) * 0.0004, cos(t * 0.7 + p.x * 11.0) * 0.0009);
 
   vec3 src = texture2D(uColor, p).rgb;
@@ -101,9 +175,7 @@ void main() {
   col += glint * 0.035 * (1.0 - rain) * (1.0 - night);
 
   // ---------- Rain grade: overcast light, softer contrast, cooler tone ----------
-  vec3 overcast = mix(vec3(lum), src, 0.5) * vec3(0.84, 0.88, 0.95);
-  overcast = mix(overcast, vec3(0.6, 0.64, 0.69), 0.16);
-  col = mix(col, overcast, rain);
+  col = mix(col, grade(src, 1.0, 0.0), rain);
 
   // ---------- Night grade: moonlit blue, deep shadows ----------
   vec3 moon = pow(col, vec3(1.35)) * vec3(0.17, 0.2, 0.33);
@@ -150,21 +222,59 @@ void main() {
   col += refl * shimmer * vec3(1.0, 0.62, 0.3) * 0.32 * night;
 
   // ---------- Rain details ----------
-  // Wet stone: darker, glossier, picks up light from the sky / lamps.
-  vec3 sheen = mix(vec3(0.07, 0.08, 0.1), vec3(0.18, 0.11, 0.06), night);
-  col = mix(col, col * 0.78 + sheen * (0.5 + 0.5 * noise(p * vec2(40.0, 4.0))), ground * rain * 0.85);
-  float rr = ripples(p, t);
-  col += rr * (water + ground * 0.35) * rain * mix(vec3(0.16), vec3(0.22, 0.15, 0.09), night);
-  // Atmospheric haze: far things fade into the rain.
-  vec3 fog = mix(vec3(0.66, 0.69, 0.73), vec3(0.08, 0.09, 0.12), night);
-  col = mix(col, fog, rain * 0.32 * (1.0 - smoothstep(0.0, 0.45, depth)) * (1.0 - sky));
+  // Wet stone: darker and richer, with a mirror-like film that reflects the building and
+  // sky (by day) or lit windows and lamps (by night). Mirrored about the waterline, graded
+  // with the same weather/time as the scene, stronger at grazing angles (further away).
+  float puddle = smoothstep(0.48, 0.7, fbm(p * vec2(14.0, 34.0)));
+  float wet = ground * rain;
+  col = mix(col, pow(max(col, 0.0), vec3(1.2)) * 0.82, wet * 0.9);
+  float jitter = (noise(p * vec2(300.0, 40.0) + t * 2.5) - 0.5) * 0.004;
+  vec2 mp = vec2(p.x + jitter, clamp(2.0 * 0.64 - p.y, 0.002, 0.998));
+  vec3 mirror = (texture2D(uColor, mp).rgb + texture2D(uColor, mp + vec2(0.0, 0.008)).rgb + texture2D(uColor, mp + vec2(0.0, 0.018)).rgb) / 3.0;
+  vec4 mk = texture2D(uMask, mp);
+  vec3 wetRefl = grade(mirror, rain, night);
+  wetRefl += (mk.g * 0.7 + mk.b) * vec3(1.0, 0.62, 0.3) * night * 0.8;
+  wetRefl = mix(wetRefl, mix(vec3(0.62, 0.66, 0.71), vec3(0.04, 0.05, 0.08), night), mk.r * 0.6);
+  float fresnel = mix(0.8, 0.4, smoothstep(0.2, 0.7, depth));
+  // Only things standing above the floor reflect (not floor mirrored onto floor), and the
+  // raised terrace (and anything under it) neither shows nor casts a mirror: it sits above
+  // the reflection line.
+  float reflW = (1.0 - mk.a * 0.75) * (1.0 - terrace * 0.9) * (1.0 - mk.b * 0.85);
+  col = mix(col, wetRefl, wet * (0.28 + 0.55 * puddle) * fresnel * reflW);
+  // Lamp-lit terrace floor: a soft wet gloss of its own light instead.
+  col += src * vec3(1.0, 0.6, 0.3) * terrace * wet * night * puddle * 0.18;
 
-  // Falling rain: three depth layers, in screen space.
+  // Under rain the marina loses its mirror finish and picks up the grey sky.
+  col = mix(col, mix(vec3(0.6, 0.64, 0.69), vec3(0.05, 0.06, 0.09), night), water * rain * 0.14);
+
+  // Light the drops pick up: daylight, or warm lamps near the terrace at night.
+  vec3 dropLight = mix(vec3(0.86, 0.89, 0.94), vec3(0.36, 0.38, 0.44), night) + terrace * night * vec3(0.9, 0.55, 0.25);
+
+  // Drops hitting the stone floor: splash crowns + spreading rings, bigger closer to camera.
+  float nearG = smoothstep(0.35, 0.6, depth);
+  float spl = splashes(p, vec2(50.0, 125.0), 1.2, t, 3.0, puddle) * (1.0 - nearG * 0.7)
+            + splashes(p + 0.21, vec2(24.0, 52.0), 1.1, t * 1.07, 11.0, puddle) * (0.3 + nearG * 0.7);
+  col = mix(col, max(col, dropLight * 0.92), clamp(spl * wet * 0.85, 0.0, 1.0));
+
+  // Rain rings on the water: crests catch the sky light, troughs fall into shadow.
+  float rw = ringSum.x * water * rain;
+  col = mix(col, max(col * 1.18, dropLight * 0.9), clamp(rw, 0.0, 1.0));
+  col *= 1.0 - clamp(-rw, 0.0, 1.0) * 0.4;
+
+  // Atmosphere: drifting rain mist, thicker in the distance.
+  float mist = 0.7 + 0.6 * fbm(p * vec2(3.0, 1.6) + vec2(t * 0.05, t * 0.012));
+  vec3 fog = mix(vec3(0.66, 0.69, 0.73), vec3(0.08, 0.09, 0.12), night);
+  col = mix(col, fog, clamp(rain * 0.3 * mist * (1.0 - smoothstep(0.0, 0.45, depth)) * (1.0 - sky * 0.4), 0.0, 1.0));
+
+  // Falling rain, three depth layers. Each layer hides behind anything nearer than it, so
+  // far rain never draws over the olive tree. Drops show against dark areas and nearly
+  // vanish against the bright sky, like real rain.
   vec2 suv = vec2(vUv.x * uRes.x / uRes.y, 1.0 - vUv.y);
-  float drops = rainLayer(suv, 110.0, 9.0, 0.45, 0.04, 1.7, t) * 0.25
-              + rainLayer(suv, 65.0, 12.0, 0.55, 0.045, 4.1, t) * 0.4
-              + rainLayer(suv, 34.0, 16.0, 0.65, 0.05, 9.3, t) * 0.55;
-  col += drops * rain * mix(vec3(0.42, 0.46, 0.52), vec3(0.24, 0.22, 0.21), night);
+  float rFar = rainLayer(suv, 230.0, 0.16, 1.2, 0.035, 0.6, 0.6, 1.7, t) * inv(0.08, 0.18, depth);
+  float rMid = rainLayer(suv, 115.0, 0.28, 1.7, 0.075, 1.0, 0.38, 4.1, t) * inv(0.38, 0.5, depth);
+  float rNear = rainLayer(suv, 46.0, 0.5, 2.5, 0.15, 2.0, 0.2, 9.3, t);
+  float drops = rFar * 0.35 + rMid * 0.5 + rNear * 0.45;
+  col = mix(col, max(col * 1.04, dropLight), clamp(drops * rain, 0.0, 1.0));
 
   gl_FragColor = vec4(clamp(col, 0.0, 1.0), 1.0);
 }`;
