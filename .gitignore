@@ -13,3 +13,4 @@ npm-debug.log*
 .railway
 AGENTS.md
 media-local/
+.data-local

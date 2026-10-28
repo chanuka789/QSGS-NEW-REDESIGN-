@@ -26,10 +26,10 @@ export default function ContactPage() {
         crumbs={[{ name: "Contact" }]}
         eyebrow="Contact us"
         title={["Contact our quantity surveyors."]}
-        lead="Tell us about your project and choose a convenient time. Our quantity surveying team will confirm your online meeting by email."
+        lead="Book an online meeting or request a quotation. Tell us about your project and our quantity surveying team will reply by email."
       />
 
-      <section className="section pt-10 lg:pt-14" aria-label="Contact form and offices">
+      <section id="form" className="section scroll-mt-24 pt-10 lg:pt-14" aria-label="Contact form and offices">
         <div className="container-x grid gap-10 lg:grid-cols-[1.3fr_0.7fr] lg:gap-14">
           <Reveal y={24}>
             <div className="rounded-[20px] bg-white p-6 shadow-[inset_0_0_0_1px_var(--color-line)] sm:p-8">

@@ -1,12 +1,14 @@
 import { careersSchema, fieldErrors, FILE_RULES } from "@/lib/validation";
 import { clientIp, rateLimit, sameOrigin } from "@/lib/rate-limit";
-import { inbox, sendMail } from "@/lib/mail";
-import { careersConfirmation, careersNotification } from "@/lib/mail/templates";
-import { readUploads, storeUploads, UploadError, type UploadedFile } from "@/lib/uploads";
+import { verifySolution } from "@/lib/captcha";
+import { processSubmission, publicBase } from "@/lib/submit";
+import { qsJob } from "@/lib/jobs";
+import { readUploads, UploadError, type UploadedFile } from "@/lib/uploads";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+/** Careers page: job applications with CV (required) and cover letter (optional). */
 export async function POST(req: Request) {
   if (!sameOrigin(req)) return Response.json({ ok: false, error: "Invalid origin." }, { status: 403 });
   const limit = rateLimit(`careers:${clientIp(req)}`, 3);
@@ -27,6 +29,7 @@ export async function POST(req: Request) {
   if (!parsed.success) return Response.json({ ok: false, error: "Please check the highlighted fields.", fields: fieldErrors(parsed.error) }, { status: 422 });
   const d = parsed.data;
   if (d.website || (d.startedAt && Date.now() - d.startedAt < 3000)) return Response.json({ ok: true });
+  if (!verifySolution(d.captcha)) return Response.json({ ok: false, error: "Please complete the human verification.", fields: { captcha: "Please verify that you are human." } }, { status: 422 });
 
   let files: UploadedFile[];
   try {
@@ -40,25 +43,26 @@ export async function POST(req: Request) {
   }
 
   const name = `${d.firstName} ${d.lastName}`;
-  try {
-    const stored = await storeUploads("careers", files, { applicant: name, email: d.email, jobType: d.jobType });
-    const flat = Object.fromEntries(Object.entries(d).map(([k, v]) => [k, String(v ?? "")]));
-    const n = careersNotification(flat, stored);
-    await sendMail({
-      to: [inbox("careers")],
-      subject: n.subject,
-      html: n.html,
-      text: n.text,
-      replyTo: { email: d.email, name },
-      attachments: files.map((f) => ({ filename: `${f.label} - ${f.filename}`, contentType: f.contentType, content: f.content })),
-    });
-    if (process.env.MAIL_SEND_CONFIRMATION !== "false") {
-      const c = careersConfirmation(d.firstName);
-      await sendMail({ to: [d.email], subject: c.subject, html: c.html, text: c.text }).catch((e) => console.error("[careers] confirmation failed", e));
-    }
-    return Response.json({ ok: true });
-  } catch (e) {
-    console.error("[careers] submit failed", e);
-    return Response.json({ ok: false, error: "We could not send your application right now. Please email your CV to info@qs-global-solutions.com." }, { status: 502 });
-  }
+  const address = [d.address1, d.city, d.state, d.country].filter(Boolean).join(", ");
+  const result = await processSubmission(
+    "careers",
+    {
+      kind: "careers",
+      name,
+      email: d.email,
+      phone: d.phone,
+      country: d.country,
+      summary: [qsJob.title, d.jobType, d.country, `${files.length} file${files.length === 1 ? "" : "s"}`].filter(Boolean).join(" · "),
+      fields: [
+        ["Position", qsJob.title],
+        ["Job type", d.jobType],
+        ["Address", address],
+      ],
+      message: d.info,
+    },
+    files,
+    publicBase(req),
+  );
+  if (!result.ok) return Response.json({ ok: false, error: "We could not send your application right now. Please email your CV to info@qs-global-solutions.com." }, { status: 502 });
+  return Response.json({ ok: true });
 }

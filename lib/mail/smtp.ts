@@ -5,7 +5,7 @@ import type { MailMessage } from "./types";
 
 /**
  * SMTP sender for Microsoft 365 (smtp.office365.com:587, STARTTLS).
- * SMTP_AUTH=login  → username + password (Microsoft is retiring this by default from late 2026)
+ * SMTP_AUTH=login  → username + password (Microsoft disables this by default from end of December 2026)
  * SMTP_AUTH=oauth2 → OAuth 2.0 token from the Azure app (SMTP.SendAsApp permission)
  */
 export async function sendWithSmtp(m: MailMessage) {

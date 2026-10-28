@@ -16,6 +16,8 @@ function ScrollReset() {
 }
 
 export function Providers({ children }: { children: ReactNode }) {
+  // The dashboard has its own scroll panes, so it uses native scrolling.
+  if (usePathname()?.startsWith("/admin")) return <MotionConfig reducedMotion="user">{children}</MotionConfig>;
   return (
     <MotionConfig reducedMotion="user" transition={{ type: "spring", stiffness: 260, damping: 30 }}>
       <ReactLenis root options={{ lerp: 0.1, wheelMultiplier: 1, smoothWheel: true, anchors: { offset: -100 } }}>

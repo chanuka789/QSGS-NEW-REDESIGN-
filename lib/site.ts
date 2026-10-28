@@ -68,6 +68,9 @@ export const routes = {
   article: "/expert-remote-quantity-surveying-services-in-uae-qs-global-solutions/",
 } as const;
 
+/** Contact form opened on "Request a quotation". */
+export const quoteHref = `${routes.contact}?type=quote#form`;
+
 export type NavItem = { label: string; href: string; description?: string; children?: NavItem[] };
 
 export const mainNav: NavItem[] = [

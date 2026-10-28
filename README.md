@@ -64,13 +64,30 @@ npm run dev                  # http://localhost:3000
 
 Checks: `npm run lint`, `npm run typecheck`, `npm run build`.
 
+## Forms, emails and the submissions dashboard
+
+Three website forms create a **submission**: job applications (careers page), meeting requests and quotation requests (contact page — switch at the top of the form; “Get a quote” buttons open it on *Request a quotation*).
+
+For every submission the site:
+
+1. checks the human verification (a proof-of-work puzzle solved in the visitor’s browser — no third-party service), the honeypot and the timing check;
+2. saves the record in the bucket (`submissions/<id>.json`) and the files in `uploads/<type>/<id>/`;
+3. emails `MAIL_TO` a branded notification with every field and the files attached (up to 18 MB; larger files open from the dashboard);
+4. emails the visitor a branded confirmation with a reference number (`QSGS-XXXXXXXX`).
+
+If email is down, the submission is still saved to the dashboard.
+
+**Dashboard:** `https://<your-site>/admin/` — sign in with `ADMIN_EMAIL` (default info@qs-global-solutions.com) and `ADMIN_PASSWORD`. Inbox, unread, starred, per-type folders and archive; search; open/download files; mark read/unread, star, archive, internal notes, delete (removes the files too), bulk actions and CSV export. Changing `ADMIN_PASSWORD` signs out every session.
+
+Templates: `lib/mail/templates.ts` · Dashboard: `components/admin/Dashboard.tsx`.
+
 ## Email setup (Microsoft 365)
 
 Form submissions go to `MAIL_TO` (default `info@qs-global-solutions.com`), and the visitor gets a confirmation email.
 
 ### Option A — Microsoft Graph (recommended)
 
-Microsoft is switching off password-based SMTP (Basic Auth) by default for Exchange Online from late 2026, so OAuth via Graph is the future-proof choice.
+Microsoft switches off password-based SMTP (Basic Auth) by default for Exchange Online at the end of December 2026, so OAuth via Graph is the future-proof choice.
 
 1. Azure Portal → **Microsoft Entra ID** → **App registrations** → **New registration** (single tenant).
 2. **Certificates & secrets** → **New client secret** → copy the value.

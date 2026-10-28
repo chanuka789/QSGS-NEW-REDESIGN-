@@ -22,6 +22,11 @@ export async function sendMail(m: MailMessage) {
   if (provider === "graph") return sendWithGraph(m);
   if (provider === "smtp") return sendWithSmtp(m);
   console.info(`[mail:console] To: ${m.to.join(", ")} | Subject: ${m.subject} | Attachments: ${m.attachments?.length ?? 0}\n${m.text}`);
+  // Development preview: keep the rendered email in .data-local/mail/ to open in a browser.
+  const { promises: fs } = await import("node:fs");
+  const dir = `${process.cwd()}/.data-local/mail`;
+  await fs.mkdir(dir, { recursive: true });
+  await fs.writeFile(`${dir}/${Date.now()}-${m.subject.replace(/[^\w]+/g, "-").slice(0, 60)}.html`, m.html);
 }
 
 export const inbox = (kind: "contact" | "careers") =>

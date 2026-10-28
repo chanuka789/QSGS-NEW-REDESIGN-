@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { DropZone } from "./DropZone";
+import { HumanCheck, type HumanCheckHandle } from "./HumanCheck";
 import { CountryOptions, Field, FormError, Honeypot, SubmitButton, Success } from "./FormBits";
 import { countries, priorityCountries } from "@/lib/countries";
 import { JOB_TYPES } from "@/lib/form-rules";
@@ -17,6 +18,7 @@ export function CareersForm() {
   const [resume, setResume] = useState<File[]>([]);
   const [cover, setCover] = useState<File[]>([]);
   const startedAt = useRef(0);
+  const human = useRef<HumanCheckHandle>(null);
 
   useEffect(() => {
     startedAt.current = Date.now();
@@ -44,6 +46,13 @@ export function CareersForm() {
     fd.set("consent", "true");
     fd.set("startedAt", String(startedAt.current));
     setLoading(true);
+    const captcha = await human.current?.start();
+    if (!captcha) {
+      setLoading(false);
+      setErrors({ captcha: "Please verify that you are human." });
+      return;
+    }
+    fd.set("captcha", captcha);
     try {
       const res = await fetch("/api/careers/", { method: "POST", body: fd });
       const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string; fields?: Record<string, string> };
@@ -53,6 +62,7 @@ export function CareersForm() {
         return;
       }
       setDone(true);
+      human.current?.reset();
       setResume([]);
       setCover([]);
     } catch {
@@ -67,7 +77,7 @@ export function CareersForm() {
   const err = (k: string) => (errors[k] ? { "aria-invalid": true as const, "aria-describedby": `${k}-error` } : {});
 
   return (
-    <form onSubmit={onSubmit} noValidate className="relative grid gap-6 sm:grid-cols-2">
+    <form method="post" action="/api/careers/" encType="multipart/form-data" onSubmit={onSubmit} onFocus={() => human.current?.start()} noValidate className="relative grid gap-6 sm:grid-cols-2">
       <Honeypot />
       <Field id="firstName" label="First name" required error={errors.firstName}>
         <input id="firstName" name="firstName" autoComplete="given-name" className="field" {...err("firstName")} />
@@ -117,6 +127,10 @@ export function CareersForm() {
       <Field id="info" label="Additional information" className="sm:col-span-2">
         <textarea id="info" name="info" className="field" placeholder="Experience, software skills, notice period, portfolio links…" />
       </Field>
+
+      <div className="sm:col-span-2">
+        <HumanCheck ref={human} error={errors.captcha} />
+      </div>
 
       <div className="sm:col-span-2">
         <label className="flex cursor-pointer items-start gap-3 t-small leading-relaxed text-muted">

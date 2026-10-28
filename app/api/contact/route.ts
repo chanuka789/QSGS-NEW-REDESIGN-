@@ -1,13 +1,15 @@
 import { contactSchema, fieldErrors, FILE_RULES } from "@/lib/validation";
 import { clientIp, rateLimit, sameOrigin } from "@/lib/rate-limit";
-import { inbox, sendMail } from "@/lib/mail";
-import { contactConfirmation, contactNotification } from "@/lib/mail/templates";
-import { readUploads, storeUploads, UploadError, type UploadedFile } from "@/lib/uploads";
+import { verifySolution } from "@/lib/captcha";
+import { processSubmission, publicBase } from "@/lib/submit";
+import { readUploads, UploadError, type UploadedFile } from "@/lib/uploads";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-/** Accepts multipart/form-data (with optional attachments) or JSON. */
+const day = (d: string) => (d ? new Date(`${d}T00:00:00Z`).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }) : "");
+
+/** Contact page: meeting requests and quotation requests (multipart, optional attachments). */
 export async function POST(req: Request) {
   if (!sameOrigin(req)) return Response.json({ ok: false, error: "Invalid origin." }, { status: 403 });
   const limit = rateLimit(`contact:${clientIp(req)}`, 5);
@@ -16,53 +18,60 @@ export async function POST(req: Request) {
   const len = Number(req.headers.get("content-length") || 0);
   if (len > FILE_RULES.maxTotalBytes + 1024 * 1024) return Response.json({ ok: false, error: "Your files are too large. Each file can be up to 5 MB." }, { status: 413 });
 
-  let raw: Record<string, unknown>;
-  let form: FormData | null = null;
+  let form: FormData;
   try {
-    if ((req.headers.get("content-type") || "").includes("multipart/form-data")) {
-      form = await req.formData();
-      raw = Object.fromEntries([...form.entries()].filter(([, v]) => typeof v === "string"));
-      raw.consent = raw.consent === "true" || raw.consent === "on";
-    } else {
-      raw = await req.json();
-    }
+    form = await req.formData();
   } catch {
     return Response.json({ ok: false, error: "Invalid request." }, { status: 400 });
   }
+  const raw: Record<string, unknown> = Object.fromEntries([...form.entries()].filter(([, v]) => typeof v === "string"));
+  raw.consent = raw.consent === "true" || raw.consent === "on";
 
   const parsed = contactSchema.safeParse(raw);
   if (!parsed.success) return Response.json({ ok: false, error: "Please check the highlighted fields.", fields: fieldErrors(parsed.error) }, { status: 422 });
   const d = parsed.data;
   // Bots: honeypot filled or submitted faster than a human could type → pretend success.
   if (d.website || (d.startedAt && Date.now() - d.startedAt < 2500)) return Response.json({ ok: true });
+  if (!verifySolution(d.captcha)) return Response.json({ ok: false, error: "Please complete the human verification.", fields: { captcha: "Please verify that you are human." } }, { status: 422 });
 
   let files: UploadedFile[] = [];
   try {
-    if (form) files = await readUploads(form, "attachments", "Attachment");
+    files = await readUploads(form, "attachments", d.requestType === "quote" ? "Drawings / documents" : "Attachment");
   } catch (e) {
     if (e instanceof UploadError) return Response.json({ ok: false, error: e.message, fields: { attachments: e.message } }, { status: 422 });
     throw e;
   }
 
-  try {
-    const stored = await storeUploads("contact", files, { name: d.name, email: d.email, company: d.company });
-    const flat = Object.fromEntries(Object.entries(d).map(([k, v]) => [k, String(v ?? "")]));
-    const n = contactNotification(flat, stored);
-    await sendMail({
-      to: [inbox("contact")],
-      subject: n.subject,
-      html: n.html,
-      text: n.text,
-      replyTo: { email: d.email, name: d.name },
-      attachments: files.map((f) => ({ filename: f.filename, contentType: f.contentType, content: f.content })),
-    });
-    if (process.env.MAIL_SEND_CONFIRMATION !== "false") {
-      const c = contactConfirmation(d.name);
-      await sendMail({ to: [d.email], subject: c.subject, html: c.html, text: c.text }).catch((e) => console.error("[contact] confirmation failed", e));
-    }
-    return Response.json({ ok: true });
-  } catch (e) {
-    console.error("[contact] send failed", e);
-    return Response.json({ ok: false, error: "We could not send your message right now. Please email info@qs-global-solutions.com." }, { status: 502 });
-  }
+  const quote = d.requestType === "quote";
+  const time = d.time ? `${d.time}${d.timezone ? ` (${d.timezone})` : ""}` : "";
+  const fields: [string, string][] = quote
+    ? [
+        ["Project", d.projectName],
+        ["Project type", d.projectType],
+        ["Project location", d.projectLocation],
+        ["Service required", d.service],
+        ["Required by", day(d.deadline)],
+        ["Company type", d.companyType],
+        ["Country", d.country],
+      ]
+    : [
+        ["Preferred date", day(d.date)],
+        ["Preferred time", time],
+        ["Service of interest", d.service],
+        ["Company type", d.companyType],
+        ["Country", d.country],
+        ["Visitor time zone", d.timezone],
+      ];
+  const summary = quote
+    ? [d.projectName || d.projectType, d.service, d.projectLocation || d.country, d.deadline && `due ${day(d.deadline)}`].filter(Boolean).join(" · ")
+    : [d.date ? `Preferred ${day(d.date)}${time ? `, ${time}` : ""}` : "No preferred time given", d.service, d.country].filter(Boolean).join(" · ");
+
+  const result = await processSubmission(
+    quote ? "quote" : "meeting",
+    { kind: quote ? "quote" : "meeting", name: d.name, email: d.email, phone: d.phone, company: d.company, country: d.country, summary, fields, message: d.message },
+    files,
+    publicBase(req),
+  );
+  if (!result.ok) return Response.json({ ok: false, error: "We could not send your request right now. Please email info@qs-global-solutions.com." }, { status: 502 });
+  return Response.json({ ok: true });
 }

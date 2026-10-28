@@ -1,7 +1,7 @@
 import "server-only";
-import { randomUUID } from "node:crypto";
 import { FILE_RULES } from "./form-rules";
-import { presignedUrl, putObject, storageEnabled } from "./storage";
+import { putObject, storageAvailable } from "./storage";
+import type { SubmissionFile } from "./submissions";
 import type { MailAttachment } from "./mail";
 
 const MIME: Record<string, string> = {
@@ -58,28 +58,19 @@ export async function readUploads(form: FormData, field: string, label: string):
   return out;
 }
 
-export type StoredFile = { name: string; label: string; key: string; size: number; link?: string };
-
 /**
- * Saves visitor uploads in the private bucket:
- *   uploads/<kind>/<YYYY>/<MM>/<DD>/<submission-id>/<file>
- * Returns 7-day private download links for the notification email.
+ * Saves visitor uploads in the private bucket under uploads/<kind>/<submission-id>/.
+ * Returns references for the submission record (the files are opened from the dashboard).
  */
-export async function storeUploads(kind: "careers" | "contact", files: UploadedFile[], meta: Record<string, string>): Promise<StoredFile[]> {
+export async function storeUploads(kind: "careers" | "meeting" | "quote", submissionId: string, files: UploadedFile[], meta: Record<string, string>): Promise<SubmissionFile[]> {
   if (!files.length) return [];
-  if (!storageEnabled()) {
-    if (process.env.NODE_ENV === "production") throw new Error("Storage bucket is not configured.");
-    return files.map((f) => ({ name: f.filename, label: f.label, key: "(local dev — not stored)", size: f.content.length }));
-  }
-  const d = new Date();
-  const id = `${d.toISOString().slice(11, 19).replace(/:/g, "")}-${randomUUID().slice(0, 8)}`;
-  const base = `uploads/${kind}/${d.getUTCFullYear()}/${String(d.getUTCMonth() + 1).padStart(2, "0")}/${String(d.getUTCDate()).padStart(2, "0")}/${id}`;
+  if (!storageAvailable()) throw new Error("Storage bucket is not configured.");
   const ascii = (v: string) => v.replace(/[^\x20-\x7e]/g, "?").slice(0, 200);
   return Promise.all(
     files.map(async (f, i) => {
-      const key = `${base}/${String(i + 1).padStart(2, "0")}-${f.filename}`;
+      const key = `uploads/${kind}/${submissionId}/${String(i + 1).padStart(2, "0")}-${f.filename}`;
       await putObject(key, f.content, f.contentType, Object.fromEntries(Object.entries({ ...meta, label: f.label }).map(([k, v]) => [k, ascii(v)])));
-      return { name: f.filename, label: f.label, key, size: f.content.length, link: await presignedUrl(key) };
+      return { name: f.filename, label: f.label, key, size: f.content.length, contentType: f.contentType };
     }),
   );
 }

@@ -6,7 +6,7 @@ import { ArrowUpRight } from "lucide-react";
 import { SplitText } from "@/components/ui/SplitText";
 import { ArrowLong } from "@/components/ui/ArrowLong";
 import { HeroScenes } from "./HeroScenes";
-import { routes } from "@/lib/site";
+import { quoteHref, routes } from "@/lib/site";
 
 const facts = [
   { k: "20+", v: "Countries served remotely" },
@@ -46,7 +46,7 @@ export function HomeHero() {
             transition={{ delay: 0.85, duration: 0.9, ease }}
             className="mt-8 flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-8"
           >
-            <Link href={routes.contact} className="btn btn-primary w-full justify-between sm:w-auto sm:justify-center">
+            <Link href={quoteHref} className="btn btn-primary w-full justify-between sm:w-auto sm:justify-center">
               Get a quote <ArrowUpRight className="h-5 w-5" />
             </Link>
             <Link href={routes.contact} className="link-arrow">

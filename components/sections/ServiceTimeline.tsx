@@ -6,7 +6,7 @@ import { motion, useInView, useScroll, useSpring, type MotionValue } from "motio
 import { createRef, useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { ArrowUpRight, Check } from "lucide-react";
 import type { ServiceModule } from "@/lib/services";
-import { routes } from "@/lib/site";
+import { quoteHref, routes } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 /**
@@ -34,7 +34,7 @@ export function ServiceTimeline({ modules, discussLabel = "Discuss" }: { modules
             <div className="mt-8 rounded-[16px] bg-brand-50 p-5">
               <p className="t-h4 text-ink">Need a quote?</p>
               <p className="t-small mt-1 text-muted">Share your drawings and we will reply with scope and timeline.</p>
-              <Link href={routes.contact} className="btn btn-primary btn-sm mt-4">
+              <Link href={quoteHref} className="btn btn-primary btn-sm mt-4">
                 Get a quote <ArrowUpRight className="h-4 w-4" />
               </Link>
             </div>

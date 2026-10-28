@@ -8,7 +8,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbJsonLd, landingServiceJsonLd, webPageJsonLd } from "@/lib/seo";
 import { processSteps, type Landing } from "@/lib/landing";
 import { LinkRows } from "@/components/ui/LinkRows";
-import { routes, standards } from "@/lib/site";
+import { quoteHref, routes, standards } from "@/lib/site";
 
 const parent = {
   service: { name: "Our Services", path: routes.services },
@@ -34,7 +34,7 @@ export function LandingPage({ page: p }: { page: Landing }) {
         imageAlt={p.image.alt}
       >
         <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-8">
-          <Link href={routes.contact} className="btn btn-primary w-full justify-between sm:w-auto sm:justify-center">
+          <Link href={quoteHref} className="btn btn-primary w-full justify-between sm:w-auto sm:justify-center">
             Get a quote <ArrowUpRight className="h-5 w-5" />
           </Link>
           {p.contact?.phone && (
