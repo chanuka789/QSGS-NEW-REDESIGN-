@@ -13,9 +13,14 @@ const nextConfig: NextConfig = {
   // Keep the exact WordPress URL shape (trailing slash) so existing Google rankings carry over.
   trailingSlash: true,
   poweredByHeader: false,
+  // Self-contained server (.next/standalone/server.js): loads fewer modules and runs without npm.
+  output: "standalone",
   reactStrictMode: true,
   images: {
-    formats: ["image/avif", "image/webp"],
+    // No server-side resizing: bucket images are already web-sized WebP (~300 KB), and the
+    // optimizer was the main RAM user on Railway (~300 MB vs ~120 MB without it).
+    unoptimized: true,
+    formats: ["image/webp"],
     qualities: [70, 75, 85],
     deviceSizes: [640, 828, 1080, 1280, 1600, 1920],
     minimumCacheTTL: 60 * 60 * 24 * 30,
