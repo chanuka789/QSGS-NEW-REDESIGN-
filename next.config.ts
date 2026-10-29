@@ -17,7 +17,9 @@ const nextConfig: NextConfig = {
   output: "standalone",
   reactStrictMode: true,
   images: {
-    // WebP only: AVIF encoding made the server hold ~900 MB of RAM after resizing a few images.
+    // No server-side resizing: bucket images are already web-sized WebP (~300 KB), and the
+    // optimizer was the main RAM user on Railway (~300 MB vs ~120 MB without it).
+    unoptimized: true,
     formats: ["image/webp"],
     qualities: [70, 75, 85],
     deviceSizes: [640, 828, 1080, 1280, 1600, 1920],
