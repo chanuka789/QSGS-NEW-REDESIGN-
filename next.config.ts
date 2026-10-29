@@ -13,9 +13,12 @@ const nextConfig: NextConfig = {
   // Keep the exact WordPress URL shape (trailing slash) so existing Google rankings carry over.
   trailingSlash: true,
   poweredByHeader: false,
+  // Self-contained server (.next/standalone/server.js): loads fewer modules and runs without npm.
+  output: "standalone",
   reactStrictMode: true,
   images: {
-    formats: ["image/avif", "image/webp"],
+    // WebP only: AVIF encoding made the server hold ~900 MB of RAM after resizing a few images.
+    formats: ["image/webp"],
     qualities: [70, 75, 85],
     deviceSizes: [640, 828, 1080, 1280, 1600, 1920],
     minimumCacheTTL: 60 * 60 * 24 * 30,
